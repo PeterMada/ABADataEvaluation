@@ -4,7 +4,8 @@
   "description": "Server side for ABA Data evaulation site",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon index"
   },
   "keywords": [
     "Express",
@@ -14,11 +15,16 @@
   "author": "Peter Mada",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "express": "^4.17.3",
     "express-graphql": "^0.12.0",
-    "graphql": "^15.8.0"
+    "graphql": "^15.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^8.7.3"
   }
 }

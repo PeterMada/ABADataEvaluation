@@ -1,9 +1,9 @@
 import React from 'react';
 
-export const Dashboard = () => {
+export const Register = () => {
   return (
     <>
-      <h1>Dashboard</h1>
+      <h1>Register</h1>
     </>
   );
 };

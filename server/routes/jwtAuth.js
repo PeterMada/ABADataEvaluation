@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const jwtGenerator = require('../utils/jwtGenerator');
 const validInfo = require('../middleware/validinfo');
+const authorization = require('../middleware/authorization');
 
 // register
 router.post('/register', validInfo, async (req, res) => {
@@ -63,6 +64,15 @@ router.post('/login', validInfo, async (req, res) => {
   } catch (err) {
     console.log(err.message);
     res.status(500).send('Server Error');
+  }
+});
+
+router.get('/verify', authorization, (req, res) => {
+  try {
+    res.status(200).json(true);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
   }
 });
 

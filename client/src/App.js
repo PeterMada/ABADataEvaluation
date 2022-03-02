@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter,
@@ -17,6 +17,26 @@ export const App = () => {
   const setAuth = (boolean) => {
     setsAuthenticated(boolean);
   };
+
+  const isAuth = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/auth/verify', {
+        metod: 'GET',
+        headers: { token: localStorage.token },
+      });
+
+      const parseRes = await response.json();
+      parseRes === true
+        ? setsAuthenticated(true)
+        : setsAuthenticated(false);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    isAuth();
+  });
 
   return (
     <BrowserRouter>

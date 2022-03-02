@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export const Register = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
@@ -37,7 +38,9 @@ export const Register = ({ setAuth }) => {
 
   return (
     <>
-      <h1>Register</h1>
+      <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
+        Register
+      </h1>
       <form onSubmit={onSubmitForm}>
         <div className="mb-4">
           <label
@@ -54,7 +57,7 @@ export const Register = ({ setAuth }) => {
             value={name}
             onChange={(e) => onChange(e)}
           />
-        </div>{' '}
+        </div>
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -78,7 +81,7 @@ export const Register = ({ setAuth }) => {
             Password
           </label>
           <input
-            className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             name="password"
             type="password"
@@ -86,9 +89,6 @@ export const Register = ({ setAuth }) => {
             value={password}
             onChange={(e) => onChange(e)}
           />
-          <p className="text-red-500 text-xs italic">
-            Please choose a password.
-          </p>
         </div>
         <div className="flex items-center justify-between">
           <button
@@ -96,13 +96,10 @@ export const Register = ({ setAuth }) => {
             type="submit">
             Register
           </button>
-          <a
-            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-            href="#">
-            Forgot Password?
-          </a>
         </div>
       </form>
+
+      <Link to="/login">Login</Link>
     </>
   );
 };

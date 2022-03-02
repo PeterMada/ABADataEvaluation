@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export const Login = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
@@ -29,9 +30,15 @@ export const Login = ({ setAuth }) => {
 
       const parseRes = await response.json();
 
-      // TODO save token to cookie
-      localStorage.setItem('token', parseRes.token);
-      setAuth(true);
+      if (parseRes.token) {
+        // TODO save token to cookie
+        localStorage.setItem('token', parseRes.token);
+        setAuth(true);
+        toast.success('Login succesfully');
+      } else {
+        setAuth(false);
+        toast.error(parseRes);
+      }
     } catch (err) {
       console.error(err.message);
     }

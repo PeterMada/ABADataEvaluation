@@ -7,13 +7,17 @@ import {
   Redirect,
   Navigate,
 } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { Dashboard } from './components/dashboard/dashboard';
 import { Login } from './components/login/login';
 import { Register } from './components/register/register';
 
+toast.configure();
+
 export const App = () => {
   const [isAuthenticated, setsAuthenticated] = useState(false);
-
   const setAuth = (boolean) => {
     setsAuthenticated(boolean);
   };

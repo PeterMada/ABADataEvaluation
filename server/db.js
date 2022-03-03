@@ -6,7 +6,9 @@ const pool = new Pool({
   host: process.env.PG_HOST,
   port: process.env.PG_PORT, //automatic run on this port
   database: process.env.PG_DATABASE,
-  ssl: true,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 module.exports = pool;

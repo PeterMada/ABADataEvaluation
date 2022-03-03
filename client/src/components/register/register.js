@@ -12,21 +12,25 @@ export const Register = ({ setAuth }) => {
   const { email, password, name } = inputs;
 
   const onChange = (e) => {
+    console.log(process.env.REACT_APP_API_URL);
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
-    const url = process.env.API_URL || 'http://localhost:5000/';
+    console.log(process.env.API_URL);
     try {
       const body = { email, password, name };
       console.log(JSON.stringify(body));
-      const response = await fetch(`${url}auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}auth/register`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
 
-        body: JSON.stringify(body),
-      });
+          body: JSON.stringify(body),
+        }
+      );
 
       const parseRes = await response.json();
 

@@ -23,12 +23,14 @@ export const App = () => {
   };
 
   const isAuth = async () => {
-    const url = process.env.API_URL || 'http://localhost:5000/';
     try {
-      const response = await fetch(`${url}auth/verify`, {
-        metod: 'GET',
-        headers: { token: localStorage.token },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}auth/verify`,
+        {
+          metod: 'GET',
+          headers: { token: localStorage.token },
+        }
+      );
 
       const parseRes = await response.json();
       parseRes === true

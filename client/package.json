@@ -23,6 +23,7 @@
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
+    "dotenv": "^16.0.0",
     "jest": "^27.5.1"
   },
   "dependencies": {

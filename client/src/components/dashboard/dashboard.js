@@ -3,15 +3,17 @@ import { toast } from 'react-toastify';
 
 export const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState('');
-  const url = process.env.API_URL || 'http://localhost:5000/';
 
   const getName = async () => {
     try {
       // TODO get token from cookie
-      const response = await fetch(`${url}dashobard/`, {
-        method: 'GET',
-        headers: { token: localStorage.token },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}dashobard/`,
+        {
+          method: 'GET',
+          headers: { token: localStorage.token },
+        }
+      );
 
       const parseRes = await response.json();
       setName(parseRes.user_name);

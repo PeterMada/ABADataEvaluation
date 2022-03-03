@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 
 export const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState('');
-  const url = process.env.URL || 'http://localhost:5000/';
+  const url = process.env.API_URL || 'http://localhost:5000/';
 
   const getName = async () => {
     try {

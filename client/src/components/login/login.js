@@ -16,7 +16,7 @@ export const Login = ({ setAuth }) => {
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
-    const url = process.env.URL || 'http://localhost:5000/';
+    const url = process.env.API_URL || 'http://localhost:5000/';
 
     try {
       const body = { email, password };

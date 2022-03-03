@@ -12,7 +12,6 @@ export const Register = ({ setAuth }) => {
   const { email, password, name } = inputs;
 
   const onChange = (e) => {
-    console.log(process.env.REACT_APP_API_URL);
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 

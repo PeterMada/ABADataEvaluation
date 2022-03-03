@@ -23,8 +23,9 @@ export const App = () => {
   };
 
   const isAuth = async () => {
+    const url = process.env.URL || 'http://localhost:5000/';
     try {
-      const response = await fetch('http://localhost:5000/auth/verify', {
+      const response = await fetch(`${url}auth/verify`, {
         metod: 'GET',
         headers: { token: localStorage.token },
       });

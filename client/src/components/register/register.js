@@ -17,10 +17,11 @@ export const Register = ({ setAuth }) => {
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
+    const url = process.env.URL || 'http://localhost:5000/';
     try {
       const body = { email, password, name };
       console.log(JSON.stringify(body));
-      const response = await fetch('http://localhost:5000/auth/register', {
+      const response = await fetch(`${url}auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
 

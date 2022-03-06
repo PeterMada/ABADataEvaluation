@@ -63,7 +63,7 @@ export const Login = ({ setAuth }) => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
             name="email"
-            type="text"
+            type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => onChange(e)}
@@ -80,7 +80,7 @@ export const Login = ({ setAuth }) => {
             id="password"
             name="password"
             type="password"
-            placeholder="******************"
+            placeholder="**********"
             value={password}
             onChange={(e) => onChange(e)}
           />

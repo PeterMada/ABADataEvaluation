@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { createMemoryHistory } from 'history';
 import { BrowserRouter } from 'react-router-dom';
@@ -13,6 +13,10 @@ describe('Login', () => {
         <Login />
       </BrowserRouter>
     );
+  });
+
+  it('render login form', () => {
+    expect(screen.getByTestId('loginForm')).toBeInTheDocument();
   });
 
   it('render input for eamil', () => {
@@ -45,5 +49,19 @@ describe('Login', () => {
   it('has right name in submit button', () => {
     const field = screen.getByRole('button', { name: 'Login' });
     expect(field).toBeInTheDocument();
+  });
+
+  it('has link to register page', () => {
+    const field = screen.getByRole('link', { name: 'Register' });
+    expect(field).toBeInTheDocument();
+    expect(field).toHaveAttribute('href', '/register');
+  });
+
+  it.skip('redirect to register page on register link click', () => {
+    const onClick = jest.fn();
+    const field = screen.getByRole('link', { name: 'Register' });
+
+    fireEvent.click(field);
+    expect(onClick).toHaveBeenCalled();
   });
 });

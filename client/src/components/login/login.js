@@ -52,7 +52,7 @@ export const Login = ({ setAuth }) => {
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
         Login
       </h1>
-      <form onSubmit={onSubmitForm}>
+      <form data-testid="loginForm" onSubmit={onSubmitForm}>
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"

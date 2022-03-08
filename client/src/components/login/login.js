@@ -94,6 +94,7 @@ export const Login = ({ setAuth }) => {
         </div>
       </form>
       <Link to="/register">Register</Link>
+      <Link to="/resetPassword">Forgot password?</Link>
     </>
   );
 };

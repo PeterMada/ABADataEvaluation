@@ -9,6 +9,8 @@ import {
 } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import { Header } from './layout/header/Header';
 import { Dashboard } from './components/dashboard/dashboard';
 import { Login } from './components/login/Login';
 import { Register } from './components/register/register';
@@ -47,9 +49,20 @@ export const App = () => {
 
   return (
     <BrowserRouter>
+      <Header isAuthenticated={isAuthenticated} />
       <div className="container">
         <Routes>
-          <Route exact path="/" element={<Login />} />
+          <Route
+            exact
+            path="/"
+            element={
+              !isAuthenticated ? (
+                <Login setAuth={setAuth} />
+              ) : (
+                <Navigate replace to="/dashboard" />
+              )
+            }
+          />
           <Route
             exact
             path="/login"

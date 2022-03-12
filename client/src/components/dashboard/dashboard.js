@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import { Header } from '../header/Header';
 
 export const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState('');

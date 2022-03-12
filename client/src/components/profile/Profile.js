@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-export const Profile = ({ setAuth }) => {
-  /*
-  const [profile, setProfile] = useState({});
+export const Profile = () => {
+  const [profile, setProfile] = useState({
+    user_email: '',
+    user_name: '',
+  });
 
   const getProfile = async () => {
     try {
-      const response = awaitfetch(
+      const response = await fetch(
         `${process.env.REACT_APP_API_URL}profile/`,
         {
           method: 'GET',
@@ -15,7 +17,7 @@ export const Profile = ({ setAuth }) => {
       );
 
       const parseRes = await response.json();
-      setProfile(parseRes.profile);
+      setProfile(parseRes);
     } catch (err) {
       console.error(err.message);
     }
@@ -23,12 +25,23 @@ export const Profile = ({ setAuth }) => {
 
   useEffect(() => {
     getProfile();
-  });
-  */
+  }, []);
 
   return (
     <>
       <h1>Profile</h1>
+      <table>
+        <tbody>
+          <tr>
+            <td>Name</td>
+            <td>{profile.user_name}</td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td>{profile.user_email}</td>
+          </tr>
+        </tbody>
+      </table>
     </>
   );
 };

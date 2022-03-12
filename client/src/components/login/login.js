@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -33,6 +34,8 @@ export const Login = ({ setAuth }) => {
 
       const parseRes = await response.json();
 
+      console.log('response data?', parseRes);
+
       if (parseRes.token) {
         // TODO save token to cookie
         localStorage.setItem('token', parseRes.token);
@@ -43,6 +46,7 @@ export const Login = ({ setAuth }) => {
         toast.error(parseRes);
       }
     } catch (err) {
+      console.log('Login fetch error');
       console.error(err.message);
     }
   };

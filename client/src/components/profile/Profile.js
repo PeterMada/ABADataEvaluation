@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 export const Profile = ({ setAuth }) => {
+  /*
   const [profile, setProfile] = useState({});
 
   const getProfile = async () => {
@@ -23,6 +24,7 @@ export const Profile = ({ setAuth }) => {
   useEffect(() => {
     getProfile();
   });
+  */
 
   return (
     <>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 import { Header } from '../header/Header';
 
 export const Dashboard = ({ setAuth }) => {
@@ -40,6 +41,7 @@ export const Dashboard = ({ setAuth }) => {
         Dashboard for {name}
       </h1>
       <button onClick={logout}>Log out</button>
+      <Link to="/profile">Profile</Link>
     </>
   );
 };

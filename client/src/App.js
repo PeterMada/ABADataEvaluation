@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Dashboard } from './components/dashboard/dashboard';
 import { Login } from './components/login/Login';
 import { Register } from './components/register/register';
+import { Profile } from './components/profile/Profile';
 
 toast.configure();
 
@@ -77,6 +78,17 @@ export const App = () => {
             element={
               isAuthenticated ? (
                 <Dashboard setAuth={setAuth} />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/profile"
+            element={
+              isAuthenticated ? (
+                <Profile setAuth={setAuth} />
               ) : (
                 <Navigate replace to="/login" />
               )

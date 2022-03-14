@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 export const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState('');
@@ -39,6 +40,7 @@ export const Dashboard = ({ setAuth }) => {
         Dashboard for {name}
       </h1>
       <button onClick={logout}>Log out</button>
+      <Link to="/profile">Profile</Link>
     </>
   );
 };

@@ -5,6 +5,10 @@ CREATE TABLE users(
   user_name VARCHAR(255) NOT NULL,
   user_email VARCHAR(255) NOT NULL,
   user_password VARCHAR(255) NOT NULL
+  user_email_verified BOOLEAN,
+  user_date_created DATE,
+  user_last_login DATE
+
 );
 
 -- insert fake users

@@ -10,10 +10,11 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { Header } from './layout/header/Header';
 import { Dashboard } from './components/dashboard/dashboard';
 import { Login } from './components/login/Login';
 import { Register } from './components/register/register';
-import { ResetPassword } from './components/resetPassword/ResetPassword';
+import { Profile } from './components/profile/Profile';
 
 toast.configure();
 
@@ -48,9 +49,20 @@ export const App = () => {
 
   return (
     <BrowserRouter>
+      <Header isAuthenticated={isAuthenticated} />
       <div className="container">
         <Routes>
-          <Route exact path="/" element={<Login />} />
+          <Route
+            exact
+            path="/"
+            element={
+              !isAuthenticated ? (
+                <Login setAuth={setAuth} />
+              ) : (
+                <Navigate replace to="/dashboard" />
+              )
+            }
+          />
           <Route
             exact
             path="/login"
@@ -90,6 +102,17 @@ export const App = () => {
             element={
               isAuthenticated ? (
                 <Dashboard setAuth={setAuth} />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/profile"
+            element={
+              isAuthenticated ? (
+                <Profile setAuth={setAuth} />
               ) : (
                 <Navigate replace to="/login" />
               )

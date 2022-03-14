@@ -56,7 +56,7 @@ export const Login = ({ setAuth }) => {
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
         Login
       </h1>
-      <form onSubmit={onSubmitForm}>
+      <form data-testid="loginForm" onSubmit={onSubmitForm}>
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -67,7 +67,7 @@ export const Login = ({ setAuth }) => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
             name="email"
-            type="text"
+            type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => onChange(e)}
@@ -84,7 +84,7 @@ export const Login = ({ setAuth }) => {
             id="password"
             name="password"
             type="password"
-            placeholder="******************"
+            placeholder="**********"
             value={password}
             onChange={(e) => onChange(e)}
           />
@@ -98,6 +98,7 @@ export const Login = ({ setAuth }) => {
         </div>
       </form>
       <Link to="/register">Register</Link>
+      <Link to="/resetPassword">Forgot password?</Link>
     </>
   );
 };

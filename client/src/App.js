@@ -87,6 +87,17 @@ export const App = () => {
           />
           <Route
             exact
+            path="/resetPassword"
+            element={
+              isAuthenticated ? (
+                <Dashboard setAuth={setAuth} />
+              ) : (
+                <ResetPassword />
+              )
+            }
+          />
+          <Route
+            exact
             path="/dashboard"
             element={
               isAuthenticated ? (

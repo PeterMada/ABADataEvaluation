@@ -1,5 +1,10 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { createMemoryHistory } from 'history';
 import {
@@ -11,6 +16,7 @@ import 'whatwg-fetch';
 import { BrowserRouter } from 'react-router-dom';
 import { Login } from '../../../src/components/login/Login';
 import { App } from '../../../src/App';
+import { ToastContainer } from 'react-toastify';
 
 describe('Login', () => {
   beforeEach(() => {
@@ -93,6 +99,7 @@ describe('Login', () => {
     expect(field).toHaveAttribute('href', '/resetPassword');
   });
 
+  // TODO is this test realy nescesary?
   it.skip('has right value in email input when changed', () => {
     renderLogin();
     const field = screen.getByLabelText('Email');
@@ -100,6 +107,7 @@ describe('Login', () => {
     expect(field.value).toBe('testemail@email.sk');
   });
 
+  // TODO finish this test
   it.skip('show error message when email field is empty on submit', async () => {
     render(
       <BrowserRouter>
@@ -136,5 +144,23 @@ describe('Login', () => {
         body: JSON.stringify(emptyBody),
       }
     );
+  });
+
+  // TODO finish this test
+  it.skip('show error message when empty form is submited', async () => {
+    render(
+      <BrowserRouter>
+        <Login setAuth={() => null} />
+      </BrowserRouter>
+    );
+    const form = screen.getByTestId('loginForm');
+    const submitButton = screen.getByRole('button', 'submit');
+
+    fireEvent.click(submitButton);
+    //+ await waitFor(() => screen.findByRole('alert'));
+
+    expect(
+      await screen.findByText('Missing Credentials')
+    ).toBeInTheDocument();
   });
 });

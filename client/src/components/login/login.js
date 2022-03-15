@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+require('dotenv').config();
 
 export const Login = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
@@ -33,8 +34,6 @@ export const Login = ({ setAuth }) => {
       );
 
       const parseRes = await response.json();
-
-      console.log('response data?', parseRes);
 
       if (parseRes.token) {
         // TODO save token to cookie

@@ -88,13 +88,17 @@ describe('Login', () => {
     const form = screen.getByTestId('loginForm');
 
     fireEvent.submit(form);
-    expect(window.fetch).toHaveBeenCalledWith('auth/login');
+    expect(window.fetch).toHaveBeenCalledWith(
+      `${process.env.REACT_APP_API_URL}auth/login`,
+      expect.anything()
+    );
 
     /*
     expect(window.fetch).toHaveBeenCalledWith(
       '/customers',
       expect.objectContaining({
         method: 'POST',
+        
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' }
       })

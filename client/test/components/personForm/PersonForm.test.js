@@ -108,6 +108,8 @@ describe('PersonForm', () => {
       render(<PersonForm />);
       renderForm('Email', 'email', 'email');
     });
+
+    isThereErrorOnInputBlur('Email', 'Email field is required');
   });
 
   describe('email check field', () => {

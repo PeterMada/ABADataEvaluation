@@ -47,4 +47,12 @@ describe('PersonForm', () => {
     expect(beforeNameTitles.id).toEqual('afterNameTitle');
     expect(beforeNameTitles.type).toEqual('text');
   });
+
+  it('renders a input field for email', () => {
+    render(<PersonForm />);
+    const emailField = screen.getByLabelText('Email');
+    expect(emailField).toBeInTheDocument();
+    expect(emailField.id).toEqual('email');
+    expect(emailField.type).toEqual('email');
+  });
 });

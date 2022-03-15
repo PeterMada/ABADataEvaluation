@@ -21,6 +21,10 @@ export const PersonForm = () => {
           <label htmlFor="afterNameTitle">Titles after name</label>
           <input id="afterNameTitle" name="afterNameTitle" />
         </div>
+        <div>
+          <label htmlFor="email">Email</label>
+          <input id="email" name="email" type="email" />
+        </div>
       </form>
     </div>
   );

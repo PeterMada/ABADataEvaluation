@@ -31,4 +31,20 @@ describe('PersonForm', () => {
     expect(lastNameField.id).toEqual('lastName');
     expect(lastNameField.type).toEqual('text');
   });
+
+  it('renders a input field for before name titles', () => {
+    render(<PersonForm />);
+    const beforeNameTitles = screen.getByLabelText('Titles before name');
+    expect(beforeNameTitles).toBeInTheDocument();
+    expect(beforeNameTitles.id).toEqual('beforeNameTitle');
+    expect(beforeNameTitles.type).toEqual('text');
+  });
+
+  it('renders a input field for titles after name', () => {
+    render(<PersonForm />);
+    const beforeNameTitles = screen.getByLabelText('Titles after name');
+    expect(beforeNameTitles).toBeInTheDocument();
+    expect(beforeNameTitles.id).toEqual('afterNameTitle');
+    expect(beforeNameTitles.type).toEqual('text');
+  });
 });

@@ -10,4 +10,15 @@ describe('PersonForm', () => {
       'Add Person'
     );
   });
+
+  it('render form', () => {
+    render(<PersonForm />);
+    expect(screen.getByTestId('addPerson')).toBeInTheDocument();
+  });
+
+  it.skip('renders a input field for first name', () => {
+    render(<PersonForm />);
+    const firstNameField = screen.getByLabelText('First Name');
+    expect(firstNameField).toBeInDocument();
+  });
 });

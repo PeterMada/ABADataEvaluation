@@ -18,7 +18,7 @@ describe('PersonForm', () => {
     expect(firstNameField.type).toEqual(type);
   };
 
-  const isThereErrorOnInputBlur = async (labelText, errorText) => {
+  const isThereErrorOnEmptyInputBlur = async (labelText, errorText) => {
     it('displays error after blur when first name field is blank', async () => {
       render(<PersonForm />);
       await fireEvent.focus(screen.getByLabelText(labelText));
@@ -69,7 +69,10 @@ describe('PersonForm', () => {
       renderForm('First Name', 'firstName');
     });
 
-    isThereErrorOnInputBlur('First Name', 'First name field is required');
+    isThereErrorOnEmptyInputBlur(
+      'First Name',
+      'First name field is required'
+    );
     isThereNoErrorMessageOnSomeTextInInput(
       'First Name',
       'First name field is required'
@@ -82,7 +85,10 @@ describe('PersonForm', () => {
       renderForm('Last Name', 'lastName');
     });
 
-    isThereErrorOnInputBlur('First Name', 'First name field is required');
+    isThereErrorOnEmptyInputBlur(
+      'First Name',
+      'First name field is required'
+    );
     isThereNoErrorMessageOnSomeTextInInput(
       'Last Name',
       'Last name field is required'
@@ -122,7 +128,7 @@ describe('PersonForm', () => {
       );
     });
 
-    isThereErrorOnInputBlur('Email', 'Email field is required');
+    isThereErrorOnEmptyInputBlur('Email', 'Email field is required');
   });
 
   describe('email confirm field', () => {
@@ -144,7 +150,7 @@ describe('PersonForm', () => {
       );
     });
 
-    isThereErrorOnInputBlur(
+    isThereErrorOnEmptyInputBlur(
       'Email confirmation',
       'Email confirmation field is required'
     );

@@ -110,6 +110,19 @@ describe('PersonForm', () => {
     });
 
     isThereErrorOnInputBlur('Email', 'Email field is required');
+
+    it('show error on incorrect format', async () => {
+      render(<PersonForm />);
+      const emailField = screen.getByLabelText('Email');
+      fireEvent.change(emailField, { target: { value: '123' } });
+      fireEvent.blur(emailField);
+
+      await waitFor(() =>
+        expect(
+          screen.queryByText('Invalid email address')
+        ).toBeInTheDocument()
+      );
+    });
   });
 
   describe('email confirm field', () => {

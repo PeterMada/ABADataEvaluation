@@ -15,6 +15,7 @@ import { Dashboard } from './components/dashboard/dashboard';
 import { Login } from './components/login/Login';
 import { Register } from './components/register/register';
 import { Profile } from './components/profile/Profile';
+import { PersonForm } from './components/personForm/PersonForm';
 
 toast.configure();
 
@@ -106,6 +107,11 @@ export const App = () => {
                 <Navigate replace to="/login" />
               )
             }
+          />
+          <Route
+            exact
+            path="/addPerson"
+            element={isAuthenticated ? <PersonForm /> : <PersonForm />}
           />
         </Routes>
       </div>

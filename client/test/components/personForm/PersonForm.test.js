@@ -1,9 +1,23 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
+
 import { PersonForm } from '../../../src/components/personForm/PersonForm';
 
 describe('PersonForm', () => {
+  const renderForm = (labelText, name, type = 'text') => {
+    const firstNameField = screen.getByLabelText(labelText);
+    expect(firstNameField).toBeInTheDocument();
+    expect(firstNameField.id).toEqual(name);
+    expect(firstNameField.type).toEqual(type);
+  };
+
   it('render heading', () => {
     render(<PersonForm />);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual(
@@ -18,49 +32,66 @@ describe('PersonForm', () => {
 
   it('renders a input field for first name', () => {
     render(<PersonForm />);
-    const firstNameField = screen.getByLabelText('First Name');
-    expect(firstNameField).toBeInTheDocument();
-    expect(firstNameField.id).toEqual('firstName');
-    expect(firstNameField.type).toEqual('text');
+    renderForm('First Name', 'firstName');
   });
 
   it('renders a input field for last name', () => {
     render(<PersonForm />);
-    const lastNameField = screen.getByLabelText('Last Name');
-    expect(lastNameField).toBeInTheDocument();
-    expect(lastNameField.id).toEqual('lastName');
-    expect(lastNameField.type).toEqual('text');
+    renderForm('Last Name', 'lastName');
   });
 
   it('renders a input field for before name titles', () => {
     render(<PersonForm />);
-    const beforeNameTitles = screen.getByLabelText('Titles before name');
-    expect(beforeNameTitles).toBeInTheDocument();
-    expect(beforeNameTitles.id).toEqual('beforeNameTitle');
-    expect(beforeNameTitles.type).toEqual('text');
+    renderForm('Titles before name', 'beforeNameTitle');
   });
 
   it('renders a input field for titles after name', () => {
     render(<PersonForm />);
-    const beforeNameTitles = screen.getByLabelText('Titles after name');
-    expect(beforeNameTitles).toBeInTheDocument();
-    expect(beforeNameTitles.id).toEqual('afterNameTitle');
-    expect(beforeNameTitles.type).toEqual('text');
+    renderForm('Titles after name', 'afterNameTitle');
   });
 
   it('renders a input field for email', () => {
     render(<PersonForm />);
-    const emailField = screen.getByLabelText('Email');
-    expect(emailField).toBeInTheDocument();
-    expect(emailField.id).toEqual('email');
-    expect(emailField.type).toEqual('email');
+    renderForm('Email', 'email', 'email');
   });
 
   it('renders a input field for email confirmation', () => {
     render(<PersonForm />);
-    const emailField = screen.getByLabelText('Email confirmation');
-    expect(emailField).toBeInTheDocument();
-    expect(emailField.id).toEqual('emailConfirm');
-    expect(emailField.type).toEqual('email');
+    renderForm('Email confirmation', 'emailConfirm', 'email');
+  });
+
+  it('displays error after blur when first name field is blank', async () => {
+    render(<PersonForm />);
+
+    await fireEvent.focus(screen.getByLabelText('First Name'));
+    await fireEvent.blur(screen.getByLabelText('First Name'));
+    await waitFor(() =>
+      expect(
+        screen.getByText('First name field is required')
+      ).toBeInTheDocument()
+    );
+  });
+
+  it('hide error when there is some value in input', async () => {
+    render(<PersonForm />);
+    const firstNameField = screen.getByLabelText('First Name');
+    fireEvent.focus(firstNameField);
+    fireEvent.blur(firstNameField);
+
+    await waitFor(() =>
+      expect(
+        screen.getByText('First name field is required')
+      ).toBeInTheDocument()
+    );
+
+    fireEvent.change(firstNameField, { target: { value: '23' } });
+
+    await waitForElementToBeRemoved(() =>
+      screen.queryByText('First name field is required')
+    );
+
+    expect(
+      screen.queryByText('First name field is required')
+    ).not.toBeInTheDocument();
   });
 });

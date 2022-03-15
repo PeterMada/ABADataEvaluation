@@ -109,8 +109,6 @@ describe('PersonForm', () => {
       renderForm('Email', 'email', 'email');
     });
 
-    isThereErrorOnInputBlur('Email', 'Email field is required');
-
     it('show error on incorrect format', async () => {
       render(<PersonForm />);
       const emailField = screen.getByLabelText('Email');
@@ -123,12 +121,27 @@ describe('PersonForm', () => {
         ).toBeInTheDocument()
       );
     });
+
+    isThereErrorOnInputBlur('Email', 'Email field is required');
   });
 
   describe('email confirm field', () => {
     it('renders a input field', () => {
       render(<PersonForm />);
       renderForm('Email confirmation', 'emailConfirm', 'email');
+    });
+
+    it('show error on incorrect format', async () => {
+      render(<PersonForm />);
+      const emailField = screen.getByLabelText('Email confirmation');
+      fireEvent.change(emailField, { target: { value: '123' } });
+      fireEvent.blur(emailField);
+
+      await waitFor(() =>
+        expect(
+          screen.queryByText('Invalid email address')
+        ).toBeInTheDocument()
+      );
     });
 
     isThereErrorOnInputBlur(

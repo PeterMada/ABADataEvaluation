@@ -33,6 +33,12 @@ export const PersonForm = () => {
           }
           if (!values.emailConfirm) {
             errors.emailConfirm = 'Email confirmation field is required';
+          } else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
+              values.emailConfirm
+            )
+          ) {
+            errors.emailConfirm = 'Invalid email address';
           }
 
           if (

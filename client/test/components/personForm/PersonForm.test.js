@@ -172,4 +172,11 @@ describe('PersonForm', () => {
       expect(screen.queryByText('Email Not Matching')).toBeInTheDocument()
     );
   });
+
+  it('has a submit button', () => {
+    render(<PersonForm />);
+    const submitButton = screen.getByRole('button', 'submit');
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton.textContent).toEqual('Add');
+  });
 });

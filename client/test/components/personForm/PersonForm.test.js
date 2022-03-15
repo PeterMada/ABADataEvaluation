@@ -23,4 +23,12 @@ describe('PersonForm', () => {
     expect(firstNameField.id).toEqual('firstName');
     expect(firstNameField.type).toEqual('text');
   });
+
+  it('renders a input field for last name', () => {
+    render(<PersonForm />);
+    const lastNameField = screen.getByLabelText('Last Name');
+    expect(lastNameField).toBeInTheDocument();
+    expect(lastNameField.id).toEqual('lastName');
+    expect(lastNameField.type).toEqual('text');
+  });
 });

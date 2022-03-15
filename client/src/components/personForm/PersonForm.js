@@ -9,6 +9,10 @@ export const PersonForm = () => {
           <label htmlFor="firstName">First Name</label>
           <input id="firstName" name="firstName" />
         </div>
+        <div>
+          <label htmlFor="lastName">Last Name</label>
+          <input id="lastName" name="lastName" />
+        </div>
       </form>
     </div>
   );

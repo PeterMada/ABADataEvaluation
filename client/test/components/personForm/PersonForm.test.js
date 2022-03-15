@@ -94,4 +94,16 @@ describe('PersonForm', () => {
       screen.queryByText('First name field is required')
     ).not.toBeInTheDocument();
   });
+
+  it('displays error after blur when last name field is blank', async () => {
+    render(<PersonForm />);
+
+    await fireEvent.focus(screen.getByLabelText('Last Name'));
+    await fireEvent.blur(screen.getByLabelText('Last Name'));
+    await waitFor(() =>
+      expect(
+        screen.getByText('Last name field is required')
+      ).toBeInTheDocument()
+    );
+  });
 });

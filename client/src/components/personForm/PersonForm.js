@@ -21,6 +21,9 @@ export const PersonForm = () => {
           if (!values.firstName) {
             errors.firstName = 'First name field is required';
           }
+          if (!values.lastName) {
+            errors.lastName = 'Last name field is required';
+          }
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -67,6 +70,11 @@ export const PersonForm = () => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="lastName"
                 name="lastName"
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="lastName"
+                component="div"
               />
             </div>
             <div className="mb-4">

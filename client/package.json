@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "testStat": "jest --coverage",
     "start": "react-scripts start",
     "build": "react-scripts build"
   },

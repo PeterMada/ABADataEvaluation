@@ -18,6 +18,39 @@ describe('PersonForm', () => {
     expect(firstNameField.type).toEqual(type);
   };
 
+  const isThereErrorOnInputBlur = async (labelText, errorText) => {
+    it('displays error after blur when first name field is blank', async () => {
+      render(<PersonForm />);
+      await fireEvent.focus(screen.getByLabelText(labelText));
+      await fireEvent.blur(screen.getByLabelText(labelText));
+      await waitFor(() =>
+        expect(screen.getByText(errorText)).toBeInTheDocument()
+      );
+    });
+  };
+
+  const isThereNoErrorMessageOnSomeTextInInput = async (
+    labelText,
+    errorText
+  ) => {
+    it('remove error when there is some value in input', async () => {
+      render(<PersonForm />);
+      const labelField = screen.getByLabelText(labelText);
+      fireEvent.focus(labelField);
+      fireEvent.blur(labelField);
+
+      await waitFor(() =>
+        expect(screen.getByText(errorText)).toBeInTheDocument()
+      );
+
+      fireEvent.change(labelField, { target: { value: '23' } });
+
+      await waitForElementToBeRemoved(() => screen.queryByText(errorText));
+
+      expect(screen.queryByText(errorText)).not.toBeInTheDocument();
+    });
+  };
+
   it('render heading', () => {
     render(<PersonForm />);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual(
@@ -30,80 +63,57 @@ describe('PersonForm', () => {
     expect(screen.getByTestId('addPerson')).toBeInTheDocument();
   });
 
-  it('renders a input field for first name', () => {
-    render(<PersonForm />);
-    renderForm('First Name', 'firstName');
-  });
+  describe('first name', () => {
+    it('renders a input field', () => {
+      render(<PersonForm />);
+      renderForm('First Name', 'firstName');
+    });
 
-  it('renders a input field for last name', () => {
-    render(<PersonForm />);
-    renderForm('Last Name', 'lastName');
-  });
-
-  it('renders a input field for before name titles', () => {
-    render(<PersonForm />);
-    renderForm('Titles before name', 'beforeNameTitle');
-  });
-
-  it('renders a input field for titles after name', () => {
-    render(<PersonForm />);
-    renderForm('Titles after name', 'afterNameTitle');
-  });
-
-  it('renders a input field for email', () => {
-    render(<PersonForm />);
-    renderForm('Email', 'email', 'email');
-  });
-
-  it('renders a input field for email confirmation', () => {
-    render(<PersonForm />);
-    renderForm('Email confirmation', 'emailConfirm', 'email');
-  });
-
-  it('displays error after blur when first name field is blank', async () => {
-    render(<PersonForm />);
-
-    await fireEvent.focus(screen.getByLabelText('First Name'));
-    await fireEvent.blur(screen.getByLabelText('First Name'));
-    await waitFor(() =>
-      expect(
-        screen.getByText('First name field is required')
-      ).toBeInTheDocument()
+    isThereErrorOnInputBlur('First Name', 'First name field is required');
+    isThereNoErrorMessageOnSomeTextInInput(
+      'First Name',
+      'First name field is required'
     );
   });
 
-  it('hide error when there is some value in input', async () => {
-    render(<PersonForm />);
-    const firstNameField = screen.getByLabelText('First Name');
-    fireEvent.focus(firstNameField);
-    fireEvent.blur(firstNameField);
+  describe('last name', () => {
+    it('renders a input field', () => {
+      render(<PersonForm />);
+      renderForm('Last Name', 'lastName');
+    });
 
-    await waitFor(() =>
-      expect(
-        screen.getByText('First name field is required')
-      ).toBeInTheDocument()
+    isThereErrorOnInputBlur('First Name', 'First name field is required');
+    isThereNoErrorMessageOnSomeTextInInput(
+      'Last Name',
+      'Last name field is required'
     );
-
-    fireEvent.change(firstNameField, { target: { value: '23' } });
-
-    await waitForElementToBeRemoved(() =>
-      screen.queryByText('First name field is required')
-    );
-
-    expect(
-      screen.queryByText('First name field is required')
-    ).not.toBeInTheDocument();
   });
 
-  it('displays error after blur when last name field is blank', async () => {
-    render(<PersonForm />);
+  describe('title before name', () => {
+    it('renders a input field', () => {
+      render(<PersonForm />);
+      renderForm('Titles before name', 'beforeNameTitle');
+    });
+  });
 
-    await fireEvent.focus(screen.getByLabelText('Last Name'));
-    await fireEvent.blur(screen.getByLabelText('Last Name'));
-    await waitFor(() =>
-      expect(
-        screen.getByText('Last name field is required')
-      ).toBeInTheDocument()
-    );
+  describe('title after name', () => {
+    it('renders a input field', () => {
+      render(<PersonForm />);
+      renderForm('Titles after name', 'afterNameTitle');
+    });
+  });
+
+  describe('email field', () => {
+    it('renders a input field', () => {
+      render(<PersonForm />);
+      renderForm('Email', 'email', 'email');
+    });
+  });
+
+  describe('email check field', () => {
+    it('renders a input field', () => {
+      render(<PersonForm />);
+      renderForm('Email confirmation', 'emailConfirm', 'email');
+    });
   });
 });

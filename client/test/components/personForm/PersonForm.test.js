@@ -112,10 +112,32 @@ describe('PersonForm', () => {
     isThereErrorOnInputBlur('Email', 'Email field is required');
   });
 
-  describe('email check field', () => {
+  describe('email confirm field', () => {
     it('renders a input field', () => {
       render(<PersonForm />);
       renderForm('Email confirmation', 'emailConfirm', 'email');
     });
+
+    isThereErrorOnInputBlur(
+      'Email confirmation',
+      'Email confirmation field is required'
+    );
+  });
+
+  it('should render error when there is no the same value in email fields', async () => {
+    render(<PersonForm />);
+    const emailField = screen.getByLabelText('Email');
+    const emailConfirmField = screen.getByLabelText('Email confirmation');
+
+    fireEvent.change(emailField, { target: { value: '123' } });
+    fireEvent.change(emailConfirmField, {
+      target: { value: '987' },
+    });
+
+    fireEvent.blur(emailConfirmField);
+
+    await waitFor(() =>
+      expect(screen.queryByText('Email Not Matching')).toBeInTheDocument()
+    );
   });
 });

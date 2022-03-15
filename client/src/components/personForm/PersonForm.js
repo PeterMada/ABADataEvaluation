@@ -27,6 +27,18 @@ export const PersonForm = () => {
           if (!values.email) {
             errors.email = 'Email field is required';
           }
+          if (!values.emailConfirm) {
+            errors.emailConfirm = 'Email confirmation field is required';
+          }
+
+          if (
+            values.email &&
+            values.emailConfirm &&
+            values.email !== values.emailConfirm
+          ) {
+            errors.emailConfirm = 'Email Not Matching';
+          }
+
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -121,6 +133,11 @@ export const PersonForm = () => {
                 id="emailConfirm"
                 name="emailConfirm"
                 type="email"
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="emailConfirm"
+                component="div"
               />
             </div>
           </Form>

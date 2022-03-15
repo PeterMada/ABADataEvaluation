@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-require('dotenv').config();
 
 export const Login = ({ setAuth }) => {
   const [inputs, setInputs] = useState({

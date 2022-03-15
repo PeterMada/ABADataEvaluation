@@ -34,6 +34,13 @@ describe('Login', () => {
     expect(screen.getByTestId('loginForm')).toBeInTheDocument();
   });
 
+  it('render heading for form', () => {
+    renderLogin();
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual(
+      'Login'
+    );
+  });
+
   it('render input for eamil', () => {
     renderLogin();
     const field = screen.getByPlaceholderText('Email');
@@ -79,30 +86,55 @@ describe('Login', () => {
     expect(field).toHaveAttribute('href', '/register');
   });
 
-  it('submit login form', () => {
+  it('has link to forgot password page', () => {
+    renderLogin();
+    const field = screen.getByRole('link', { name: 'Forgot password?' });
+    expect(field).toBeInTheDocument();
+    expect(field).toHaveAttribute('href', '/resetPassword');
+  });
+
+  it.skip('has right value in email input when changed', () => {
+    renderLogin();
+    const field = screen.getByLabelText('Email');
+    fireEvent.change(field, { target: { value: 'testemail@email.sk' } });
+    expect(field.value).toBe('testemail@email.sk');
+  });
+
+  it.skip('show error message when email field is empty on submit', async () => {
     render(
       <BrowserRouter>
         <Login setAuth={() => null} />
       </BrowserRouter>
     );
     const form = screen.getByTestId('loginForm');
+    fireEvent.submit(form);
+    expect(
+      await screen.findByText('Missing Credentials')
+    ).toBeInTheDocument();
+  });
+
+  it('submit empty login form', () => {
+    render(
+      <BrowserRouter>
+        <Login setAuth={() => null} />
+      </BrowserRouter>
+    );
+    const form = screen.getByTestId('loginForm');
+    const emptyBody = {
+      email: '',
+      password: '',
+    };
 
     fireEvent.submit(form);
     expect(window.fetch).toHaveBeenCalledWith(
       `${process.env.REACT_APP_API_URL}auth/login`,
-      expect.anything()
-    );
-
-    /*
-    expect(window.fetch).toHaveBeenCalledWith(
-      '/customers',
-      expect.objectContaining({
+      {
         method: 'POST',
-        
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' }
-      })
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(emptyBody),
+      }
     );
-    */
   });
 });

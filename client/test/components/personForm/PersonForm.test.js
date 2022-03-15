@@ -16,9 +16,11 @@ describe('PersonForm', () => {
     expect(screen.getByTestId('addPerson')).toBeInTheDocument();
   });
 
-  it.skip('renders a input field for first name', () => {
+  it('renders a input field for first name', () => {
     render(<PersonForm />);
     const firstNameField = screen.getByLabelText('First Name');
-    expect(firstNameField).toBeInDocument();
+    expect(firstNameField).toBeInTheDocument();
+    expect(firstNameField.id).toEqual('firstName');
+    expect(firstNameField.type).toEqual('text');
   });
 });

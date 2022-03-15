@@ -55,4 +55,12 @@ describe('PersonForm', () => {
     expect(emailField.id).toEqual('email');
     expect(emailField.type).toEqual('email');
   });
+
+  it('renders a input field for email confirmation', () => {
+    render(<PersonForm />);
+    const emailField = screen.getByLabelText('Email confirmation');
+    expect(emailField).toBeInTheDocument();
+    expect(emailField.id).toEqual('emailConfirm');
+    expect(emailField.type).toEqual('email');
+  });
 });

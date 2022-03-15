@@ -25,6 +25,10 @@ export const PersonForm = () => {
           <label htmlFor="email">Email</label>
           <input id="email" name="email" type="email" />
         </div>
+        <div>
+          <label htmlFor="emailConfirm">Email confirmation</label>
+          <input id="emailConfirm" name="emailConfirm" type="email" />
+        </div>
       </form>
     </div>
   );

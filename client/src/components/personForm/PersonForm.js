@@ -2,8 +2,6 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 export const PersonForm = () => {
-  const handleSubmit = () => {};
-
   return (
     <div>
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
@@ -53,10 +51,29 @@ export const PersonForm = () => {
 
           return errors;
         }}
-        onSubmit={async (values, actions) => {
-          setTimeout(() => {
-            actions.setSubmitting(false);
-          }, 1000);
+        onSubmit={async (values, { setSubmitting }) => {
+          try {
+            const response = await fetch(
+              `${process.env.REACT_APP_API_URL}addPerson`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-type': 'application/json',
+                },
+                body: JSON.stringify(values),
+              }
+            );
+
+            const parseRes = await response.json();
+
+            if (parseRes.personID) {
+              toast.success('Person added succesfully');
+            } else {
+              toast.error(parseRes);
+            }
+          } catch (err) {
+            console.error(err.message);
+          }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
           <Form data-testid="addPerson">

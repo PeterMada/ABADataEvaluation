@@ -8,7 +8,10 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 import { PersonForm } from '../../../src/components/personForm/PersonForm';
+require('dotenv').config();
 
 describe('PersonForm', () => {
   const renderForm = (labelText, name, type = 'text') => {
@@ -230,4 +233,54 @@ describe('PersonForm', () => {
     expect(screen.queryByText('Processing...')).toBeNull();
     expect(screen.getByRole('button', 'submit')).toBeInTheDocument();
   });
+
+  /*
+  describe('submiting form', () => {
+    it.only('call fetch request with form values', async () => {
+      const handleSubmit = jest.fn();
+      render(<PersonForm onSubmit={handleSubmit} />);
+
+      const fetchBody = {
+        firstName: 'FirstName',
+        lastName: 'LastName',
+        email: 'test@test.tt',
+        emailConfirm: 'test@test.tt',
+      };
+      const submitButton = screen.getByRole('button', 'submit');
+
+      const firstNameField = screen.getByLabelText('First Name');
+      const lastNameField = screen.getByLabelText('Last Name');
+      const emailField = screen.getByLabelText('Email');
+      const emailConfirmField = screen.getByLabelText(
+        'Email confirmation'
+      );
+
+      fireEvent.change(firstNameField, {
+        target: { value: 'FirstName' },
+      });
+      fireEvent.change(lastNameField, { target: { value: 'LastName' } });
+      fireEvent.change(emailField, {
+        target: { value: 'test@test.tt' },
+      });
+      fireEvent.change(emailConfirmField, {
+        target: { value: 'test@test.tt' },
+      });
+
+      fireEvent.blur(emailConfirmField);
+
+      await fireEvent.click(submitButton);
+
+      expect(handleSubmit).toHaveBeenCalledWith(
+        `${process.env.REACT_APP_API_URL}addPerson`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+          },
+          body: JSON.stringify(fetchBody),
+        }
+      );
+    });
+  });
+  */
 });

@@ -90,6 +90,14 @@ export const Register = ({ setAuth }) => {
               'Confirm Password Field Cannot be empty';
           }
 
+          if (
+            values.password &&
+            values.passwordConfirm &&
+            values.password !== values.passwordConfirm
+          ) {
+            errors.passwordConfirm = 'Password must be matching';
+          }
+
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {}}>

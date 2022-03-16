@@ -204,14 +204,27 @@ describe('Register', () => {
       'Confirm Password Field Cannot be empty'
     );
 
-    /*
     it('shows error when passowrds does not match', async () => {
       render(
         <BrowserRouter>
           <Register />
         </BrowserRouter>
       );
-    })
-    */
+
+      const passwordField = screen.getByLabelText('Password');
+      const passwordConfirmField =
+        screen.getByLabelText('Confirm Password');
+      fireEvent.change(passwordField, { target: { value: 'asdf123456' } });
+      fireEvent.change(passwordConfirmField, {
+        target: { value: '123456asdf' },
+      });
+      fireEvent.blur(passwordConfirmField);
+
+      await waitFor(() =>
+        expect(
+          screen.queryByText('Password must be matching')
+        ).toBeInTheDocument()
+      );
+    });
   });
 });

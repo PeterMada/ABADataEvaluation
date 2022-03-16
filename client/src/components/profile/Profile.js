@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 export const Profile = () => {
   const [profile, setProfile] = useState({
     user_email: '',
-    user_name: '',
+    user_first_name: '',
+    user_last_name: '',
   });
 
   const getProfile = async () => {
@@ -34,7 +35,9 @@ export const Profile = () => {
         <tbody>
           <tr>
             <td>Name</td>
-            <td>{profile.user_name}</td>
+            <td>
+              {profile.user_first_name} {profile.user_last_name}
+            </td>
           </tr>
           <tr>
             <td>Email</td>

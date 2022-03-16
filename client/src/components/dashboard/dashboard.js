@@ -17,7 +17,7 @@ export const Dashboard = ({ setAuth }) => {
       );
 
       const parseRes = await response.json();
-      setName(parseRes.user_name);
+      setName(`${parseRes.user_first_name} ${parseRes.user_last_name}`);
     } catch (err) {
       console.error(err.message);
     }

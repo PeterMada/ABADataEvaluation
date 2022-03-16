@@ -179,4 +179,10 @@ describe('PersonForm', () => {
     expect(submitButton).toBeInTheDocument();
     expect(submitButton.textContent).toEqual('Add');
   });
+
+  it('has disabled submit button on load', () => {
+    render(<PersonForm />);
+    const submitButton = screen.getByRole('button', 'submit');
+    expect(submitButton).toBeDisabled();
+  });
 });

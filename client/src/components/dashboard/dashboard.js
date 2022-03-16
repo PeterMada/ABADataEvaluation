@@ -39,8 +39,21 @@ export const Dashboard = ({ setAuth }) => {
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
         Dashboard for {name}
       </h1>
-      <button onClick={logout}>Log out</button>
-      <Link to="/profile">Profile</Link>
+      <button
+        className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={logout}>
+        Log out
+      </button>
+      <Link
+        className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        to="/profile">
+        Profile
+      </Link>
+      <Link
+        className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        to="/addPerson">
+        Add new Person
+      </Link>
     </>
   );
 };

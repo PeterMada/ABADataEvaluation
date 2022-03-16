@@ -54,7 +54,7 @@ export const PersonForm = () => {
         onSubmit={(values, { setSubmitting }) => {
           setSubmitting(false);
         }}>
-        {({ isSubmitting }) => (
+        {({ isSubmitting, isValid, dirty }) => (
           <Form data-testid="addPerson">
             <div className="mb-4">
               <label
@@ -153,8 +153,12 @@ export const PersonForm = () => {
 
             <div className="flex items-center justify-between">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="submit">
+                className={
+                  (!dirty ? 'opacity-50 cursor-not-allowed ' : '') +
+                  'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                }
+                type="submit"
+                disabled={!dirty}>
                 Add
               </button>
             </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import 'whatwg-fetch';
 
 export const PersonForm = () => {
   return (
@@ -52,6 +53,8 @@ export const PersonForm = () => {
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {
+          // TODO Fix fetch
+          /*
           try {
             const response = await fetch(
               `${process.env.REACT_APP_API_URL}addPerson`,
@@ -74,6 +77,7 @@ export const PersonForm = () => {
           } catch (err) {
             console.error(err.message);
           }
+            */
         }}>
         {({ isSubmitting, isValid, dirty }) => (
           <Form data-testid="addPerson">

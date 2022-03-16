@@ -17,10 +17,10 @@ export const Register = ({ setAuth }) => {
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
-    console.log(process.env.API_URL);
+
     try {
       const body = { email, password, name };
-      console.log(JSON.stringify(body));
+
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}auth/register`,
         {

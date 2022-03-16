@@ -154,4 +154,20 @@ describe('Register', () => {
 
     isThereErrorOnEmptyInputBlur('Email', 'Email field is required');
   });
+
+  describe('password', () => {
+    it('renders a input field', () => {
+      render(
+        <BrowserRouter>
+          <Register />
+        </BrowserRouter>
+      );
+      checkFormField('Password', 'password', 'password');
+    });
+
+    isThereErrorOnEmptyInputBlur(
+      'Password',
+      'Password Field Cannot be empty'
+    );
+  });
 });

@@ -77,6 +77,10 @@ export const Register = ({ setAuth }) => {
             errors.email = 'Invalid email address';
           }
 
+          if (!values.password) {
+            errors.password = 'Password Field Cannot be empty';
+          }
+
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {}}>
@@ -134,20 +138,22 @@ export const Register = ({ setAuth }) => {
                 component="div"
               />
             </div>
-            <div className="mb-6">
+            <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="password">
                 Password
               </label>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="password"
                 name="password"
                 type="password"
-                placeholder="******************"
-                value={password}
-                onChange={(e) => onChange(e)}
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="password"
+                component="div"
               />
             </div>
             <div className="flex items-center justify-between">

@@ -57,6 +57,7 @@ export const Register = ({ setAuth }) => {
         initialValues={{
           firstName: '',
           lastName: '',
+          email: '',
         }}
         validate={(values) => {
           const errors = {};
@@ -66,6 +67,14 @@ export const Register = ({ setAuth }) => {
 
           if (!values.lastName) {
             errors.lastName = 'Last name field is required';
+          }
+
+          if (!values.email) {
+            errors.email = 'Email field is required';
+          } else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+          ) {
+            errors.email = 'Invalid email address';
           }
 
           return errors;
@@ -113,14 +122,16 @@ export const Register = ({ setAuth }) => {
                 htmlFor="email">
                 Email
               </label>
-              <input
+              <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="email"
                 name="email"
-                type="text"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => onChange(e)}
+                type="email"
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="email"
+                component="div"
               />
             </div>
             <div className="mb-6">

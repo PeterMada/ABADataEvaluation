@@ -22,9 +22,11 @@ export const PersonForm = () => {
           if (!values.firstName) {
             errors.firstName = 'First name field is required';
           }
+
           if (!values.lastName) {
             errors.lastName = 'Last name field is required';
           }
+
           if (!values.email) {
             errors.email = 'Email field is required';
           } else if (
@@ -32,6 +34,7 @@ export const PersonForm = () => {
           ) {
             errors.email = 'Invalid email address';
           }
+
           if (!values.emailConfirm) {
             errors.emailConfirm = 'Email confirmation field is required';
           } else if (

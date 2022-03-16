@@ -124,4 +124,34 @@ describe('Register', () => {
       'Last name field is required'
     );
   });
+
+  describe('email field', () => {
+    it('renders a input field', () => {
+      render(
+        <BrowserRouter>
+          <Register />
+        </BrowserRouter>
+      );
+      checkFormField('Email', 'email', 'email');
+    });
+
+    it('show error on incorrect format', async () => {
+      render(
+        <BrowserRouter>
+          <Register />
+        </BrowserRouter>
+      );
+      const emailField = screen.getByLabelText('Email');
+      fireEvent.change(emailField, { target: { value: '123' } });
+      fireEvent.blur(emailField);
+
+      await waitFor(() =>
+        expect(
+          screen.queryByText('Invalid email address')
+        ).toBeInTheDocument()
+      );
+    });
+
+    isThereErrorOnEmptyInputBlur('Email', 'Email field is required');
+  });
 });

@@ -185,4 +185,25 @@ describe('PersonForm', () => {
     const submitButton = screen.getByRole('button', 'submit');
     expect(submitButton).toBeDisabled();
   });
+
+  it('shows loading button when form is submitting', async () => {
+    render(<PersonForm />);
+    const firstNameField = screen.getByLabelText('First Name');
+    const lastNameField = screen.getByLabelText('Last Name');
+    const emailField = screen.getByLabelText('Email');
+    const emailConfirmField = screen.getByLabelText('Email confirmation');
+
+    fireEvent.change(firstNameField, { target: { value: 'FirstName' } });
+    fireEvent.change(lastNameField, { target: { value: 'LastName' } });
+    fireEvent.change(emailField, { target: { value: 'test@test.tt' } });
+    fireEvent.change(emailConfirmField, {
+      target: { value: 'test@test.tt' },
+    });
+
+    fireEvent.click(screen.getByRole('button', 'submit'));
+
+    await waitFor(() =>
+      expect(screen.getByText('Processing...')).toBeInTheDocument()
+    );
+  });
 });

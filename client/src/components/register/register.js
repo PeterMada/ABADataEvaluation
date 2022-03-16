@@ -58,6 +58,8 @@ export const Register = ({ setAuth }) => {
           firstName: '',
           lastName: '',
           email: '',
+          password: '',
+          passwordConfirm: '',
         }}
         validate={(values) => {
           const errors = {};
@@ -79,6 +81,13 @@ export const Register = ({ setAuth }) => {
 
           if (!values.password) {
             errors.password = 'Password Field Cannot be empty';
+          } else if (values.password.length < 8) {
+            errors.password = 'Password must be 8 characters long';
+          }
+
+          if (!values.passwordConfirm) {
+            errors.passwordConfirm =
+              'Confirm Password Field Cannot be empty';
           }
 
           return errors;
@@ -153,6 +162,24 @@ export const Register = ({ setAuth }) => {
               <ErrorMessage
                 className="text-red-500 text-xs mt-1 ml-1"
                 name="password"
+                component="div"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="passwordConfirm">
+                Confirm Password
+              </label>
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="passwordConfirm"
+                name="passwordConfirm"
+                type="password"
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="passwordConfirm"
                 component="div"
               />
             </div>

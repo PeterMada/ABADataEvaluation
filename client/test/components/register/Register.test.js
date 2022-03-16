@@ -169,5 +169,49 @@ describe('Register', () => {
       'Password',
       'Password Field Cannot be empty'
     );
+
+    it('shows error on password with small length', async () => {
+      render(
+        <BrowserRouter>
+          <Register />
+        </BrowserRouter>
+      );
+
+      const passwordField = screen.getByLabelText('Password');
+      fireEvent.change(passwordField, { target: { value: '123' } });
+      fireEvent.blur(passwordField);
+
+      await waitFor(() =>
+        expect(
+          screen.queryByText('Password must be 8 characters long')
+        ).toBeInTheDocument()
+      );
+    });
+  });
+
+  describe('password confirm', () => {
+    it('renders a input field', () => {
+      render(
+        <BrowserRouter>
+          <Register />
+        </BrowserRouter>
+      );
+      checkFormField('Confirm Password', 'passwordConfirm', 'password');
+    });
+
+    isThereErrorOnEmptyInputBlur(
+      'Confirm Password',
+      'Confirm Password Field Cannot be empty'
+    );
+
+    /*
+    it('shows error when passowrds does not match', async () => {
+      render(
+        <BrowserRouter>
+          <Register />
+        </BrowserRouter>
+      );
+    })
+    */
   });
 });

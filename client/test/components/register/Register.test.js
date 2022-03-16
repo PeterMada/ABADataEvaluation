@@ -15,11 +15,26 @@ import { Register } from '../../../src/components/register/Register';
 require('dotenv').config();
 
 describe('Register', () => {
-  const renderForm = (labelText, name, type = 'text') => {
-    const firstNameField = screen.getByLabelText(labelText);
-    expect(firstNameField).toBeInTheDocument();
-    expect(firstNameField.id).toEqual(name);
-    expect(firstNameField.type).toEqual(type);
+  const checkFormField = (labelText, name, type = 'text') => {
+    const field = screen.getByLabelText(labelText);
+    expect(field).toBeInTheDocument();
+    expect(field.id).toEqual(name);
+    expect(field.type).toEqual(type);
+  };
+
+  const isThereErrorOnEmptyInputBlur = async (labelText, errorText) => {
+    it('displays error after blur when field is blank', async () => {
+      render(
+        <BrowserRouter>
+          <Register />
+        </BrowserRouter>
+      );
+      await fireEvent.focus(screen.getByLabelText(labelText));
+      await fireEvent.blur(screen.getByLabelText(labelText));
+      await waitFor(() =>
+        expect(screen.getByText(errorText)).toBeInTheDocument()
+      );
+    });
   };
 
   it('render heading', () => {
@@ -30,6 +45,31 @@ describe('Register', () => {
     );
     expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual(
       'Register'
+    );
+  });
+
+  it('render form', () => {
+    render(
+      <BrowserRouter>
+        <Register />
+      </BrowserRouter>
+    );
+    expect(screen.getByTestId('registerForm')).toBeInTheDocument();
+  });
+
+  describe('first name', () => {
+    it('renders a input field', () => {
+      render(
+        <BrowserRouter>
+          <Register />
+        </BrowserRouter>
+      );
+      checkFormField('First Name', 'firstName');
+    });
+
+    isThereErrorOnEmptyInputBlur(
+      'First Name',
+      'First name field is required'
     );
   });
 });

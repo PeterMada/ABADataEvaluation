@@ -2,7 +2,6 @@ CREATE DATABASE ABADataEvaluation;
 
 CREATE TABLE users(
   user_id uuid DEFAULT uuid_generate_v4(),
-  user_name VARCHAR(255) NOT NULL,
   user_first_name VARCHAR(255) NOT NULL,
   user_last_name VARCHAR(255) NOT NULL,
   user_email VARCHAR(255) NOT NULL,
@@ -16,5 +15,5 @@ CREATE TABLE users(
 );
 
 -- insert fake users
-INSERT INTO users(user_name, user_email, user_password)
- VALUES ('peter', 'test123@gmail.com', 'wert1189');
+INSERT INTO users(user_first_name, user_last_name, user_email, user_password)
+ VALUES ('peter', 'mada' 'test123@gmail.com', 'wert1189');

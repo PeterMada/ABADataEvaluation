@@ -37,6 +37,32 @@ describe('Register', () => {
     });
   };
 
+  const thereIsNoErrorMessageOnSomeTextInInput = async (
+    labelText,
+    errorText
+  ) => {
+    it('remove error when there is some value in input', async () => {
+      render(
+        <BrowserRouter>
+          <Register />
+        </BrowserRouter>
+      );
+      const labelField = screen.getByLabelText(labelText);
+      fireEvent.focus(labelField);
+      fireEvent.blur(labelField);
+
+      await waitFor(() =>
+        expect(screen.getByText(errorText)).toBeInTheDocument()
+      );
+
+      fireEvent.change(labelField, { target: { value: '23' } });
+
+      await waitForElementToBeRemoved(() => screen.queryByText(errorText));
+
+      expect(screen.queryByText(errorText)).not.toBeInTheDocument();
+    });
+  };
+
   it('render heading', () => {
     render(
       <BrowserRouter>
@@ -70,6 +96,32 @@ describe('Register', () => {
     isThereErrorOnEmptyInputBlur(
       'First Name',
       'First name field is required'
+    );
+
+    thereIsNoErrorMessageOnSomeTextInInput(
+      'First Name',
+      'First name field is required'
+    );
+  });
+
+  describe('last name', () => {
+    it('renders a input field', () => {
+      render(
+        <BrowserRouter>
+          <Register />
+        </BrowserRouter>
+      );
+      checkFormField('Last Name', 'lastName');
+    });
+
+    isThereErrorOnEmptyInputBlur(
+      'Last Name',
+      'Last name field is required'
+    );
+
+    thereIsNoErrorMessageOnSomeTextInInput(
+      'Last Name',
+      'Last name field is required'
     );
   });
 });

@@ -56,11 +56,16 @@ export const Register = ({ setAuth }) => {
       <Formik
         initialValues={{
           firstName: '',
+          lastName: '',
         }}
         validate={(values) => {
           const errors = {};
           if (!values.firstName) {
             errors.firstName = 'First name field is required';
+          }
+
+          if (!values.lastName) {
+            errors.lastName = 'Last name field is required';
           }
 
           return errors;
@@ -82,6 +87,23 @@ export const Register = ({ setAuth }) => {
               <ErrorMessage
                 className="text-red-500 text-xs mt-1 ml-1"
                 name="firstName"
+                component="div"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="lastName">
+                Last Name
+              </label>
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="lastName"
+                name="lastName"
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="lastName"
                 component="div"
               />
             </div>

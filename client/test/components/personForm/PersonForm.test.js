@@ -206,4 +206,28 @@ describe('PersonForm', () => {
       expect(screen.getByText('Processing...')).toBeInTheDocument()
     );
   });
+
+  it('remove loading button when form submiting finished', async () => {
+    render(<PersonForm />);
+    const firstNameField = screen.getByLabelText('First Name');
+    const lastNameField = screen.getByLabelText('Last Name');
+    const emailField = screen.getByLabelText('Email');
+    const emailConfirmField = screen.getByLabelText('Email confirmation');
+    const submitButton = screen.getByRole('button', 'submit');
+
+    fireEvent.change(firstNameField, { target: { value: 'FirstName' } });
+    fireEvent.change(lastNameField, { target: { value: 'LastName' } });
+    fireEvent.change(emailField, { target: { value: 'test@test.tt' } });
+    fireEvent.change(emailConfirmField, {
+      target: { value: 'test@test.tt' },
+    });
+
+    fireEvent.click(submitButton);
+    await waitForElementToBeRemoved(() =>
+      screen.getByText('Processing...')
+    );
+
+    expect(screen.queryByText('Processing...')).toBeNull();
+    expect(screen.getByRole('button', 'submit')).toBeInTheDocument();
+  });
 });

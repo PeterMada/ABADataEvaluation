@@ -53,11 +53,10 @@ export const PersonForm = () => {
 
           return errors;
         }}
-        onSubmit={(values, actions) => {
+        onSubmit={async (values, actions) => {
           setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
             actions.setSubmitting(false);
-          }, 5000);
+          }, 1000);
         }}>
         {({ isSubmitting, isValid, dirty }) => (
           <Form data-testid="addPerson">

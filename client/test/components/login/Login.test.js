@@ -107,15 +107,15 @@ describe('Login', () => {
     expect(field.value).toBe('testemail@email.sk');
   });
 
-  // TODO finish this test
-  it.skip('show error message when email field is empty on submit', async () => {
+  it('show error message when email field is empty on submit', async () => {
     render(
       <BrowserRouter>
+        <ToastContainer />
         <Login setAuth={() => null} />
       </BrowserRouter>
     );
-    const form = screen.getByTestId('loginForm');
-    fireEvent.submit(form);
+    const submitButton = screen.getByRole('button', 'submit');
+    fireEvent.click(submitButton);
     expect(
       await screen.findByText('Missing Credentials')
     ).toBeInTheDocument();

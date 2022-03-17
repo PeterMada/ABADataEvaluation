@@ -264,9 +264,12 @@ describe('Register', () => {
     };
 
     const server = setupServer(
-      rest.get('/greeting', (req, res, ctx) => {
-        return res(ctx.json({ greeting: 'hello there' }));
-      })
+      rest.get(
+        `${process.env.REACT_APP_API_URL}auth/register`,
+        (req, res, ctx) => {
+          return res(ctx.json({ greeting: 'hello there' }));
+        }
+      )
     );
 
     beforeAll(() => server.listen());

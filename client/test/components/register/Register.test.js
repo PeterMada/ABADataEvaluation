@@ -297,5 +297,49 @@ describe('Register', () => {
         await screen.findByText('Oops, failed to fetch!')
       ).toBeInTheDocument();
     });
+
+    it('returns error when fetch does not return access token', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <Register setAuth={() => null} />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}auth/register`,
+          (req, res, ctx) => {
+            return res(ctx.status(200), ctx.json({ token: '' }));
+          }
+        )
+      );
+
+      const firstName = screen.getByLabelText('First Name');
+      const lastName = screen.getByLabelText('Last Name');
+      const email = screen.getByLabelText('Email');
+      const passwordField = screen.getByLabelText('Password');
+      const passwordConfirmField =
+        screen.getByLabelText('Confirm Password');
+      const submitButton = screen.getByRole('button', 'submit');
+      fireEvent.change(firstName, {
+        target: { value: 'FirstName' },
+      });
+      fireEvent.change(lastName, { target: { value: 'LastName' } });
+      fireEvent.change(email, { target: { value: 'test@test.sk' } });
+      fireEvent.change(passwordField, {
+        target: { value: 'asdf123456' },
+      });
+      fireEvent.change(passwordConfirmField, {
+        target: { value: 'asdf123456' },
+      });
+
+      fireEvent.blur(passwordConfirmField);
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Authentication was unsuccessful')
+      ).toBeInTheDocument();
+    });
   });
 });

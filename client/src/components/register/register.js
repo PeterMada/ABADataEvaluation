@@ -69,7 +69,6 @@ export const Register = ({ setAuth }) => {
             );
 
             const parseRes = await response.json();
-
             if (parseRes.token) {
               //TODO store token in cookie
               localStorage.setItem('token', parseRes.token);
@@ -77,7 +76,7 @@ export const Register = ({ setAuth }) => {
               toast.success('Registered succesfully');
             } else {
               setAuth(false);
-              toast.error(parseRes);
+              toast.error('Authentication was unsuccessful');
             }
           } catch (err) {
             toast.error('Oops, failed to fetch!');

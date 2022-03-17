@@ -227,4 +227,16 @@ describe('Register', () => {
       );
     });
   });
+
+  it('has submit button', () => {
+    render(
+      <BrowserRouter>
+        <Register />
+      </BrowserRouter>
+    );
+
+    const submitButton = screen.getByRole('button', 'submit');
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton.textContent).toEqual('Register');
+  });
 });

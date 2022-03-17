@@ -303,10 +303,11 @@ describe('Register', () => {
     });
 
     it('returns error when fetch does not return access token', async () => {
+      const setAuth = jest.fn();
       render(
         <BrowserRouter>
           <ToastContainer />
-          <Register setAuth={() => null} />
+          <Register setAuth={setAuth} />
         </BrowserRouter>
       );
 
@@ -332,13 +333,17 @@ describe('Register', () => {
       expect(
         await screen.findByText('Authentication was unsuccessful')
       ).toBeInTheDocument();
+
+      expect(setAuth).toHaveBeenCalledWith(false);
     });
 
     it('shows success message on sucessful submition', async () => {
+      const setAuth = jest.fn();
+
       render(
         <BrowserRouter>
           <ToastContainer />
-          <Register setAuth={() => null} />
+          <Register setAuth={setAuth} />
         </BrowserRouter>
       );
 
@@ -359,6 +364,7 @@ describe('Register', () => {
       expect(
         await screen.findByText('Registered succesfully')
       ).toBeInTheDocument();
+      expect(setAuth).toHaveBeenCalledWith(true);
     });
   });
 });

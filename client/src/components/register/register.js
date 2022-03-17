@@ -4,46 +4,6 @@ import { toast } from 'react-toastify';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 export const Register = ({ setAuth }) => {
-  const [inputs, setInputs] = useState({
-    email: '',
-    password: '',
-    firstName: '',
-  });
-
-  const { email, password, firstName } = inputs;
-
-  const onChange = (e) => {
-    setInputs({ ...inputs, [e.target.name]: e.target.value });
-  };
-
-  const onSubmitForm = async ({ values }) => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}auth/register`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-
-          body: JSON.stringify(body),
-        }
-      );
-
-      const parseRes = await response.json();
-
-      if (parseRes.token) {
-        //TODO store token in cookie
-        localStorage.setItem('token', parseRes.token);
-        setAuth(true);
-        toast.success('Registered succesfully');
-      } else {
-        setAuth(false);
-        toast.error(parseRes);
-      }
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
   return (
     <>
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">

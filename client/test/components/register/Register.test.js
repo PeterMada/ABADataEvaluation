@@ -242,6 +242,27 @@ describe('Register', () => {
   });
 
   describe('submiting', () => {
+    const fillFormWithRightValues = () => {
+      const firstName = screen.getByLabelText('First Name');
+      const lastName = screen.getByLabelText('Last Name');
+      const email = screen.getByLabelText('Email');
+      const passwordField = screen.getByLabelText('Password');
+      const passwordConfirmField =
+        screen.getByLabelText('Confirm Password');
+      const submitButton = screen.getByRole('button', 'submit');
+      fireEvent.change(firstName, {
+        target: { value: 'FirstName' },
+      });
+      fireEvent.change(lastName, { target: { value: 'LastName' } });
+      fireEvent.change(email, { target: { value: 'test@test.sk' } });
+      fireEvent.change(passwordField, {
+        target: { value: 'asdf123456' },
+      });
+      fireEvent.change(passwordConfirmField, {
+        target: { value: 'asdf123456' },
+      });
+    };
+
     const server = setupServer(
       rest.get('/greeting', (req, res, ctx) => {
         return res(ctx.json({ greeting: 'hello there' }));
@@ -269,29 +290,12 @@ describe('Register', () => {
         )
       );
 
-      const firstName = screen.getByLabelText('First Name');
-      const lastName = screen.getByLabelText('Last Name');
-      const email = screen.getByLabelText('Email');
-      const passwordField = screen.getByLabelText('Password');
       const passwordConfirmField =
         screen.getByLabelText('Confirm Password');
       const submitButton = screen.getByRole('button', 'submit');
-      fireEvent.change(firstName, {
-        target: { value: 'FirstName' },
-      });
-      fireEvent.change(lastName, { target: { value: 'LastName' } });
-      fireEvent.change(email, { target: { value: 'test@test.sk' } });
-      fireEvent.change(passwordField, {
-        target: { value: 'asdf123456' },
-      });
-      fireEvent.change(passwordConfirmField, {
-        target: { value: 'asdf123456' },
-      });
+      fillFormWithRightValues();
 
-      fireEvent.blur(passwordConfirmField);
       fireEvent.click(submitButton);
-
-      await waitFor(() => screen.getByRole('alert'));
 
       expect(
         await screen.findByText('Oops, failed to fetch!')
@@ -315,26 +319,11 @@ describe('Register', () => {
         )
       );
 
-      const firstName = screen.getByLabelText('First Name');
-      const lastName = screen.getByLabelText('Last Name');
-      const email = screen.getByLabelText('Email');
-      const passwordField = screen.getByLabelText('Password');
       const passwordConfirmField =
         screen.getByLabelText('Confirm Password');
       const submitButton = screen.getByRole('button', 'submit');
-      fireEvent.change(firstName, {
-        target: { value: 'FirstName' },
-      });
-      fireEvent.change(lastName, { target: { value: 'LastName' } });
-      fireEvent.change(email, { target: { value: 'test@test.sk' } });
-      fireEvent.change(passwordField, {
-        target: { value: 'asdf123456' },
-      });
-      fireEvent.change(passwordConfirmField, {
-        target: { value: 'asdf123456' },
-      });
+      fillFormWithRightValues();
 
-      fireEvent.blur(passwordConfirmField);
       fireEvent.click(submitButton);
 
       expect(

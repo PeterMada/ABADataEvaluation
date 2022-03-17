@@ -10,7 +10,7 @@ import {
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { BrowserRouter } from 'react-router-dom';
-import { Register } from '../../../src/components/register/Register';
+import { Register } from '../../../src/components/register/register';
 import { ToastContainer } from 'react-toastify';
 import 'whatwg-fetch';
 require('dotenv').config();

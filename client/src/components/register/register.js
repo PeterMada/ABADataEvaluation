@@ -80,7 +80,7 @@ export const Register = ({ setAuth }) => {
               toast.error(parseRes);
             }
           } catch (err) {
-            console.error(err.message);
+            toast.error('Oops, failed to fetch!');
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (

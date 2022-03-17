@@ -7,11 +7,12 @@ import {
   waitFor,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
-
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { BrowserRouter } from 'react-router-dom';
 import { Register } from '../../../src/components/register/Register';
+import { ToastContainer } from 'react-toastify';
+import 'whatwg-fetch';
 require('dotenv').config();
 
 describe('Register', () => {
@@ -238,5 +239,63 @@ describe('Register', () => {
     const submitButton = screen.getByRole('button', 'submit');
     expect(submitButton).toBeInTheDocument();
     expect(submitButton.textContent).toEqual('Register');
+  });
+
+  describe('submiting', () => {
+    const server = setupServer(
+      rest.get('/greeting', (req, res, ctx) => {
+        return res(ctx.json({ greeting: 'hello there' }));
+      })
+    );
+
+    beforeAll(() => server.listen());
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+
+    it('handle server error', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <Register setAuth={() => null} />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}auth/register`,
+          (req, res, ctx) => {
+            return res(ctx.status(500));
+          }
+        )
+      );
+
+      const firstName = screen.getByLabelText('First Name');
+      const lastName = screen.getByLabelText('Last Name');
+      const email = screen.getByLabelText('Email');
+      const passwordField = screen.getByLabelText('Password');
+      const passwordConfirmField =
+        screen.getByLabelText('Confirm Password');
+      const submitButton = screen.getByRole('button', 'submit');
+      fireEvent.change(firstName, {
+        target: { value: 'FirstName' },
+      });
+      fireEvent.change(lastName, { target: { value: 'LastName' } });
+      fireEvent.change(email, { target: { value: 'test@test.sk' } });
+      fireEvent.change(passwordField, {
+        target: { value: 'asdf123456' },
+      });
+      fireEvent.change(passwordConfirmField, {
+        target: { value: 'asdf123456' },
+      });
+
+      fireEvent.blur(passwordConfirmField);
+      fireEvent.click(submitButton);
+
+      await waitFor(() => screen.getByRole('alert'));
+
+      expect(
+        await screen.findByText('Oops, failed to fetch!')
+      ).toBeInTheDocument();
+    });
   });
 });

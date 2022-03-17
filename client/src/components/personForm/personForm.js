@@ -70,13 +70,13 @@ export const PersonForm = () => {
                 body: JSON.stringify(values),
               }
             );
-            toast.success('Person added succesfully');
 
             const parseRes = await response.json();
 
             if (parseRes.personID) {
+              toast.success('Person added succesfully');
             } else {
-              //toast.error(parseRes);
+              toast.error(parseRes);
             }
           } catch (err) {
             toast.error('Oops, failed to fetch!');

@@ -306,7 +306,7 @@ describe('PersonForm', () => {
         rest.post(
           `${process.env.REACT_APP_API_URL}addPerson`,
           (req, res, ctx) => {
-            return res(ctx.status(200));
+            return res(ctx.status(200), ctx.json({ personID: '123' }));
           }
         )
       );
@@ -320,8 +320,37 @@ describe('PersonForm', () => {
         await screen.findByText('Person added succesfully')
       ).toBeInTheDocument();
     });
-  });
 
+    it('shows error message on success submition but without person id', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <PersonForm />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}addPerson`,
+          (req, res, ctx) => {
+            return res(
+              ctx.status(200),
+              ctx.json('Authentication was unsuccessful')
+            );
+          }
+        )
+      );
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fillFormWithRightValues();
+
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Authentication was unsuccessful')
+      ).toBeInTheDocument();
+    });
+  });
   /*
   describe('submiting form', () => {
     it.only('call fetch request with form values', async () => {

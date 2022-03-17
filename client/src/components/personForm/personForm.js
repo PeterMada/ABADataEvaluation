@@ -1,5 +1,6 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { toast } from 'react-toastify';
 import 'whatwg-fetch';
 
 export const PersonForm = () => {
@@ -57,7 +58,7 @@ export const PersonForm = () => {
         }}
         onSubmit={async (values, { setSubmitting }) => {
           // TODO Fix fetch
-          /*
+
           try {
             const response = await fetch(
               `${process.env.REACT_APP_API_URL}addPerson`,
@@ -69,18 +70,17 @@ export const PersonForm = () => {
                 body: JSON.stringify(values),
               }
             );
+            toast.success('Person added succesfully');
 
             const parseRes = await response.json();
 
             if (parseRes.personID) {
-              toast.success('Person added succesfully');
             } else {
-              toast.error(parseRes);
+              //toast.error(parseRes);
             }
           } catch (err) {
-            console.error(err.message);
+            toast.error('Oops, failed to fetch!');
           }
-            */
         }}>
         {({ isSubmitting, isValid, dirty }) => (
           <Form data-testid="addPerson">

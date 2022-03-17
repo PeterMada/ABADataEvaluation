@@ -314,7 +314,10 @@ describe('Register', () => {
         rest.post(
           `${process.env.REACT_APP_API_URL}auth/register`,
           (req, res, ctx) => {
-            return res(ctx.status(200), ctx.json({ token: '' }));
+            return res(
+              ctx.status(200),
+              ctx.json('Authentication was unsuccessful')
+            );
           }
         )
       );
@@ -328,6 +331,33 @@ describe('Register', () => {
 
       expect(
         await screen.findByText('Authentication was unsuccessful')
+      ).toBeInTheDocument();
+    });
+
+    it('shows success message on sucessful submition', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <Register setAuth={() => null} />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}auth/register`,
+          (req, res, ctx) => {
+            return res(ctx.status(200), ctx.json({ token: '123' }));
+          }
+        )
+      );
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fillFormWithRightValues();
+
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Registered succesfully')
       ).toBeInTheDocument();
     });
   });

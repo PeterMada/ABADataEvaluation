@@ -76,7 +76,7 @@ export const Register = ({ setAuth }) => {
               toast.success('Registered succesfully');
             } else {
               setAuth(false);
-              toast.error('Authentication was unsuccessful');
+              toast.error(parseRes);
             }
           } catch (err) {
             toast.error('Oops, failed to fetch!');

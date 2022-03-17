@@ -1,5 +1,10 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { createMemoryHistory } from 'history';
 import {
@@ -11,6 +16,7 @@ import 'whatwg-fetch';
 import { BrowserRouter } from 'react-router-dom';
 import { Login } from '../../../src/components/login/Login';
 import { App } from '../../../src/App';
+import { ToastContainer } from 'react-toastify';
 
 describe('Login', () => {
   beforeEach(() => {
@@ -32,6 +38,13 @@ describe('Login', () => {
   it('render login form', () => {
     renderLogin();
     expect(screen.getByTestId('loginForm')).toBeInTheDocument();
+  });
+
+  it('render heading for form', () => {
+    renderLogin();
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual(
+      'Login'
+    );
   });
 
   it('render input for eamil', () => {
@@ -79,26 +92,76 @@ describe('Login', () => {
     expect(field).toHaveAttribute('href', '/register');
   });
 
-  it('submit login form', () => {
+  it('has link to forgot password page', () => {
+    renderLogin();
+    const field = screen.getByRole('link', { name: 'Forgot password?' });
+    expect(field).toBeInTheDocument();
+    expect(field).toHaveAttribute('href', '/resetPassword');
+  });
+
+  // TODO is this test realy nescesary?
+  it.skip('has right value in email input when changed', () => {
+    renderLogin();
+    const field = screen.getByLabelText('Email');
+    fireEvent.change(field, { target: { value: 'testemail@email.sk' } });
+    expect(field.value).toBe('testemail@email.sk');
+  });
+
+  it('show error message when email field is empty on submit', async () => {
+    render(
+      <BrowserRouter>
+        <ToastContainer />
+        <Login setAuth={() => null} />
+      </BrowserRouter>
+    );
+    const submitButton = screen.getByRole('button', 'submit');
+    fireEvent.click(submitButton);
+    expect(
+      await screen.findByText('Missing Credentials')
+    ).toBeInTheDocument();
+  });
+
+  // TODO finish this test
+  it.skip('submit empty login form', () => {
     render(
       <BrowserRouter>
         <Login setAuth={() => null} />
       </BrowserRouter>
     );
     const form = screen.getByTestId('loginForm');
+    const emptyBody = {
+      email: '',
+      password: '',
+    };
 
     fireEvent.submit(form);
-    expect(window.fetch).toHaveBeenCalledWith('auth/login');
-
-    /*
     expect(window.fetch).toHaveBeenCalledWith(
-      '/customers',
-      expect.objectContaining({
+      `${process.env.REACT_APP_API_URL}auth/login`,
+      {
         method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' }
-      })
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(emptyBody),
+      }
     );
-    */
+  });
+
+  // TODO finish this test
+  it.skip('show error message when empty form is submited', async () => {
+    render(
+      <BrowserRouter>
+        <Login setAuth={() => null} />
+      </BrowserRouter>
+    );
+    const form = screen.getByTestId('loginForm');
+    const submitButton = screen.getByRole('button', 'submit');
+
+    fireEvent.click(submitButton);
+    //+ await waitFor(() => screen.findByRole('alert'));
+
+    expect(
+      await screen.findByText('Missing Credentials')
+    ).toBeInTheDocument();
   });
 });

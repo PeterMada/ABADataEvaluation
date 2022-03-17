@@ -13,8 +13,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Header } from './layout/header/Header';
 import { Dashboard } from './components/dashboard/dashboard';
 import { Login } from './components/login/Login';
-import { Register } from './components/register/register';
+import { Register } from './components/register/Register';
 import { Profile } from './components/profile/Profile';
+import { PersonForm } from './components/personForm/PersonForm';
 
 toast.configure();
 
@@ -87,17 +88,6 @@ export const App = () => {
           />
           <Route
             exact
-            path="/resetPassword"
-            element={
-              isAuthenticated ? (
-                <Dashboard setAuth={setAuth} />
-              ) : (
-                <ResetPassword />
-              )
-            }
-          />
-          <Route
-            exact
             path="/dashboard"
             element={
               isAuthenticated ? (
@@ -117,6 +107,11 @@ export const App = () => {
                 <Navigate replace to="/login" />
               )
             }
+          />
+          <Route
+            exact
+            path="/addPerson"
+            element={isAuthenticated ? <PersonForm /> : <PersonForm />}
           />
         </Routes>
       </div>

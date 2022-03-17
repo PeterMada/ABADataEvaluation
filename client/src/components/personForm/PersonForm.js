@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import 'whatwg-fetch';
 
-export const Register = ({ setAuth }) => {
+export const PersonForm = () => {
   return (
-    <>
+    <div>
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
-        Register
+        Add Person
       </h1>
       <Formik
         initialValues={{
+          beforeNameTitle: '',
           firstName: '',
           lastName: '',
+          afterNameTitle: '',
           email: '',
-          password: '',
-          passwordConfirm: '',
+          emailConfirm: '',
         }}
         validate={(values) => {
           const errors = {};
@@ -35,55 +35,67 @@ export const Register = ({ setAuth }) => {
             errors.email = 'Invalid email address';
           }
 
-          if (!values.password) {
-            errors.password = 'Password Field Cannot be empty';
-          } else if (values.password.length < 8) {
-            errors.password = 'Password must be 8 characters long';
-          }
-
-          if (!values.passwordConfirm) {
-            errors.passwordConfirm =
-              'Confirm Password Field Cannot be empty';
+          if (!values.emailConfirm) {
+            errors.emailConfirm = 'Email confirmation field is required';
+          } else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
+              values.emailConfirm
+            )
+          ) {
+            errors.emailConfirm = 'Invalid email address';
           }
 
           if (
-            values.password &&
-            values.passwordConfirm &&
-            values.password !== values.passwordConfirm
+            values.email &&
+            values.emailConfirm &&
+            values.email !== values.emailConfirm
           ) {
-            errors.passwordConfirm = 'Password must be matching';
+            errors.emailConfirm = 'Email Not Matching';
           }
 
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {
+          // TODO Fix fetch
+          /*
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}auth/register`,
+              `${process.env.REACT_APP_API_URL}addPerson`,
               {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-
+                headers: {
+                  'Content-type': 'application/json',
+                },
                 body: JSON.stringify(values),
               }
             );
 
             const parseRes = await response.json();
-            if (parseRes.token) {
-              //TODO store token in cookie
-              localStorage.setItem('token', parseRes.token);
-              setAuth(true);
-              toast.success('Registered succesfully');
+
+            if (parseRes.personID) {
+              toast.success('Person added succesfully');
             } else {
-              setAuth(false);
               toast.error(parseRes);
             }
           } catch (err) {
-            toast.error('Oops, failed to fetch!');
+            console.error(err.message);
           }
+            */
         }}>
         {({ isSubmitting, isValid, dirty }) => (
-          <Form data-testid="registerForm">
+          <Form data-testid="addPerson">
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="beforeNameTitle">
+                Titles before name
+              </label>
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="beforeNameTitle"
+                name="beforeNameTitle"
+              />
+            </div>
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -121,6 +133,18 @@ export const Register = ({ setAuth }) => {
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="afterNameTitle">
+                Titles after name
+              </label>
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="afterNameTitle"
+                name="afterNameTitle"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="email">
                 Email
               </label>
@@ -139,36 +163,18 @@ export const Register = ({ setAuth }) => {
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="password">
-                Password
+                htmlFor="emailConfirm">
+                Email confirmation
               </label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="password"
-                name="password"
-                type="password"
+                id="emailConfirm"
+                name="emailConfirm"
+                type="email"
               />
               <ErrorMessage
                 className="text-red-500 text-xs mt-1 ml-1"
-                name="password"
-                component="div"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="passwordConfirm">
-                Confirm Password
-              </label>
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="passwordConfirm"
-                name="passwordConfirm"
-                type="password"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="passwordConfirm"
+                name="emailConfirm"
                 component="div"
               />
             </div>
@@ -182,7 +188,7 @@ export const Register = ({ setAuth }) => {
                   }
                   type="submit"
                   disabled={!dirty}>
-                  Register
+                  Add
                 </button>
               ) : (
                 <span
@@ -212,8 +218,6 @@ export const Register = ({ setAuth }) => {
           </Form>
         )}
       </Formik>
-
-      <Link to="/login">Login</Link>
-    </>
+    </div>
   );
 };

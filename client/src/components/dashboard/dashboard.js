@@ -39,8 +39,12 @@ export const Dashboard = ({ setAuth }) => {
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
         Dashboard for {name}
       </h1>
+
       <div data-testid="personsListWrapper">
         <h2>Lists of people</h2>
+        <div>
+          <p>There are no people in list</p>
+        </div>
       </div>
 
       <button

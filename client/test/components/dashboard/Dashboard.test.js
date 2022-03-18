@@ -89,5 +89,17 @@ describe('Dashboard', () => {
         'Lists of people'
       );
     });
+
+    it('renders message when lists of people is empty', () => {
+      render(
+        <BrowserRouter>
+          <Dashboard />
+        </BrowserRouter>
+      );
+
+      expect(
+        screen.getByText('There are no people in list')
+      ).toBeInTheDocument();
+    });
   });
 });

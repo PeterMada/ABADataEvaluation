@@ -86,7 +86,7 @@ export const PersonForm = () => {
             const parseRes = await response.json();
             if (parseRes.personID) {
               toast.success('Person added succesfully');
-              setSubmitted(true);
+              //setSubmitted(true);
             } else {
               toast.error(parseRes);
             }

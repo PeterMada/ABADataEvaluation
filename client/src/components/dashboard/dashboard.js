@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 export const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState('');
+  const [allPersons, setAllPersons] = useState([]);
 
   const getName = async () => {
     try {
@@ -23,6 +24,22 @@ export const Dashboard = ({ setAuth }) => {
     }
   };
 
+  const getPersonsList = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}personsList`,
+        {
+          method: 'GET',
+          headers: { token: localStorage.token },
+        }
+      );
+      const parseRes = await response.json();
+      setAllPersons(parseRes);
+    } catch (err) {
+      //console.log(err.message);
+    }
+  };
+
   const logout = (e) => {
     e.preventDefault();
     localStorage.removeItem('token');
@@ -32,7 +49,14 @@ export const Dashboard = ({ setAuth }) => {
 
   useEffect(() => {
     getName();
+    getPersonsList();
   }, []);
+
+  /*
+  useEffect(() => {
+    getPersonsList();
+  }, []);
+  */
 
   return (
     <>
@@ -43,7 +67,11 @@ export const Dashboard = ({ setAuth }) => {
       <div data-testid="personsListWrapper">
         <h2>Lists of people</h2>
         <div>
-          <p>There are no people in list</p>
+          {allPersons.length > 0 ? (
+            <h3>Adam Peter</h3>
+          ) : (
+            <p>There are no people in list</p>
+          )}
         </div>
       </div>
 

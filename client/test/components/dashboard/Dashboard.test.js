@@ -74,5 +74,20 @@ describe('Dashboard', () => {
 
       expect(screen.getByTestId('personsListWrapper')).toBeInTheDocument();
     });
+
+    it('render heading', () => {
+      render(
+        <BrowserRouter>
+          <Dashboard />
+        </BrowserRouter>
+      );
+
+      expect(
+        screen.getByRole('heading', { level: 2 })
+      ).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
+        'Lists of people'
+      );
+    });
   });
 });

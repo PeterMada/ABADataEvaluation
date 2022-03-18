@@ -48,6 +48,7 @@ export const App = () => {
     isAuth();
   });
 
+  console.log(`auth: ${isAuthenticated}`);
   return (
     <BrowserRouter>
       <Header isAuthenticated={isAuthenticated} />

@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
 import 'whatwg-fetch';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Navigate,
+  useLocation,
+} from 'react-router-dom';
 
 export const PersonForm = () => {
+  const [submitted, setSubmitted] = useState(false);
+
+  if (submitted) {
+    return <Navigate to="/dashboard" />;
+  }
+
   return (
     <div>
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
@@ -57,8 +71,6 @@ export const PersonForm = () => {
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {
-          // TODO Fix fetch
-
           try {
             const response = await fetch(
               `${process.env.REACT_APP_API_URL}addPerson`,
@@ -72,9 +84,9 @@ export const PersonForm = () => {
             );
 
             const parseRes = await response.json();
-
             if (parseRes.personID) {
               toast.success('Person added succesfully');
+              setSubmitted(true);
             } else {
               toast.error(parseRes);
             }

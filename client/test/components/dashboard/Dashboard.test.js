@@ -63,4 +63,16 @@ describe('Dashboard', () => {
       )
     );
   });
+
+  describe('persons list', () => {
+    it('render person list container', () => {
+      render(
+        <BrowserRouter>
+          <Dashboard />
+        </BrowserRouter>
+      );
+
+      expect(screen.getByTestId('personsListWrapper')).toBeInTheDocument();
+    });
+  });
 });

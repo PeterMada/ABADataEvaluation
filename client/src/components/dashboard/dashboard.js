@@ -32,7 +32,7 @@ export const Dashboard = ({ setAuth }) => {
 
   useEffect(() => {
     getName();
-  });
+  }, []);
 
   return (
     <>

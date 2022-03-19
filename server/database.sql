@@ -1,5 +1,7 @@
 CREATE DATABASE ABADataEvaluation;
 
+// TODO add user roles
+// TODO add temporaly password
 CREATE TABLE users(
   user_id uuid DEFAULT uuid_generate_v4(),
   user_first_name VARCHAR(255) NOT NULL,

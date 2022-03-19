@@ -46,7 +46,7 @@ describe('Dashboard', () => {
   it('render dashboard title', async () => {
     render(
       <BrowserRouter>
-        <Dashboard />
+        <Dashboard setAuth={() => null} />
       </BrowserRouter>
     );
 
@@ -71,7 +71,7 @@ describe('Dashboard', () => {
     );
     render(
       <BrowserRouter>
-        <Dashboard />
+        <Dashboard setAuth={() => null} />
       </BrowserRouter>
     );
 
@@ -82,114 +82,112 @@ describe('Dashboard', () => {
     );
   });
 
-  describe('persons list', () => {
-    it('render person list container', () => {
-      render(
-        <BrowserRouter>
-          <Dashboard />
-        </BrowserRouter>
-      );
+  it('render person list container', () => {
+    render(
+      <BrowserRouter>
+        <Dashboard setAuth={() => null} />
+      </BrowserRouter>
+    );
 
-      expect(screen.getByTestId('personsListWrapper')).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('personsListWrapper')).toBeInTheDocument();
+  });
 
-    it('render heading', () => {
-      render(
-        <BrowserRouter>
-          <Dashboard />
-        </BrowserRouter>
-      );
+  it('render heading', () => {
+    render(
+      <BrowserRouter>
+        <Dashboard setAuth={() => null} />
+      </BrowserRouter>
+    );
 
+    expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
+      'Lists of people'
+    );
+  });
+
+  it('renders message when lists of people is empty', async () => {
+    server.use(
+      rest.get(
+        `${process.env.REACT_APP_API_URL}personsList`,
+        (req, res, ctx) => {
+          return res(ctx.status(200), ctx.json([]));
+        }
+      )
+    );
+
+    render(
+      <BrowserRouter>
+        <Dashboard setAuth={() => null} />
+      </BrowserRouter>
+    );
+
+    await waitFor(() =>
       expect(
-        screen.getByRole('heading', { level: 2 })
-      ).toBeInTheDocument();
-      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-        'Lists of people'
-      );
-    });
+        screen.queryByText('There are no people in list')
+      ).toBeInTheDocument()
+    );
+  });
 
-    it('renders message when lists of people is empty', () => {
-      render(
-        <BrowserRouter>
-          <Dashboard />
-        </BrowserRouter>
-      );
-
-      expect(
-        screen.getByText('There are no people in list')
-      ).toBeInTheDocument();
-    });
-
-    it.only('do not show empty list message when there are some people', async () => {
-      server.use(
-        rest.get(
-          `${process.env.REACT_APP_API_URL}personsList`,
-          (req, res, ctx) => {
-            return res(
-              ctx.status(200),
-              ctx.json([
-                {
-                  user_first_name: 'Adam',
-                  user_last_name: 'Peter',
-                },
-              ])
-            );
-          }
-        )
-      );
-
-      render(
-        <BrowserRouter>
-          <Dashboard />
-        </BrowserRouter>
-      );
-
-      await waitForElementToBeRemoved(
-        screen.getByText('There are no people in list')
-      ).then(() =>
-        expect(
-          screen.queryByText('There are no people in list')
-        ).not.toBeInTheDocument()
-      );
-
-      /*
-
-      await waitForElementToBeRemoved(() =>
-        screen.getByText('There are no people in list')
-      );
-      expect(
-        await screen.getByText('There are no people in list')
-      ).not.toBeInTheDocument();
-      */
-    });
-
-    it.skip('shows people name in list', async () => {
-      server.use(
-        rest.get(
-          `${process.env.REACT_APP_API_URL}personsList`,
-          (req, res, ctx) => {
-            return res(
-              ctx.status(200),
-              ctx.json({
+  it('do not show empty list message when there are some people', async () => {
+    server.use(
+      rest.get(
+        `${process.env.REACT_APP_API_URL}personsList`,
+        (req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json([
+              {
                 user_first_name: 'Adam',
                 user_last_name: 'Peter',
-              })
-            );
-          }
-        )
-      );
+              },
+            ])
+          );
+        }
+      )
+    );
 
-      render(
-        <BrowserRouter>
-          <Dashboard />
-        </BrowserRouter>
-      );
+    render(
+      <BrowserRouter>
+        <Dashboard setAuth={() => null} />
+      </BrowserRouter>
+    );
+    await waitForElementToBeRemoved(() =>
+      screen.queryByText('There are no people in list')
+    );
 
-      await waitFor(() =>
-        expect(
-          screen.getByRole('heading', { level: 3 })
-        ).toHaveTextContent('Adam Peter')
-      );
-    });
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
+        'Adam Peter'
+      )
+    );
+  });
+
+  it.skip('shows people name in list', async () => {
+    server.use(
+      rest.get(
+        `${process.env.REACT_APP_API_URL}personsList`,
+        (req, res, ctx) => {
+          return res(
+            ctx.status(200),
+            ctx.json({
+              user_first_name: 'Adam',
+              user_last_name: 'Peter',
+            })
+          );
+        }
+      )
+    );
+
+    render(
+      <BrowserRouter>
+        <Dashboard setAuth={() => null} />
+      </BrowserRouter>
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
+        'Adam Peter'
+      )
+    );
   });
 });

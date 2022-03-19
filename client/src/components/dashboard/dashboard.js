@@ -48,8 +48,47 @@ export const Dashboard = ({ setAuth }) => {
   };
 
   useEffect(() => {
+    /*
     getName();
     getPersonsList();
+    */
+    let isCancelled = false;
+
+    const fetchPersonsList = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}personsList`,
+        {
+          method: 'GET',
+          headers: { token: localStorage.token },
+        }
+      );
+      const parseRes = await response.json();
+      if (!isCancelled) {
+        setAllPersons(parseRes);
+      }
+    };
+
+    const fetchName = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}dashobard/`,
+        {
+          method: 'GET',
+          headers: { token: localStorage.token },
+        }
+      );
+
+      const parseRes = await response.json();
+      if (!isCancelled) {
+        setName(`${parseRes.user_first_name} ${parseRes.user_last_name}`);
+      }
+    };
+
+    const personsListResults = fetchPersonsList().catch(console.error);
+    const nameResults = fetchName().catch(console.error);
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   /*

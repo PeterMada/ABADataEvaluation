@@ -6,40 +6,6 @@ export const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState('');
   const [allPersons, setAllPersons] = useState([]);
 
-  const getName = async () => {
-    try {
-      // TODO get token from cookie
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}dashobard/`,
-        {
-          method: 'GET',
-          headers: { token: localStorage.token },
-        }
-      );
-
-      const parseRes = await response.json();
-      setName(`${parseRes.user_first_name} ${parseRes.user_last_name}`);
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const getPersonsList = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}personsList`,
-        {
-          method: 'GET',
-          headers: { token: localStorage.token },
-        }
-      );
-      const parseRes = await response.json();
-      setAllPersons(parseRes);
-    } catch (err) {
-      //console.log(err.message);
-    }
-  };
-
   const logout = (e) => {
     e.preventDefault();
     localStorage.removeItem('token');
@@ -48,13 +14,10 @@ export const Dashboard = ({ setAuth }) => {
   };
 
   useEffect(() => {
-    /*
-    getName();
-    getPersonsList();
-    */
     let isCancelled = false;
 
     const fetchPersonsList = async () => {
+      // TODO get token from cookie
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}personsList`,
         {
@@ -90,12 +53,6 @@ export const Dashboard = ({ setAuth }) => {
       isCancelled = true;
     };
   }, []);
-
-  /*
-  useEffect(() => {
-    getPersonsList();
-  }, []);
-  */
 
   return (
     <>

@@ -76,6 +76,7 @@ export const Dashboard = ({ setAuth }) => {
         onClick={logout}>
         Log out
       </button>
+
       <Link
         className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         to="/profile">
@@ -84,7 +85,12 @@ export const Dashboard = ({ setAuth }) => {
       <Link
         className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         to="/addPerson">
-        Add new Person
+        Add new therapeutist
+      </Link>
+      <Link
+        className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        to="/addChild">
+        Add new child
       </Link>
     </>
   );

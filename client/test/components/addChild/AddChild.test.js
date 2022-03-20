@@ -40,4 +40,11 @@ describe('AddChild', () => {
       checkFormField('First Name', 'firstName');
     });
   });
+
+  describe('last name', () => {
+    it('renders an input', () => {
+      render(<AddChild />);
+      checkFormField('Last Name', 'lastName');
+    });
+  });
 });

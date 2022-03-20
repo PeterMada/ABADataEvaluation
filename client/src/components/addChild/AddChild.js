@@ -11,6 +11,10 @@ export const AddChild = () => {
           <label for="firstName">First Name</label>
           <input name="firstName" id="firstName" />
         </div>
+        <div>
+          <label for="lastName">Last Name</label>
+          <input name="lastName" id="lastName" />
+        </div>
       </form>
     </>
   );

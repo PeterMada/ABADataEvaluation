@@ -23,7 +23,7 @@ describe('AddChild', () => {
   };
 
   const isThereErrorOnEmptyInputBlur = async (labelText, errorText) => {
-    it('displays error after blur when first name field is blank', async () => {
+    it(`displays error after blur when ${labelText} field is blank`, async () => {
       render(<AddChild />);
       await fireEvent.focus(screen.getByLabelText(labelText));
       await fireEvent.blur(screen.getByLabelText(labelText));
@@ -62,6 +62,11 @@ describe('AddChild', () => {
       render(<AddChild />);
       checkFormField('Last Name', 'lastName');
     });
+
+    isThereErrorOnEmptyInputBlur(
+      'Last Name',
+      'Last name field is required'
+    );
   });
 
   describe('child code', () => {

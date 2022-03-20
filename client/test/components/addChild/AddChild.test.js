@@ -78,4 +78,15 @@ describe('AddChild', () => {
       expect(sexField.children[2].value).toEqual('Man');
     });
   });
+
+  describe('date of birth', () => {
+    it('shows date field', () => {
+      render(<AddChild />);
+      const dobField = screen.getByLabelText('Date of Birth');
+
+      expect(dobField).toBeInTheDocument();
+      expect(dobField.id).toEqual('dateOfBirth');
+      expect(dobField.type).toEqual('date');
+    });
+  });
 });

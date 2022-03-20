@@ -27,6 +27,10 @@ export const AddChild = () => {
             <option value="Man">Man</option>
           </select>
         </div>
+        <div>
+          <label htmlFor="dateOfBirth">Date of Birth</label>
+          <input name="dateOfBirth" id="dateOfBirth" type="date" />
+        </div>
       </form>
     </>
   );

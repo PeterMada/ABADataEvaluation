@@ -80,13 +80,20 @@ describe('AddChild', () => {
   });
 
   describe('date of birth', () => {
-    it('shows date field', () => {
+    it('shows field', () => {
       render(<AddChild />);
       const dobField = screen.getByLabelText('Date of Birth');
 
       expect(dobField).toBeInTheDocument();
       expect(dobField.id).toEqual('dateOfBirth');
       expect(dobField.type).toEqual('date');
+    });
+  });
+
+  describe('diagnosis', () => {
+    it('shows field', () => {
+      render(<AddChild />);
+      checkFormField('Diagnosis', 'diagnosis');
     });
   });
 });

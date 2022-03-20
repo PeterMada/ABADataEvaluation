@@ -31,6 +31,10 @@ export const AddChild = () => {
           <label htmlFor="dateOfBirth">Date of Birth</label>
           <input name="dateOfBirth" id="dateOfBirth" type="date" />
         </div>
+        <div>
+          <label htmlFor="diagnosis">Diagnosis</label>
+          <input name="diagnosis" id="diagnosis" />
+        </div>
       </form>
     </>
   );

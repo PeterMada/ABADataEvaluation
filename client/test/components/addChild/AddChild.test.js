@@ -64,5 +64,12 @@ describe('AddChild', () => {
       expect(sexField.id).toEqual('sex');
       expect(sexField.type).toEqual('select-one');
     });
+
+    it('default value is empty', () => {
+      render(<AddChild />);
+      const sexField = screen.getByLabelText('Sex');
+
+      expect(sexField.firstChild.value).toEqual('');
+    });
   });
 });

@@ -21,7 +21,9 @@ export const AddChild = () => {
         </div>
         <div>
           <label htmlFor="sex">Sex</label>
-          <select name="sex" id="sex"></select>
+          <select name="sex" id="sex">
+            <option />
+          </select>
         </div>
       </form>
     </>

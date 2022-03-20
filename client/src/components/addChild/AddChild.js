@@ -1,5 +1,6 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { toast } from 'react-toastify';
 
 export const AddChild = () => {
   return (
@@ -11,6 +12,10 @@ export const AddChild = () => {
         initialValues={{
           firstName: '',
           lastName: '',
+          childCode: '',
+          sex: '',
+          dateOfBirth: '',
+          diagnosis: '',
         }}
         validate={(values) => {
           const errors = {};
@@ -24,7 +29,11 @@ export const AddChild = () => {
 
           return errors;
         }}
-        onSubmit={async (values, { setSubmitting }) => {}}>
+        onSubmit={async (values, { setSubmitting }) => {
+          toast.error('Oops, failed to fetch!');
+          try {
+          } catch (err) {}
+        }}>
         {({ isSubmitting, isValid, dirty }) => (
           <Form data-testid="addChildForm">
             <div className="mb-4">
@@ -74,7 +83,7 @@ export const AddChild = () => {
             </div>
             <div className="mb-4">
               <label htmlFor="dateOfBirth">Date of Birth</label>
-              <input
+              <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 name="dateOfBirth"
                 id="dateOfBirth"
@@ -83,7 +92,11 @@ export const AddChild = () => {
             </div>
             <div className="mb-6">
               <label htmlFor="diagnosis">Diagnosis</label>
-              <input name="diagnosis" id="diagnosis" />
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                name="diagnosis"
+                id="diagnosis"
+              />
             </div>
 
             <div className="flex items-center justify-between">

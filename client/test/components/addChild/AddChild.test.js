@@ -145,4 +145,54 @@ describe('AddChild', () => {
       expect(screen.getByText('Processing...')).toBeInTheDocument()
     );
   });
+
+  describe('submiting form', () => {
+    const server = setupServer(
+      rest.get(
+        `${process.env.REACT_APP_API_URL}addChild`,
+        (req, res, ctx) => {
+          return res(ctx.json({ greeting: 'hello there' }));
+        }
+      )
+    );
+
+    beforeAll(() => server.listen());
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+
+    const fillFormWithRightValues = () => {
+      const firstNameField = screen.getByLabelText('First Name');
+      const lastNameField = screen.getByLabelText('Last Name');
+
+      fireEvent.change(firstNameField, { target: { value: 'FirstName' } });
+      fireEvent.change(lastNameField, { target: { value: 'LastName' } });
+    };
+
+    it('show alert when there is server error', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <AddChild />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}addChild`,
+          (req, res, ctx) => {
+            return res(ctx.status(500));
+          }
+        )
+      );
+
+      fillFormWithRightValues();
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Oops, failed to fetch!')
+      ).toBeInTheDocument();
+    });
+  });
 });

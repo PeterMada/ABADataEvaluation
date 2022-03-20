@@ -16,6 +16,7 @@ import { Login } from './components/login/login';
 import { Register } from './components/register/register';
 import { Profile } from './components/profile/profile';
 import { PersonForm } from './components/personForm/personForm';
+import { AddChild } from './components/addChild/AddChild';
 
 toast.configure();
 
@@ -119,7 +120,7 @@ export const App = () => {
             path="/addChild"
             element={
               isAuthenticated ? (
-                <PersonForm />
+                <AddChild />
               ) : (
                 <Navigate replace to="/login" />
               )

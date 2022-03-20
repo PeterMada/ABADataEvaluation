@@ -15,7 +15,7 @@ import { ToastContainer } from 'react-toastify';
 import { AddChild } from '../../../src/components/addChild/AddChild';
 
 describe('AddChild', () => {
-  const renderForm = (labelText, name, type = 'text') => {
+  const checkFormField = (labelText, name, type = 'text') => {
     const firstNameField = screen.getByLabelText(labelText);
     expect(firstNameField).toBeInTheDocument();
     expect(firstNameField.id).toEqual(name);
@@ -32,5 +32,12 @@ describe('AddChild', () => {
   it('render a form', () => {
     render(<AddChild />);
     expect(screen.getByTestId('addChildForm')).toBeInTheDocument();
+  });
+
+  describe('first name', () => {
+    it('renders an input', () => {
+      render(<AddChild />);
+      checkFormField('First Name', 'firstName');
+    });
   });
 });

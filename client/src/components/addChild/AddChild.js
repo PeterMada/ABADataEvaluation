@@ -30,9 +30,27 @@ export const AddChild = () => {
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {
-          toast.error('Oops, failed to fetch!');
           try {
-          } catch (err) {}
+            const response = await fetch(
+              `${process.env.REACT_APP_API_URL}addChild`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-type': 'application/json',
+                },
+                body: JSON.stringify(values),
+              }
+            );
+            const parseRes = await response.json();
+            if (parseRes.childID) {
+              toast.success('Child added succesfully');
+              setSubmitted(true);
+            } else {
+              //toast.error(parseRes);
+            }
+          } catch (err) {
+            toast.error('Oops, failed to fetch!');
+          }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
           <Form data-testid="addChildForm">

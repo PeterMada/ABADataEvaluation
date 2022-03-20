@@ -151,7 +151,7 @@ describe('AddChild', () => {
       rest.get(
         `${process.env.REACT_APP_API_URL}addChild`,
         (req, res, ctx) => {
-          return res(ctx.json({ greeting: 'hello there' }));
+          return res(ctx.status(200));
         }
       )
     );
@@ -192,6 +192,33 @@ describe('AddChild', () => {
 
       expect(
         await screen.findByText('Oops, failed to fetch!')
+      ).toBeInTheDocument();
+    });
+
+    it('shows success message on success submition', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <AddChild />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}addChild`,
+          (req, res, ctx) => {
+            return res(ctx.status(200), ctx.json({ childID: '123' }));
+          }
+        )
+      );
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fillFormWithRightValues();
+
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Child added succesfully')
       ).toBeInTheDocument();
     });
   });

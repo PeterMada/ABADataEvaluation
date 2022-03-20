@@ -114,6 +114,17 @@ export const App = () => {
             path="/addPerson"
             element={isAuthenticated ? <PersonForm /> : <PersonForm />}
           />
+          <Route
+            exact
+            path="/addChild"
+            element={
+              isAuthenticated ? (
+                <PersonForm />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
         </Routes>
       </div>
     </BrowserRouter>

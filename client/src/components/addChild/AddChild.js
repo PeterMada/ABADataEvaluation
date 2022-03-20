@@ -85,11 +85,20 @@ export const AddChild = () => {
               <label htmlFor="diagnosis">Diagnosis</label>
               <input name="diagnosis" id="diagnosis" />
             </div>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit">
-              Add
-            </button>
+
+            <div className="flex items-center justify-between">
+              {!isSubmitting ? (
+                <button
+                  className={
+                    (!dirty ? 'opacity-50 cursor-not-allowed ' : '') +
+                    'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                  }
+                  type="submit"
+                  disabled={!dirty}>
+                  Add
+                </button>
+              ) : null}
+            </div>
           </Form>
         )}
       </Formik>

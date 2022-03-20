@@ -124,4 +124,10 @@ describe('AddChild', () => {
     expect(submitButton).toBeInTheDocument();
     expect(submitButton.textContent).toEqual('Add');
   });
+
+  it('has disabled submit button on load', () => {
+    render(<AddChild />);
+    const submitButton = screen.getByRole('button', 'submit');
+    expect(submitButton).toBeDisabled();
+  });
 });

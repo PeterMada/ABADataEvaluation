@@ -45,6 +45,7 @@ export const AddChild = () => {
             const parseRes = await response.json();
             if (parseRes.childId) {
               toast.success('Child added succesfully');
+              // TODO add redirect to dashboard or detail
               //setSubmitted(true);
             } else {
               toast.error(parseRes);

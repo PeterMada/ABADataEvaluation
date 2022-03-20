@@ -56,26 +56,23 @@ describe('AddChild', () => {
   });
 
   describe('sex', () => {
-    it('show select field', () => {
+    beforeEach(() => {
       render(<AddChild />);
+    });
+    it('show select field', () => {
       const sexField = screen.getByLabelText('Sex');
-
       expect(sexField).toBeInTheDocument();
       expect(sexField.id).toEqual('sex');
       expect(sexField.type).toEqual('select-one');
     });
 
     it('default value is empty', () => {
-      render(<AddChild />);
       const sexField = screen.getByLabelText('Sex');
-
       expect(sexField.firstChild.value).toEqual('');
     });
 
     it('has two gender options', () => {
-      render(<AddChild />);
       const sexField = screen.getByLabelText('Sex');
-
       expect(sexField.children.length).toEqual(3);
       expect(sexField.children[1].value).toEqual('Woman');
       expect(sexField.children[2].value).toEqual('Man');

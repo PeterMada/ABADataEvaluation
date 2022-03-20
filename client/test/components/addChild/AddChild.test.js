@@ -207,7 +207,7 @@ describe('AddChild', () => {
         rest.post(
           `${process.env.REACT_APP_API_URL}addChild`,
           (req, res, ctx) => {
-            return res(ctx.status(200), ctx.json({ childID: '123' }));
+            return res(ctx.status(200), ctx.json({ childId: '123' }));
           }
         )
       );

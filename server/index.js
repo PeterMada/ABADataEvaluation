@@ -13,6 +13,7 @@ app.use('/dashobard', require('./routes/dashboard'));
 app.use('/profile', require('./routes/profile'));
 app.use('/addPerson', require('./routes/addPerson'));
 app.use('/personsList', require('./routes/personsList'));
+app.use('/addChild', require('./routes/addChild'));
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server started succesfully`);

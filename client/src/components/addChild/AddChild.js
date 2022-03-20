@@ -37,14 +37,15 @@ export const AddChild = () => {
                 method: 'POST',
                 headers: {
                   'Content-type': 'application/json',
+                  token: localStorage.token,
                 },
                 body: JSON.stringify(values),
               }
             );
             const parseRes = await response.json();
-            if (parseRes.childID) {
+            if (parseRes.childId) {
               toast.success('Child added succesfully');
-              setSubmitted(true);
+              //setSubmitted(true);
             } else {
               toast.error(parseRes);
             }

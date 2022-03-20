@@ -46,7 +46,7 @@ export const AddChild = () => {
               toast.success('Child added succesfully');
               setSubmitted(true);
             } else {
-              //toast.error(parseRes);
+              toast.error(parseRes);
             }
           } catch (err) {
             toast.error('Oops, failed to fetch!');

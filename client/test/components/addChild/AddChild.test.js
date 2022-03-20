@@ -221,5 +221,35 @@ describe('AddChild', () => {
         await screen.findByText('Child added succesfully')
       ).toBeInTheDocument();
     });
+
+    it('shows error message on success submition but without child id', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <AddChild />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}addChild`,
+          (req, res, ctx) => {
+            return res(
+              ctx.status(200),
+              ctx.json('Authentication was unsuccessful')
+            );
+          }
+        )
+      );
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fillFormWithRightValues();
+
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Authentication was unsuccessful')
+      ).toBeInTheDocument();
+    });
   });
 });

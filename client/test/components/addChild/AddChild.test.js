@@ -28,4 +28,9 @@ describe('AddChild', () => {
       'Add Child'
     );
   });
+
+  it('render a form', () => {
+    render(<AddChild />);
+    expect(screen.getByTestId('addChildForm')).toBeInTheDocument();
+  });
 });

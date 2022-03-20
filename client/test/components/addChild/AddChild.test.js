@@ -71,5 +71,14 @@ describe('AddChild', () => {
 
       expect(sexField.firstChild.value).toEqual('');
     });
+
+    it('has two gender options', () => {
+      render(<AddChild />);
+      const sexField = screen.getByLabelText('Sex');
+
+      expect(sexField.children.length).toEqual(3);
+      expect(sexField.children[1].value).toEqual('Woman');
+      expect(sexField.children[2].value).toEqual('Man');
+    });
   });
 });

@@ -23,6 +23,8 @@ export const AddChild = () => {
           <label htmlFor="sex">Sex</label>
           <select name="sex" id="sex">
             <option />
+            <option value="Woman">Woman</option>
+            <option value="Man">Man</option>
           </select>
         </div>
       </form>

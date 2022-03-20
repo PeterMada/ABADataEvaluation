@@ -22,6 +22,17 @@ describe('AddChild', () => {
     expect(firstNameField.type).toEqual(type);
   };
 
+  const isThereErrorOnEmptyInputBlur = async (labelText, errorText) => {
+    it('displays error after blur when first name field is blank', async () => {
+      render(<AddChild />);
+      await fireEvent.focus(screen.getByLabelText(labelText));
+      await fireEvent.blur(screen.getByLabelText(labelText));
+      await waitFor(() =>
+        expect(screen.getByText(errorText)).toBeInTheDocument()
+      );
+    });
+  };
+
   it('render heading', () => {
     render(<AddChild />);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual(
@@ -39,6 +50,11 @@ describe('AddChild', () => {
       render(<AddChild />);
       checkFormField('First Name', 'firstName');
     });
+
+    isThereErrorOnEmptyInputBlur(
+      'First Name',
+      'First name field is required'
+    );
   });
 
   describe('last name', () => {
@@ -95,5 +111,12 @@ describe('AddChild', () => {
       render(<AddChild />);
       checkFormField('Diagnosis', 'diagnosis');
     });
+  });
+
+  it('has submit button', () => {
+    render(<AddChild />);
+    const submitButton = screen.getByRole('button', 'submit');
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton.textContent).toEqual('Add');
   });
 });

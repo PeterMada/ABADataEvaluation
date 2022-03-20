@@ -8,12 +8,20 @@ export const AddChild = () => {
       </h1>
       <form data-testid="addChildForm">
         <div>
-          <label for="firstName">First Name</label>
+          <label htmlFor="firstName">First Name</label>
           <input name="firstName" id="firstName" />
         </div>
         <div>
-          <label for="lastName">Last Name</label>
+          <label htmlFor="lastName">Last Name</label>
           <input name="lastName" id="lastName" />
+        </div>
+        <div>
+          <label htmlFor="childCode">Child Code</label>
+          <input name="childCode" id="childCode" />
+        </div>
+        <div>
+          <label htmlFor="sex">Sex</label>
+          <select name="sex" id="sex"></select>
         </div>
       </form>
     </>

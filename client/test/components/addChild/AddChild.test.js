@@ -47,4 +47,22 @@ describe('AddChild', () => {
       checkFormField('Last Name', 'lastName');
     });
   });
+
+  describe('child code', () => {
+    it('renders an input', () => {
+      render(<AddChild />);
+      checkFormField('Child Code', 'childCode');
+    });
+  });
+
+  describe('sex', () => {
+    it('show select field', () => {
+      render(<AddChild />);
+      const sexField = screen.getByLabelText('Sex');
+
+      expect(sexField).toBeInTheDocument();
+      expect(sexField.id).toEqual('sex');
+      expect(sexField.type).toEqual('select-one');
+    });
+  });
 });

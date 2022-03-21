@@ -1,36 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
-import 'whatwg-fetch';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Navigate,
-  useLocation,
-} from 'react-router-dom';
 
-export const PersonForm = () => {
-  const [submitted, setSubmitted] = useState(false);
-
-  if (submitted) {
-    return <Navigate to="/dashboard" />;
-  }
-
+export const AddChild = () => {
   return (
-    <div>
+    <>
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
-        Add Person
+        Add Child
       </h1>
       <Formik
         initialValues={{
-          beforeNameTitle: '',
           firstName: '',
           lastName: '',
-          afterNameTitle: '',
-          email: '',
-          emailConfirm: '',
+          childCode: '',
+          sex: '',
+          dateOfBirth: '',
+          diagnosis: '',
         }}
         validate={(values) => {
           const errors = {};
@@ -42,50 +27,25 @@ export const PersonForm = () => {
             errors.lastName = 'Last name field is required';
           }
 
-          if (!values.email) {
-            errors.email = 'Email field is required';
-          } else if (
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-          ) {
-            errors.email = 'Invalid email address';
-          }
-
-          if (!values.emailConfirm) {
-            errors.emailConfirm = 'Email confirmation field is required';
-          } else if (
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-              values.emailConfirm
-            )
-          ) {
-            errors.emailConfirm = 'Invalid email address';
-          }
-
-          if (
-            values.email &&
-            values.emailConfirm &&
-            values.email !== values.emailConfirm
-          ) {
-            errors.emailConfirm = 'Email Not Matching';
-          }
-
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}addPerson`,
+              `${process.env.REACT_APP_API_URL}addChild`,
               {
                 method: 'POST',
                 headers: {
                   'Content-type': 'application/json',
+                  token: localStorage.token,
                 },
                 body: JSON.stringify(values),
               }
             );
-
             const parseRes = await response.json();
-            if (parseRes.personID) {
-              toast.success('Person added succesfully');
+            if (parseRes.childId) {
+              toast.success('Child added succesfully');
+              // TODO add redirect to dashboard or detail
               //setSubmitted(true);
             } else {
               toast.error(parseRes);
@@ -95,29 +55,13 @@ export const PersonForm = () => {
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
-          <Form data-testid="addPerson">
+          <Form data-testid="addChildForm">
             <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="beforeNameTitle">
-                Titles before name
-              </label>
+              <label htmlFor="firstName">First Name</label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="beforeNameTitle"
-                name="beforeNameTitle"
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="firstName">
-                First Name
-              </label>
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                name="firstName"
                 id="firstName"
-                name="firstName"
               />
               <ErrorMessage
                 className="text-red-500 text-xs mt-1 ml-1"
@@ -126,15 +70,11 @@ export const PersonForm = () => {
               />
             </div>
             <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="lastName">
-                Last Name
-              </label>
+              <label htmlFor="lastName">Last Name</label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                name="lastName"
                 id="lastName"
-                name="lastName"
               />
               <ErrorMessage
                 className="text-red-500 text-xs mt-1 ml-1"
@@ -143,51 +83,39 @@ export const PersonForm = () => {
               />
             </div>
             <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="afterNameTitle">
-                Titles after name
-              </label>
-              <Field
+              <label htmlFor="childCode">Child Code</label>
+              <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="afterNameTitle"
-                name="afterNameTitle"
+                name="childCode"
+                id="childCode"
               />
             </div>
             <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="email">
-                Email
-              </label>
-              <Field
+              <label htmlFor="sex">Sex</label>
+              <select
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="email"
-                name="email"
-                type="email"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="email"
-                component="div"
-              />
+                name="sex"
+                id="sex">
+                <option />
+                <option value="Woman">Woman</option>
+                <option value="Man">Man</option>
+              </select>
             </div>
             <div className="mb-4">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="emailConfirm">
-                Email confirmation
-              </label>
+              <label htmlFor="dateOfBirth">Date of Birth</label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="emailConfirm"
-                name="emailConfirm"
-                type="email"
+                name="dateOfBirth"
+                id="dateOfBirth"
+                type="date"
               />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="emailConfirm"
-                component="div"
+            </div>
+            <div className="mb-6">
+              <label htmlFor="diagnosis">Diagnosis</label>
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                name="diagnosis"
+                id="diagnosis"
               />
             </div>
 
@@ -230,6 +158,6 @@ export const PersonForm = () => {
           </Form>
         )}
       </Formik>
-    </div>
+    </>
   );
 };

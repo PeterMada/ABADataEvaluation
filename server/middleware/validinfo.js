@@ -17,6 +17,16 @@ module.exports = (req, res, next) => {
     } else if (!validEmail(email)) {
       return res.status(401).json('Invalid Email');
     }
+  } else if (req.path === '/addPerson') {
+    if (![firstName, lastName, email].every(Boolean)) {
+      return res.status(401).json('Missing required fields');
+    } else if (!validEmail(email)) {
+      return res.status(401).json('Invalid Email');
+    }
+  } else if (req.path === '/addChild') {
+    if (![firstName, lastName].every(Boolean)) {
+      return res.status(401).json('Missing required fields');
+    }
   }
 
   next();

@@ -16,6 +16,7 @@ import { Login } from './components/login/login';
 import { Register } from './components/register/register';
 import { Profile } from './components/profile/profile';
 import { PersonForm } from './components/personForm/personForm';
+import { AddChild } from './components/addChild/AddChild';
 
 toast.configure();
 
@@ -48,6 +49,7 @@ export const App = () => {
     isAuth();
   });
 
+  console.log(`auth: ${isAuthenticated}`);
   return (
     <BrowserRouter>
       <Header isAuthenticated={isAuthenticated} />
@@ -112,6 +114,17 @@ export const App = () => {
             exact
             path="/addPerson"
             element={isAuthenticated ? <PersonForm /> : <PersonForm />}
+          />
+          <Route
+            exact
+            path="/addChild"
+            element={
+              isAuthenticated ? (
+                <AddChild />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
           />
         </Routes>
       </div>

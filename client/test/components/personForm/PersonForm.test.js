@@ -8,8 +8,11 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 
+import 'whatwg-fetch';
+import { BrowserRouter } from 'react-router-dom';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
+import { ToastContainer } from 'react-toastify';
 import { PersonForm } from '../../../src/components/personForm/PersonForm';
 require('dotenv').config();
 
@@ -234,6 +237,120 @@ describe('PersonForm', () => {
     expect(screen.getByRole('button', 'submit')).toBeInTheDocument();
   });
 
+  describe('submiting form', () => {
+    const server = setupServer(
+      rest.get(
+        `${process.env.REACT_APP_API_URL}auth/register`,
+        (req, res, ctx) => {
+          return res(ctx.json({ greeting: 'hello there' }));
+        }
+      )
+    );
+
+    const fillFormWithRightValues = () => {
+      const firstNameField = screen.getByLabelText('First Name');
+      const lastNameField = screen.getByLabelText('Last Name');
+      const emailField = screen.getByLabelText('Email');
+      const emailConfirmField = screen.getByLabelText(
+        'Email confirmation'
+      );
+
+      fireEvent.change(firstNameField, { target: { value: 'FirstName' } });
+      fireEvent.change(lastNameField, { target: { value: 'LastName' } });
+      fireEvent.change(emailField, { target: { value: 'test@test.tt' } });
+      fireEvent.change(emailConfirmField, {
+        target: { value: 'test@test.tt' },
+      });
+    };
+
+    beforeAll(() => server.listen());
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+
+    it('show alert when there is server error', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <PersonForm />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}addPerson`,
+          (req, res, ctx) => {
+            return res(ctx.status(500));
+          }
+        )
+      );
+
+      fillFormWithRightValues();
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Oops, failed to fetch!')
+      ).toBeInTheDocument();
+    });
+
+    it('shows success message on success submition', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <PersonForm />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}addPerson`,
+          (req, res, ctx) => {
+            return res(ctx.status(200), ctx.json({ personID: '123' }));
+          }
+        )
+      );
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fillFormWithRightValues();
+
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Person added succesfully')
+      ).toBeInTheDocument();
+    });
+
+    it('shows error message on success submition but without person id', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <PersonForm />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}addPerson`,
+          (req, res, ctx) => {
+            return res(
+              ctx.status(200),
+              ctx.json('Authentication was unsuccessful')
+            );
+          }
+        )
+      );
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fillFormWithRightValues();
+
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Authentication was unsuccessful')
+      ).toBeInTheDocument();
+    });
+  });
   /*
   describe('submiting form', () => {
     it.only('call fetch request with form values', async () => {

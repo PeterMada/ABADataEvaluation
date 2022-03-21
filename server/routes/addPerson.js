@@ -1,10 +1,10 @@
+const router = require('express').Router();
 const pool = require('../db');
-const express = require('express');
+const bcrypt = require('bcrypt');
+const authorization = require('../middleware/authorization');
 const validinfo = require('../middleware/validinfo');
-const router = express.Router();
 
-/*
-router.post('/addPerson', validinfo, async (req, res) => {
+router.post('/', validinfo, async (req, res) => {
   try {
     const {
       beforeNameTitle,
@@ -15,21 +15,38 @@ router.post('/addPerson', validinfo, async (req, res) => {
       emailConfirm,
     } = req.body;
 
-    if (email === emailConfirm) {
-      const person = await pool.query(
-        'SELECT * FROM persons WHERE user_email = $1',
-        [email]
-      );
+    const person = await pool.query(
+      'SELECT * FROM users WHERE user_email = $1',
+      [email]
+    );
 
-      if (person.rows.length !== 0) {
-        return res.status(401).json('Person already exist!');
-      }
-
-      const newPerson = await pool.query(
-        'INSERT INTO persons (person_firstName, person_lastName, person_titleBefore, person_titleAfter, person_email) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [firstName, lastName, beforeNameTitle, afterNameTitle, email]
-      );
+    if (person.rows.length !== 0) {
+      return res.status(401).json('Person already exist!');
     }
-  } catch (err) {}
+
+    const password = (Math.random() + 1).toString(36).substring(7);
+    const saltRound = 10;
+    const salt = await bcrypt.genSalt(saltRound);
+    const bcryptPassword = await bcrypt.hash(password, salt);
+
+    const newPerson = await pool.query(
+      'INSERT INTO users (user_first_name, user_last_name, user_title_before, user_title_after, user_email, user_password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [
+        firstName,
+        lastName,
+        beforeNameTitle,
+        afterNameTitle,
+        email,
+        bcryptPassword,
+      ]
+    );
+
+    const personId = newPerson.rows[0].user_first_name;
+    res.json({ personID: personId });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
 });
-*/
+
+module.exports = router;

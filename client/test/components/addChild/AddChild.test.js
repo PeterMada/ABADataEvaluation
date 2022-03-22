@@ -13,6 +13,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { ToastContainer } from 'react-toastify';
 import { AddChild } from '../../../src/components/addChild/AddChild';
+require('dotenv').config();
 
 describe('AddChild', () => {
   const checkFormField = (labelText, name, type = 'text') => {

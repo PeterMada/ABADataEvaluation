@@ -1,0 +1,38 @@
+import React from 'react';
+import '@testing-library/jest-dom';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
+import { AddSkill } from '../../../src/forms/addSkill/AddSkill';
+require('dotenv').config();
+
+describe('AddSkill', () => {
+  const checkFormField = (labelText, name, type = 'text') => {
+    const firstNameField = screen.getByLabelText(labelText);
+    expect(firstNameField).toBeInTheDocument();
+    expect(firstNameField.id).toEqual(name);
+    expect(firstNameField.type).toEqual(type);
+  };
+
+  const isThereErrorOnEmptyInputBlur = async (labelText, errorText) => {
+    it(`displays error after blur when ${labelText} field is blank`, async () => {
+      render(<AddChild />);
+      await fireEvent.focus(screen.getByLabelText(labelText));
+      await fireEvent.blur(screen.getByLabelText(labelText));
+      await waitFor(() =>
+        expect(screen.getByText(errorText)).toBeInTheDocument()
+      );
+    });
+  };
+
+  it('render heading', () => {
+    render(<AddSkill />);
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual(
+      'Add Skill'
+    );
+  });
+});

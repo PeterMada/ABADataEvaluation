@@ -27,4 +27,10 @@ describe('SmallInfoBox', () => {
     render(<SmallInfoBox info="Ipsum Lorem" />);
     expect(screen.getByText('Ipsum Lorem')).toBeInTheDocument();
   });
+
+  it('redners profile image', () => {
+    render(<SmallInfoBox img="img.jpg" imgAlt="Lorem ipsum" />);
+    expect(screen.getByRole('img')).toHaveAttribute('src', 'img.jpg');
+    expect(screen.getByRole('img')).toHaveAttribute('alt', 'Lorem ipsum');
+  });
 });

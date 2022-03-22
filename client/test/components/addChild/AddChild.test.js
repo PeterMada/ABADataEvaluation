@@ -118,6 +118,18 @@ describe('AddChild', () => {
     });
   });
 
+  describe('file input', () => {
+    it('has field', () => {
+      render(<AddChild />);
+      checkFormField('Photo', 'photo', 'file');
+    });
+
+    it('accept only images', () => {
+      render(<AddChild />);
+      expect(screen.getByLabelText('Photo').accept).toEqual('image/*');
+    });
+  });
+
   it('has submit button', () => {
     render(<AddChild />);
     const submitButton = screen.getByRole('button', 'submit');

@@ -16,6 +16,7 @@ export const AddChild = () => {
           sex: '',
           dateOfBirth: '',
           diagnosis: '',
+          photo: '',
         }}
         validate={(values) => {
           const errors = {};
@@ -110,12 +111,22 @@ export const AddChild = () => {
                 type="date"
               />
             </div>
-            <div className="mb-6">
+            <div className="mb-4">
               <label htmlFor="diagnosis">Diagnosis</label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 name="diagnosis"
                 id="diagnosis"
+              />
+            </div>
+            <div className="mb-6">
+              <label htmlFor="photo">Photo</label>
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                name="photo"
+                id="photo"
+                type="file"
+                accept="image/*"
               />
             </div>
 

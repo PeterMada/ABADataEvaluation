@@ -1,10 +1,22 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router';
+import { SmallInfoBox } from '../components/smallInfoBox/SmallInfoBox';
 
 export const Child = (props) => {
-  let data = useLocation();
-  console.log(data.state.child);
+  const data = useLocation();
+  const currentChild = data.state.child;
 
-  return <>Child</>;
+  return (
+    <>
+      {data.state.child ? (
+        <SmallInfoBox
+          name={`${currentChild.child_first_name} ${currentChild.child_last_name}`}
+          info={``}
+        />
+      ) : (
+        <p>Person does not exist</p>
+      )}
+    </>
+  );
 };

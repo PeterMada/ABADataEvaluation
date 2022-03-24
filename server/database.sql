@@ -32,6 +32,7 @@ CREATE TABLE children(
   child_sex sex,
   child_date_of_birth DATE,
   child_diagnosis VARCHAR(255),
+  child_info VARCHAR(500)
   supervisor_id uuid NOT NULL,
   
   CONSTRAINT fk_supervisor FOREIGN KEY(supervisor_id) REFERENCES users(user_id)

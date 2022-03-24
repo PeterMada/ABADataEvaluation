@@ -6,8 +6,15 @@ const validinfo = require('../middleware/validinfo');
 
 router.post('/', authorization, validinfo, async (req, res) => {
   try {
-    const { firstName, lastName, childCode, sex, dateOfBirth, diagnosis } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      childCode,
+      sex,
+      dateOfBirth,
+      diagnosis,
+      photo,
+    } = req.body;
 
     if (!req.user) {
       return res.status(401).json('Server Error');

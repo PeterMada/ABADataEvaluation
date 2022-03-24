@@ -13,6 +13,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { ToastContainer } from 'react-toastify';
 import { AddChild } from '../../../src/components/addChild/AddChild';
+require('dotenv').config();
 
 describe('AddChild', () => {
   const checkFormField = (labelText, name, type = 'text') => {
@@ -115,6 +116,18 @@ describe('AddChild', () => {
     it('shows field', () => {
       render(<AddChild />);
       checkFormField('Diagnosis', 'diagnosis');
+    });
+  });
+
+  describe('file input', () => {
+    it('has field', () => {
+      render(<AddChild />);
+      checkFormField('Photo', 'photo', 'file');
+    });
+
+    it('accept only images', () => {
+      render(<AddChild />);
+      expect(screen.getByLabelText('Photo').accept).toEqual('image/*');
     });
   });
 

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { Card } from '../card/Card';
 
 export const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState('');
   const [allPersons, setAllPersons] = useState([]);
+  const [allChildren, setAllChildren] = useState([]);
 
   const logout = (e) => {
     e.preventDefault();
@@ -31,6 +33,21 @@ export const Dashboard = ({ setAuth }) => {
       }
     };
 
+    const fetchChildrenList = async () => {
+      // TODO get token from cookie
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}childrenList`,
+        {
+          method: 'GET',
+          headers: { token: localStorage.token },
+        }
+      );
+      const parseRes = await response.json();
+      if (!isCancelled) {
+        setAllChildren(parseRes);
+      }
+    };
+
     const fetchName = async () => {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}dashobard/`,
@@ -47,6 +64,7 @@ export const Dashboard = ({ setAuth }) => {
     };
 
     const personsListResults = fetchPersonsList().catch(console.error);
+    const childListResults = fetchChildrenList().catch(console.error);
     const nameResults = fetchName().catch(console.error);
 
     return () => {
@@ -62,11 +80,33 @@ export const Dashboard = ({ setAuth }) => {
 
       <div data-testid="personsListWrapper">
         <h2>Lists of people</h2>
-        <div>
+        <div data-testid="personsListWrapper">
           {allPersons.length > 0 ? (
             <h3>Adam Peter</h3>
           ) : (
             <p>There are no people in list</p>
+          )}
+        </div>
+      </div>
+
+      <div data-testid="personsListWrapper" className="mt-10 mb-6">
+        <h2>All children</h2>
+        <div>
+          {allChildren.length > 0 ? (
+            allChildren.map((child) => {
+              return (
+                <div className="mb-6 mt-4" key={child.child_id}>
+                  <Link
+                    className="bg-blue-500 ml-2 mr-2  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    to="/child"
+                    state={{
+                      child,
+                    }}>{`${child.child_first_name} ${child.child_last_name}`}</Link>
+                </div>
+              );
+            })
+          ) : (
+            <p>There are no children in list</p>
           )}
         </div>
       </div>

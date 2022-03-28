@@ -65,4 +65,10 @@ describe('AddSkill', () => {
     expect(submitButton).toBeInTheDocument();
     expect(submitButton.textContent).toEqual('Add skill');
   });
+
+  it('has disabled submit button on load', () => {
+    render(<AddSkill />);
+    const submitButton = screen.getByRole('button', 'submit');
+    expect(submitButton).toBeDisabled();
+  });
 });

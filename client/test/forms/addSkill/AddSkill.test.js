@@ -35,4 +35,34 @@ describe('AddSkill', () => {
       'Add Skill'
     );
   });
+
+  it('render form', () => {
+    render(<AddSkill />);
+    expect(screen.getByTestId('addSkill')).toBeInTheDocument();
+  });
+
+  describe('skill title', () => {
+    it('renders a input field', () => {
+      render(<AddSkill />);
+      checkFormField('Skill title', 'skillTitle');
+    });
+
+    /*
+    isThereErrorOnEmptyInputBlur(
+      'First Name',
+      'First name field is required'
+    );
+    isThereNoErrorMessageOnSomeTextInInput(
+      'First Name',
+      'First name field is required'
+    );
+    */
+  });
+
+  it('has a submit button', () => {
+    render(<AddSkill />);
+    const submitButton = screen.getByRole('button', 'submit');
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton.textContent).toEqual('Add skill');
+  });
 });

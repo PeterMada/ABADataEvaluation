@@ -18,6 +18,7 @@ import { Profile } from './components/profile/profile';
 import { PersonForm } from './components/personForm/personForm';
 import { AddChild } from './components/addChild/AddChild';
 import { Child } from './screen/Child';
+import { AddSkill } from './forms/addSkill/AddSkill';
 
 toast.configure();
 
@@ -134,6 +135,17 @@ export const App = () => {
             element={
               isAuthenticated ? (
                 <Child />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/addSkill"
+            element={
+              isAuthenticated ? (
+                <AddSkill />
               ) : (
                 <Navigate replace to="/login" />
               )

@@ -71,4 +71,32 @@ describe('AddSkill', () => {
     const submitButton = screen.getByRole('button', 'submit');
     expect(submitButton).toBeDisabled();
   });
+
+  it('shows loading button when form is submitting', async () => {
+    render(<AddSkill />);
+    const skillTitleField = screen.getByLabelText('Skill title');
+
+    fireEvent.change(skillTitleField, { target: { value: 'SkillTitle' } });
+
+    fireEvent.click(screen.getByRole('button', 'submit'));
+
+    await waitFor(() =>
+      expect(screen.getByText('Processing...')).toBeInTheDocument()
+    );
+  });
+
+  it('remove loading button when form submiting finished', async () => {
+    render(<AddSkill />);
+    const skillTitleField = screen.getByLabelText('Skill title');
+
+    fireEvent.change(skillTitleField, { target: { value: 'SkillTitle' } });
+    fireEvent.click(screen.getByRole('button', 'submit'));
+
+    await waitForElementToBeRemoved(() =>
+      screen.getByText('Processing...')
+    );
+
+    expect(screen.queryByText('Processing...')).toBeNull();
+    expect(screen.getByRole('button', 'submit')).toBeInTheDocument();
+  });
 });

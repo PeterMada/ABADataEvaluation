@@ -18,7 +18,28 @@ export const AddSkill = () => {
 
           return errors;
         }}
-        onSubmit={async (values, { setSubmitting }) => {}}>
+        onSubmit={async (values, { setSubmitting }) => {
+          try {
+            const response = await fetch(
+              `${process.env.REACT_APP_API_URL}addSkill`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-type': 'application/json',
+                  token: localStorage.token,
+                },
+                body: JSON.stringify(values),
+              }
+            );
+
+            const parseRes = await response.json();
+            if (parseRes.skillId) {
+              toast.error('Skill added succesfully');
+            }
+          } catch (err) {
+            toast.error('Oops, failed to fetch!');
+          }
+        }}>
         {({ isSubmitting, isValid, dirty }) => (
           <Form data-testid="addSkill">
             <div className="mb-4">

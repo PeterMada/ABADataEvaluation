@@ -4,9 +4,16 @@ import {
   render,
   screen,
   fireEvent,
+  findByText,
   waitFor,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
+import 'whatwg-fetch';
+import { BrowserRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
+import { ToastContainer } from 'react-toastify';
 import { AddSkill } from '../../../src/forms/addSkill/AddSkill';
 require('dotenv').config();
 
@@ -98,5 +105,74 @@ describe('AddSkill', () => {
 
     expect(screen.queryByText('Processing...')).toBeNull();
     expect(screen.getByRole('button', 'submit')).toBeInTheDocument();
+  });
+
+  describe('submiting form', () => {
+    const server = setupServer(
+      rest.post(
+        `${process.env.REACT_APP_API_URL}addSkill`,
+        (req, res, ctx) => {
+          return res(
+            ctx.status(500),
+            ctx.json('Authentificiation failed')
+          );
+        }
+      )
+    );
+
+    beforeAll(() => server.listen());
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+
+    it('shows alert when there is server error', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <AddSkill />
+        </BrowserRouter>
+      );
+      const skillTitleField = screen.getByLabelText('Skill title');
+
+      await fireEvent.change(skillTitleField, {
+        target: { value: 'SkillTitle' },
+      });
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Oops, failed to fetch!')
+      ).toBeInTheDocument();
+    });
+
+    it('shows success message on success submition', async () => {
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}addSkill`,
+          (req, res, ctx) => {
+            return res(ctx.status(200), ctx.json({ skillId: '123' }));
+          }
+        )
+      );
+
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <AddSkill />
+        </BrowserRouter>
+      );
+      const skillTitleField = screen.getByLabelText('Skill title');
+
+      await fireEvent.change(skillTitleField, {
+        target: { value: 'Skill title value' },
+      });
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Skill added succesfully')
+      ).toBeInTheDocument();
+    });
   });
 });

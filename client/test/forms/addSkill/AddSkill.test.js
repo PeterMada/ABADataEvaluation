@@ -208,5 +208,34 @@ describe('AddSkill', () => {
         await screen.findByText('Authentication was unsuccessful')
       ).toBeInTheDocument();
     });
+
+    it.skip('navigate on skill detail after succesfuli submition', async () => {
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}addSkill`,
+          (req, res, ctx) => {
+            return res(ctx.status(200), ctx.json({ skillId: '123' }));
+          }
+        )
+      );
+      render(
+        <BrowserRouter>
+          <AddSkill />
+        </BrowserRouter>
+      );
+
+      const skillTitleField = screen.getByLabelText('Skill title');
+
+      fireEvent.change(skillTitleField, {
+        target: { value: 'Skill title value' },
+      });
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Skill title value')
+      ).toBeInTheDocument();
+    });
   });
 });

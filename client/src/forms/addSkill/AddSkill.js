@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 export const AddSkill = () => {
   return (
@@ -35,6 +36,8 @@ export const AddSkill = () => {
             const parseRes = await response.json();
             if (parseRes.skillId) {
               toast.success('Skill added succesfully');
+
+              //navigate(`/skill/${parseRes.idskillId}`);
             } else {
               toast.error(parseRes);
             }

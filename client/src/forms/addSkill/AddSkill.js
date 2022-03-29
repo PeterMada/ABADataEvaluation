@@ -34,7 +34,9 @@ export const AddSkill = () => {
 
             const parseRes = await response.json();
             if (parseRes.skillId) {
-              toast.error('Skill added succesfully');
+              toast.success('Skill added succesfully');
+            } else {
+              toast.error(parseRes);
             }
           } catch (err) {
             toast.error('Oops, failed to fetch!');

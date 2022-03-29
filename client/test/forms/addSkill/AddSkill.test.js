@@ -163,7 +163,7 @@ describe('AddSkill', () => {
       );
       const skillTitleField = screen.getByLabelText('Skill title');
 
-      await fireEvent.change(skillTitleField, {
+      fireEvent.change(skillTitleField, {
         target: { value: 'Skill title value' },
       });
 
@@ -172,6 +172,40 @@ describe('AddSkill', () => {
 
       expect(
         await screen.findByText('Skill added succesfully')
+      ).toBeInTheDocument();
+    });
+
+    it('shows error message on success submition but without skill id', async () => {
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <AddSkill />
+        </BrowserRouter>
+      );
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}addSkill`,
+          (req, res, ctx) => {
+            return res(
+              ctx.status(200),
+              ctx.json('Authentication was unsuccessful')
+            );
+          }
+        )
+      );
+
+      const skillTitleField = screen.getByLabelText('Skill title');
+
+      fireEvent.change(skillTitleField, {
+        target: { value: 'Skill title value' },
+      });
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Authentication was unsuccessful')
       ).toBeInTheDocument();
     });
   });

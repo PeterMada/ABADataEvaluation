@@ -128,10 +128,9 @@ export const App = () => {
               )
             }
           />
-
           <Route
             exact
-            path="/child"
+            path="/child/:id"
             element={
               isAuthenticated ? (
                 <Child />
@@ -142,7 +141,7 @@ export const App = () => {
           />
           <Route
             exact
-            path="/addSkill"
+            path="/addSkill/:id"
             element={
               isAuthenticated ? (
                 <AddSkill />

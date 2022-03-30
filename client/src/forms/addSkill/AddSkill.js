@@ -1,9 +1,13 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const AddSkill = () => {
+  const { id } = useParams();
+  let navigate = useNavigate();
   return (
     <>
       <h1>Add Skill</h1>
@@ -28,6 +32,7 @@ export const AddSkill = () => {
                 headers: {
                   'Content-type': 'application/json',
                   token: localStorage.token,
+                  child_id: id,
                 },
                 body: JSON.stringify(values),
               }
@@ -36,8 +41,7 @@ export const AddSkill = () => {
             const parseRes = await response.json();
             if (parseRes.skillId) {
               toast.success('Skill added succesfully');
-
-              //navigate(`/skill/${parseRes.idskillId}`);
+              navigate(`/skill/${parseRes.skillId}`);
             } else {
               toast.error(parseRes);
             }

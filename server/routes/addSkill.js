@@ -6,18 +6,34 @@ const validinfo = require('../middleware/validinfo');
 
 router.post('/', authorization, validinfo, async (req, res) => {
   try {
+    const child_id = req.headers['child_id'];
     const { skillTitle } = req.body;
 
     if (!req.user) {
       return res.status(401).json('Server Error');
     }
 
-    const newSkill = await pool.query(
-      'INSERT INTO skills (skill_title, children_id,supervisor_id) VALUES ($1, $2, $3) RETURNING *',
-      [skillTitle, req.child, req.user]
+    const child = await pool.query(
+      'SELECT child_id FROM children WHERE supervisor_id = $1 AND child_id = $2',
+      [req.user, child_id]
     );
 
-    const newSkill = newSkill.rows[0].skill_id;
+    // TODO this should go to middleware
+    if (child.rows.length !== 1) {
+      res
+        .status(500)
+        .send(
+          'You do not have premmision to add new skill to this children.'
+        );
+      return;
+    }
+
+    const skill = await pool.query(
+      'INSERT INTO skills (skill_title, child_id, supervisor_id) VALUES ($1, $2, $3) RETURNING *',
+      [skillTitle, child.rows[0].child_id, req.user]
+    );
+
+    const newSkill = skill.rows[0].skill_id;
 
     res.json({ skillId: newSkill });
   } catch (err) {

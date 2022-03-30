@@ -16,6 +16,7 @@ app.use('/addChild', require('./routes/addChild'));
 app.use('/personsList', require('./routes/personsList'));
 app.use('/childrenList', require('./routes/childrenList'));
 app.use('/addSkill', require('./routes/addSkill'));
+app.use('/childDetail', require('./routes/childDetail'));
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server started succesfully`);

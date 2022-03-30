@@ -43,10 +43,10 @@ CREATE TABLE children(
 CREATE TABLE skills (
   skill_id uuid DEFAULT uuid_generate_v4(),
   skill_title VARCHAR(255) NOT NULL,
-  children_id uuid NOT NULL,
+  child_id uuid NOT NULL,
   supervisor_id uuid NOT NULL,
 
   PRIMARY KEY (skill_id),
-  CONSTRAINT fk_children FOREIGN KEY(children_id) REFERENCES skills(skill_id), 
+  CONSTRAINT fk_children FOREIGN KEY(child_id) REFERENCES children(child_id), 
   CONSTRAINT fk_supervisor FOREIGN KEY(supervisor_id) REFERENCES users(user_id)
 );

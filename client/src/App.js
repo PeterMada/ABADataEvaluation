@@ -6,6 +6,8 @@ import {
   Route,
   Redirect,
   Navigate,
+  useNavigate,
+  useLocation,
 } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,8 +21,47 @@ import { PersonForm } from './components/personForm/personForm';
 import { AddChild } from './components/addChild/AddChild';
 import { Child } from './screen/Child';
 import { AddSkill } from './forms/addSkill/AddSkill';
+import { Skill } from './screen/Skill';
 
 toast.configure();
+/*
+const RequireAuth = ({
+  children,
+  isAuthenticated,
+}: {
+  children: JSX.Element,
+}) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log(isAuthenticated);
+  console.log(children);
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+};
+
+const Routing = ({ setAuth, isAuthenticated }) => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route>
+          <Route path="/login" element={<Login setAuth={setAuth} />} />
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth isAuthenticated={isAuthenticated}>
+                <Dashboard setAuth={setAuth} />
+              </RequireAuth>
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+};
+*/
 
 export const App = () => {
   const [isAuthenticated, setsAuthenticated] = useState(false);
@@ -29,6 +70,7 @@ export const App = () => {
   };
 
   const isAuth = async () => {
+    console.log('auth hook');
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}auth/verify`,
@@ -51,7 +93,28 @@ export const App = () => {
     isAuth();
   });
 
-  console.log(`auth: ${isAuthenticated}`);
+  //return <Routing setAuth={setAuth} isAuthenticated={isAuthenticated} />;
+
+  /*
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth>
+                <Dashboard />
+              </RequireAuth>
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+            */
+
   return (
     <BrowserRouter>
       <Header isAuthenticated={isAuthenticated} />
@@ -145,6 +208,17 @@ export const App = () => {
             element={
               isAuthenticated ? (
                 <AddSkill />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/skill/:id"
+            element={
+              isAuthenticated ? (
+                <Skill />
               ) : (
                 <Navigate replace to="/login" />
               )

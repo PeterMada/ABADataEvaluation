@@ -31,13 +31,13 @@ export const Child = (props) => {
 
   return (
     <>
-      {data.state.child ? (
+      {currentChild ? (
         <SmallInfoBox
           name={`${currentChild.child_first_name} ${currentChild.child_last_name}`}
           info={``}
         />
       ) : (
-        <p>Person does not exist</p>
+        <p>Loading child details</p>
       )}
 
       <div className="mt-6">

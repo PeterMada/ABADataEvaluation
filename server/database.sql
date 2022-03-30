@@ -1,7 +1,9 @@
 CREATE DATABASE ABADataEvaluation;
 
-// TODO add user roles
-// TODO add temporaly password
+CREATE TYPE sex AS ENUM ('', 'man', 'woman');
+
+-- // TODO add user roles
+-- // TODO add temporaly password
 CREATE TABLE users(
   user_id uuid DEFAULT uuid_generate_v4(),
   user_first_name VARCHAR(255) NOT NULL,
@@ -17,12 +19,16 @@ CREATE TABLE users(
   PRIMARY KEY (user_id)
 );
 
--- insert fake users
-INSERT INTO users(user_first_name, user_last_name, user_email, user_password)
- VALUES ('peter', 'mada' 'test123@gmail.com', 'wert1189');
+CREATE TABLE therapeutists (
+  therapeutist_id uuid DEFAULT uuid_generate_v4(),
+  therapeutist_first_name VARCHAR(255) NOT NULL,
+  therapeutist_last_name VARCHAR(255) NOT NULL,
+  therapeutist_email VARCHAR(255) NOT NULL,
+  supervisor_id uuid NOT NULL,
+  PRIMARY KEY (therapeutist_id),
 
-
-CREATE TYPE sex AS ENUM ('', 'man', 'woman');
+  CONSTRAINT fk_supervisor FOREIGN KEY(supervisor_id) REFERENCES users(user_id)
+);
 
 CREATE TABLE children(
   child_id uuid DEFAULT uuid_generate_v4(),
@@ -44,9 +50,26 @@ CREATE TABLE skills (
   skill_id uuid DEFAULT uuid_generate_v4(),
   skill_title VARCHAR(255) NOT NULL,
   child_id uuid NOT NULL,
-  supervisor_id uuid NOT NULL,
 
   PRIMARY KEY (skill_id),
-  CONSTRAINT fk_children FOREIGN KEY(child_id) REFERENCES children(child_id), 
-  CONSTRAINT fk_supervisor FOREIGN KEY(supervisor_id) REFERENCES users(user_id)
+  CONSTRAINT fk_children FOREIGN KEY(child_id) REFERENCES children(child_id) 
+);
+
+  
+CREATE TABLE programs (
+  program_id uuid DEFAULT uuid_generate_v4(),
+  program_title VARCHAR(255) NOT NULL,
+  skill_id uuid NOT NULL,
+
+  PRIMARY KEY (program_id),
+  CONSTRAINT fk_children FOREIGN KEY(skill_id) REFERENCES skills(skill_id)
+);
+
+CREATE TABLE targets (
+  target_id uuid DEFAULT uuid_generate_v4(),
+  target_title VARCHAR(255) NOT NULL,
+  program_id uuid NOT NULL,
+
+  PRIMARY KEY (target_id),
+  CONSTRAINT fk_children FOREIGN KEY(program_id) REFERENCES programs(program_id)
 );

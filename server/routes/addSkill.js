@@ -29,8 +29,8 @@ router.post('/', authorization, validinfo, async (req, res) => {
     }
 
     const skill = await pool.query(
-      'INSERT INTO skills (skill_title, child_id, supervisor_id) VALUES ($1, $2, $3) RETURNING *',
-      [skillTitle, child.rows[0].child_id, req.user]
+      'INSERT INTO skills (skill_title, child_id) VALUES ($1, $2) RETURNING *',
+      [skillTitle, child.rows[0].child_id]
     );
 
     const newSkill = skill.rows[0].skill_id;

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const AddProgram = () => {
   const { id } = useParams();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -18,8 +18,8 @@ export const AddProgram = () => {
         }}
         validate={(values) => {
           const errors = {};
-          if (!values.skillTitle) {
-            errors.skillTitle = 'Program title field is required';
+          if (!values.programTitle) {
+            errors.programTitle = 'Program title field is required';
           }
 
           return errors;

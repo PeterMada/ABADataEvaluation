@@ -20,6 +20,8 @@ app.use('/childDetail', require('./routes/childDetail'));
 app.use('/addProgram', require('./routes/addProgram'));
 app.use('/addTarget', require('./routes/addTarget'));
 
+app.use('/skillList', require('./routes/skillList'));
+
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server started succesfully`);
 });

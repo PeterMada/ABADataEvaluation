@@ -53,11 +53,16 @@ export const Skill = () => {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 mb-10">
         <Link
           className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           to={`/addProgram/${id}`}>
           Add new program to this skill
+        </Link>
+        <Link
+          className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          to={`/editSkill/${id}`}>
+          Edit this skill
         </Link>
       </div>
     </>

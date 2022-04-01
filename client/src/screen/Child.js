@@ -68,18 +68,6 @@ export const Child = (props) => {
           to={`/addSkill/${id}`}>
           Add Skill
         </Link>
-
-        <Link
-          className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          to="/addSkill">
-          Add Program
-        </Link>
-
-        <Link
-          className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          to="/addSkill">
-          Add Target
-        </Link>
       </div>
     </>
   );

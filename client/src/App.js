@@ -26,6 +26,7 @@ import { AddProgram } from './forms/addProgram/AddProgram';
 import { Program } from './screen/Program';
 import { AddTarget } from './forms/addTarget/AddTarget';
 import { Target } from './screen/Target';
+import { EditSkill } from './forms/editSkill/editSkill';
 
 toast.configure();
 /*
@@ -127,6 +128,7 @@ export const App = () => {
           <Route
             exact
             path="/"
+            index
             element={
               !isAuthenticated ? (
                 <Login setAuth={setAuth} />
@@ -212,6 +214,17 @@ export const App = () => {
             element={
               isAuthenticated ? (
                 <AddSkill />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/editSkill/:id"
+            element={
+              isAuthenticated ? (
+                <EditSkill />
               ) : (
                 <Navigate replace to="/login" />
               )

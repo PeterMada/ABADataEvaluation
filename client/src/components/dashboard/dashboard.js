@@ -91,13 +91,15 @@ export const Dashboard = ({ setAuth }) => {
 
       <div data-testid="personsListWrapper" className="mt-10 mb-6">
         <h2>All children</h2>
-        <div>
+        <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
           {allChildren.length > 0 ? (
             allChildren.map((child) => {
               return (
-                <div className="mb-6 mt-4" key={child.child_id}>
+                <div
+                  className="bg-white p-10 rounded-lg shadow-md"
+                  key={child.child_id}>
                   <Link
-                    className="bg-blue-500 ml-2 mr-2  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className=""
                     to={`/child/${child.child_id}`}
                     state={{
                       child,

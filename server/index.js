@@ -22,6 +22,9 @@ app.use('/addTarget', require('./routes/addTarget'));
 
 app.use('/skillList', require('./routes/skillList'));
 
+app.use('/skillDetail', require('./routes/skillDetail'));
+app.use('/programDetail', require('./routes/programDetail'));
+
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server started succesfully`);
 });

@@ -27,6 +27,10 @@ module.exports = (req, res, next) => {
     if (![firstName, lastName].every(Boolean)) {
       return res.status(401).json('Missing required fields');
     }
+  } else if (req.path === '/addTarget') {
+    if (![targetTitle, targetType].every(Boolean)) {
+      return res.status(401).json('Missing required fields');
+    }
   }
 
   next();

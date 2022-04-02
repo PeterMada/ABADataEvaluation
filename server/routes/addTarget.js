@@ -7,7 +7,7 @@ const validinfo = require('../middleware/validinfo');
 router.post('/', authorization, validinfo, async (req, res) => {
   try {
     const program_id = req.headers['program_id'];
-    const { targetTitle } = req.body;
+    const { targetTitle, targetDescription, targetType } = req.body;
 
     if (!req.user) {
       return res.status(401).json('Server Error');
@@ -58,8 +58,8 @@ router.post('/', authorization, validinfo, async (req, res) => {
     }
 
     const target = await pool.query(
-      'INSERT INTO targets (target_title, program_id) VALUES ($1, $2) RETURNING *',
-      [targetTitle, program_id]
+      'INSERT INTO targets (target_title, target_description, target_type, program_id) VALUES ($1, $2, $3, $4) RETURNING *',
+      [targetTitle, targetDescription, targetType, program_id]
     );
 
     const newTarget = target.rows[0].target_id;

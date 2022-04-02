@@ -71,6 +71,7 @@ CREATE TABLE targets (
   target_id uuid DEFAULT uuid_generate_v4(),
   target_title VARCHAR(255) NOT NULL,
   target_description TEXT,
+  target_type target_type, 
   program_id uuid NOT NULL,
 
   PRIMARY KEY (target_id),
@@ -82,7 +83,6 @@ CREATE TABLE measurementPolarQuestions (
   measurement_created timestamp not null default CURRENT_TIMESTAMP,
   measurement_yes BOOLEAN,
   target_id uuid NOT NULL,
-
 
   PRIMARY KEY (measurement_id),
   CONSTRAINT fk_children FOREIGN KEY(target_id) REFERENCES targets(target_id)

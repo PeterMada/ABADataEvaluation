@@ -1,19 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-export const AddSkill = () => {
+export const EditSkill = () => {
   const { id } = useParams();
-  let navigate = useNavigate();
-  return (
+  const navigate = useNavigate();
+  const [currentSkill, setCurrentSkill] = useState([]);
+
+  useEffect(() => {
+    const fetchSkillDetail = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}skillDetail`,
+          {
+            method: 'GET',
+            headers: { token: localStorage.token, skill_id: id },
+          }
+        );
+        const parseRes = await response.json();
+        console.log(parseRes);
+        setCurrentSkill(parseRes.skillDetail);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const childResult = fetchSkillDetail().catch(console.error);
+  }, []);
+
+  return !currentSkill.skill_title ? (
+    <div>Loading...</div>
+  ) : (
     <>
       <h1>Add Skill</h1>
       <Formik
+        enableReinitialize={true}
         initialValues={{
-          skillTitle: '',
+          skillTitle: currentSkill.skill_title,
         }}
         validate={(values) => {
           const errors = {};
@@ -26,13 +52,13 @@ export const AddSkill = () => {
         onSubmit={async (values, { setSubmitting }) => {
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}addSkill`,
+              `${process.env.REACT_APP_API_URL}editSkill`,
               {
                 method: 'POST',
                 headers: {
                   'Content-type': 'application/json',
                   token: localStorage.token,
-                  child_id: id,
+                  skill_id: id,
                 },
                 body: JSON.stringify(values),
               }
@@ -40,7 +66,7 @@ export const AddSkill = () => {
 
             const parseRes = await response.json();
             if (parseRes.skillId) {
-              toast.success('Skill added succesfully');
+              toast.success('Skill updated succesfully');
               navigate(`/skill/${parseRes.skillId}`);
             } else {
               toast.error(parseRes);
@@ -75,7 +101,7 @@ export const AddSkill = () => {
                   }
                   type="submit"
                   disabled={!dirty}>
-                  Add skill
+                  Save
                 </button>
               ) : (
                 <span

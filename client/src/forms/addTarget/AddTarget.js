@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-export const AddSkill = () => {
+export const AddTarget = () => {
   const { id } = useParams();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+
   return (
     <>
-      <h1>Add Skill</h1>
+      <h1>Add Target</h1>
       <Formik
         initialValues={{
-          skillTitle: '',
+          targetTitle: '',
+          targetType: 'Select target type',
+          targetDescription: '',
         }}
         validate={(values) => {
           const errors = {};
-          if (!values.skillTitle) {
-            errors.skillTitle = 'Skill title field is required';
+          if (!values.targetTitle) {
+            errors.targetTitle = 'Target title field is required';
+          }
+
+          if (values.targetType === 'Select target type') {
+            errors.targetType = 'Target type field is required';
           }
 
           return errors;
@@ -26,22 +33,22 @@ export const AddSkill = () => {
         onSubmit={async (values, { setSubmitting }) => {
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}addSkill`,
+              `${process.env.REACT_APP_API_URL}addTarget`,
               {
                 method: 'POST',
                 headers: {
                   'Content-type': 'application/json',
                   token: localStorage.token,
-                  child_id: id,
+                  program_id: id,
                 },
                 body: JSON.stringify(values),
               }
             );
 
             const parseRes = await response.json();
-            if (parseRes.skillId) {
-              toast.success('Skill added succesfully');
-              navigate(`/skill/${parseRes.skillId}`);
+            if (parseRes.targetId) {
+              toast.success('Target added succesfully');
+              navigate(`/target/${parseRes.targetId}`);
             } else {
               toast.error(parseRes);
             }
@@ -50,18 +57,55 @@ export const AddSkill = () => {
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
-          <Form data-testid="addSkill">
+          <Form data-testid="addTarget">
             <div className="mb-4">
-              <label htmlFor="skillTitle">Skill title</label>
+              <label htmlFor="targetTitle">Target title</label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                id="skillTitle"
-                name="skillTitle"
+                id="targetTitle"
+                name="targetTitle"
               />
               <ErrorMessage
                 className="text-red-500 text-xs mt-1 ml-1"
-                name="skillTitle"
+                name="targetTitle"
+                component="div"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="targetDescription">Description</label>
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                as="textarea"
+                id="targetDescription"
+                name="targetDescription"
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="targetDescription"
+                component="div"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="targetType">Target type</label>
+              <Field
+                className="form-select appearance-none block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                as="select"
+                name="targetType"
+                aria-label="Target type">
+                <option value="Select target type">
+                  Select target type
+                </option>
+                <option value="yes/no">Yes/no</option>
+                <option value="prompt level">Prompt level</option>
+                <option value="duration">Duration</option>
+                <option value="frequency">Frequency</option>
+                <option value="frequency/time">Frequency/time</option>
+                <option value="text">Text</option>
+              </Field>
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="targetType"
                 component="div"
               />
             </div>
@@ -70,12 +114,14 @@ export const AddSkill = () => {
               {!isSubmitting ? (
                 <button
                   className={
-                    (!dirty ? 'opacity-50 cursor-not-allowed ' : '') +
+                    (!dirty || !isValid
+                      ? 'opacity-50 cursor-not-allowed '
+                      : '') +
                     'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
                   }
                   type="submit"
-                  disabled={!dirty}>
-                  Add skill
+                  disabled={!dirty || !isValid}>
+                  Add target
                 </button>
               ) : (
                 <span

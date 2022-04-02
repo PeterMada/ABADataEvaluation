@@ -6,6 +6,8 @@ import {
   Route,
   Redirect,
   Navigate,
+  useNavigate,
+  useLocation,
 } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,8 +20,55 @@ import { Profile } from './components/profile/profile';
 import { PersonForm } from './components/personForm/personForm';
 import { AddChild } from './components/addChild/AddChild';
 import { Child } from './screen/Child';
+import { AddSkill } from './forms/addSkill/AddSkill';
+import { Skill } from './screen/Skill';
+import { AddProgram } from './forms/addProgram/AddProgram';
+import { Program } from './screen/Program';
+import { AddTarget } from './forms/addTarget/AddTarget';
+import { Target } from './screen/Target';
+import { EditSkill } from './forms/editSkill/editSkill';
+import { Recording } from './screen/Recording';
+import { RecordAll } from './screen/RecordAll';
 
 toast.configure();
+/*
+const RequireAuth = ({
+  children,
+  isAuthenticated,
+}: {
+  children: JSX.Element,
+}) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log(isAuthenticated);
+  console.log(children);
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+};
+
+const Routing = ({ setAuth, isAuthenticated }) => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route>
+          <Route path="/login" element={<Login setAuth={setAuth} />} />
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth isAuthenticated={isAuthenticated}>
+                <Dashboard setAuth={setAuth} />
+              </RequireAuth>
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+};
+*/
 
 export const App = () => {
   const [isAuthenticated, setsAuthenticated] = useState(false);
@@ -28,6 +77,7 @@ export const App = () => {
   };
 
   const isAuth = async () => {
+    console.log('auth hook');
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}auth/verify`,
@@ -50,7 +100,28 @@ export const App = () => {
     isAuth();
   });
 
-  console.log(`auth: ${isAuthenticated}`);
+  //return <Routing setAuth={setAuth} isAuthenticated={isAuthenticated} />;
+
+  /*
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth>
+                <Dashboard />
+              </RequireAuth>
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+            */
+
   return (
     <BrowserRouter>
       <Header isAuthenticated={isAuthenticated} />
@@ -59,6 +130,7 @@ export const App = () => {
           <Route
             exact
             path="/"
+            index
             element={
               !isAuthenticated ? (
                 <Login setAuth={setAuth} />
@@ -127,13 +199,111 @@ export const App = () => {
               )
             }
           />
-
           <Route
             exact
-            path="/child"
+            path="/child/:id"
             element={
               isAuthenticated ? (
                 <Child />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/addSkill/:id"
+            element={
+              isAuthenticated ? (
+                <AddSkill />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/editSkill/:id"
+            element={
+              isAuthenticated ? (
+                <EditSkill />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/skill/:id"
+            element={
+              isAuthenticated ? (
+                <Skill />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/addProgram/:id"
+            element={
+              isAuthenticated ? (
+                <AddProgram />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/program/:id"
+            element={
+              isAuthenticated ? (
+                <Program />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/addTarget/:id"
+            element={
+              isAuthenticated ? (
+                <AddTarget />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/target/:id"
+            element={
+              isAuthenticated ? (
+                <Target />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/recording/:id"
+            element={
+              isAuthenticated ? (
+                <Recording />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/recordAll/:id"
+            element={
+              isAuthenticated ? (
+                <RecordAll />
               ) : (
                 <Navigate replace to="/login" />
               )

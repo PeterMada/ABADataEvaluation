@@ -1,8 +1,11 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export const AddChild = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
@@ -44,14 +47,16 @@ export const AddChild = () => {
               }
             );
             const parseRes = await response.json();
+
             if (parseRes.childId) {
               toast.success('Child added succesfully');
-              // TODO add redirect to dashboard or detail
               //setSubmitted(true);
+              navigate(`/child/${parseRes.childId}`);
             } else {
               toast.error(parseRes);
             }
           } catch (err) {
+            console.log(err);
             toast.error('Oops, failed to fetch!');
           }
         }}>

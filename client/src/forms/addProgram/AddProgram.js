@@ -5,20 +5,21 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-export const AddSkill = () => {
+export const AddProgram = () => {
   const { id } = useParams();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+
   return (
     <>
-      <h1>Add Skill</h1>
+      <h1>Add Program</h1>
       <Formik
         initialValues={{
-          skillTitle: '',
+          programTitle: '',
         }}
         validate={(values) => {
           const errors = {};
-          if (!values.skillTitle) {
-            errors.skillTitle = 'Skill title field is required';
+          if (!values.programTitle) {
+            errors.programTitle = 'Program title field is required';
           }
 
           return errors;
@@ -26,22 +27,22 @@ export const AddSkill = () => {
         onSubmit={async (values, { setSubmitting }) => {
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}addSkill`,
+              `${process.env.REACT_APP_API_URL}addProgram`,
               {
                 method: 'POST',
                 headers: {
                   'Content-type': 'application/json',
                   token: localStorage.token,
-                  child_id: id,
+                  skill_id: id,
                 },
                 body: JSON.stringify(values),
               }
             );
 
             const parseRes = await response.json();
-            if (parseRes.skillId) {
-              toast.success('Skill added succesfully');
-              navigate(`/skill/${parseRes.skillId}`);
+            if (parseRes.programId) {
+              toast.success('Program added succesfully');
+              navigate(`/program/${parseRes.programId}`);
             } else {
               toast.error(parseRes);
             }
@@ -50,18 +51,18 @@ export const AddSkill = () => {
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
-          <Form data-testid="addSkill">
+          <Form data-testid="addProgram">
             <div className="mb-4">
-              <label htmlFor="skillTitle">Skill title</label>
+              <label htmlFor="programTitle">Program title</label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                id="skillTitle"
-                name="skillTitle"
+                id="programTitle"
+                name="programTitle"
               />
               <ErrorMessage
                 className="text-red-500 text-xs mt-1 ml-1"
-                name="skillTitle"
+                name="programTitle"
                 component="div"
               />
             </div>
@@ -75,7 +76,7 @@ export const AddSkill = () => {
                   }
                   type="submit"
                   disabled={!dirty}>
-                  Add skill
+                  Add program
                 </button>
               ) : (
                 <span

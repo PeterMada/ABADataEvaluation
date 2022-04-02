@@ -1,7 +1,10 @@
 CREATE DATABASE ABADataEvaluation;
 
-// TODO add user roles
-// TODO add temporaly password
+CREATE TYPE sex AS ENUM ('', 'man', 'woman');
+CREATE TYPE target_type AS ENUM ('yes/no', 'prompt level', 'duration', 'frequency', 'frequency/time', 'text');
+
+-- // TODO add user roles
+-- // TODO add temporaly password
 CREATE TABLE users(
   user_id uuid DEFAULT uuid_generate_v4(),
   user_first_name VARCHAR(255) NOT NULL,
@@ -17,12 +20,16 @@ CREATE TABLE users(
   PRIMARY KEY (user_id)
 );
 
--- insert fake users
-INSERT INTO users(user_first_name, user_last_name, user_email, user_password)
- VALUES ('peter', 'mada' 'test123@gmail.com', 'wert1189');
+CREATE TABLE therapeutists (
+  therapeutist_id uuid DEFAULT uuid_generate_v4(),
+  therapeutist_first_name VARCHAR(255) NOT NULL,
+  therapeutist_last_name VARCHAR(255) NOT NULL,
+  therapeutist_email VARCHAR(255) NOT NULL,
+  supervisor_id uuid NOT NULL,
+  PRIMARY KEY (therapeutist_id),
 
-
-CREATE TYPE sex AS ENUM ('', 'man', 'woman');
+  CONSTRAINT fk_supervisor FOREIGN KEY(supervisor_id) REFERENCES users(user_id)
+);
 
 CREATE TABLE children(
   child_id uuid DEFAULT uuid_generate_v4(),
@@ -32,8 +39,91 @@ CREATE TABLE children(
   child_sex sex,
   child_date_of_birth DATE,
   child_diagnosis VARCHAR(255),
-  child_info VARCHAR(500)
+  child_info VARCHAR(500),
   supervisor_id uuid NOT NULL,
   
+  PRIMARY KEY (child_id),
   CONSTRAINT fk_supervisor FOREIGN KEY(supervisor_id) REFERENCES users(user_id)
-  );
+);
+
+  
+CREATE TABLE skills (
+  skill_id uuid DEFAULT uuid_generate_v4(),
+  skill_title VARCHAR(255) NOT NULL,
+  child_id uuid NOT NULL,
+
+  PRIMARY KEY (skill_id),
+  CONSTRAINT fk_children FOREIGN KEY(child_id) REFERENCES children(child_id) 
+);
+
+  
+CREATE TABLE programs (
+  program_id uuid DEFAULT uuid_generate_v4(),
+  program_title VARCHAR(255) NOT NULL,
+  skill_id uuid NOT NULL,
+
+  PRIMARY KEY (program_id),
+  CONSTRAINT fk_skill FOREIGN KEY(skill_id) REFERENCES skills(skill_id)
+);
+
+
+CREATE TABLE targets (
+  target_id uuid DEFAULT uuid_generate_v4(),
+  target_title VARCHAR(255) NOT NULL,
+  target_description TEXT,
+  target_type target_type, 
+  program_id uuid NOT NULL,
+  child_id uuid NOT NULL,
+
+  PRIMARY KEY (target_id),
+  CONSTRAINT fk_program FOREIGN KEY(program_id) REFERENCES programs(program_id),
+  CONSTRAINT fk_children FOREIGN KEY(child_id) REFERENCES children(child_id) 
+);
+
+CREATE TABLE measurementPolarQuestions (
+  measurement_id uuid DEFAULT uuid_generate_v4(),
+  measurement_created timestamp not null default CURRENT_TIMESTAMP,
+  measurement_yes BOOLEAN,
+  measurement_no BOOLEAN,
+  measuremend_by uuid NOT NULL,
+  measurement_closed BOOLEAN DEFAULT FALSE,
+  target_id uuid NOT NULL,
+
+  PRIMARY KEY (measurement_id),
+  CONSTRAINT fk_target FOREIGN KEY(target_id) REFERENCES targets(target_id),
+  CONSTRAINT fk_user FOREIGN KEY(measuremend_by) REFERENCES users(user_id)
+);
+
+CREATE TABLE frequency (
+  measurement_id uuid DEFAULT uuid_generate_v4(),
+  measurement_created timestamp not null default CURRENT_TIMESTAMP,
+  measurement_frequency SMALLINT NOT NULL,
+  measuremend_by uuid NOT NULL,
+  measurement_closed BOOLEAN DEFAULT FALSE,
+  target_id uuid NOT NULL,
+
+  PRIMARY KEY (measurement_id),
+  CONSTRAINT fk_target FOREIGN KEY(target_id) REFERENCES targets(target_id),
+  CONSTRAINT fk_user FOREIGN KEY(measuremend_by) REFERENCES users(user_id)
+);
+
+CREATE TABLE measurementProgramLevelOptions (
+  measurement_id uuid DEFAULT uuid_generate_v4(),
+  measurement_created timestamp not null default CURRENT_TIMESTAMP,
+  measurement_frequency SMALLINT,
+  target_id uuid NOT NULL,
+
+  PRIMARY KEY (measurement_id),
+  CONSTRAINT fk_target FOREIGN KEY(target_id) REFERENCES targets(target_id)
+);
+
+CREATE TABLE programLevelOptions (
+  program_id uuid DEFAULT uuid_generate_v4(),
+  target_title VARCHAR(255) NOT NULL,
+  measurement_id uuid NOT NULL,
+ 
+  PRIMARY KEY (program_id),
+  CONSTRAINT fk_measurment FOREIGN KEY(measurement_id) REFERENCES measurementProgramLevelOptions(measurement_id)
+
+);
+

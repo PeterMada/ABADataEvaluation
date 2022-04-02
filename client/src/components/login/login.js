@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 export const Login = ({ setAuth }) => {
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     email: '',
     password: '',
@@ -40,6 +42,7 @@ export const Login = ({ setAuth }) => {
         localStorage.setItem('token', parseRes.token);
         setAuth(true);
         toast.success('Login succesfully');
+        navigate(`/dashboard`);
       } else {
         setAuth(false);
         toast.error(parseRes);

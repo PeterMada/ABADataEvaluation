@@ -1,6 +1,7 @@
 CREATE DATABASE ABADataEvaluation;
 
 CREATE TYPE sex AS ENUM ('', 'man', 'woman');
+CREATE TYPE target_type AS ENUM ('yes/no', 'prompt level', 'duration', 'frequency', 'frequency/time', 'text');
 
 -- // TODO add user roles
 -- // TODO add temporaly password
@@ -65,11 +66,45 @@ CREATE TABLE programs (
   CONSTRAINT fk_children FOREIGN KEY(skill_id) REFERENCES skills(skill_id)
 );
 
+
 CREATE TABLE targets (
   target_id uuid DEFAULT uuid_generate_v4(),
   target_title VARCHAR(255) NOT NULL,
+  target_description TEXT,
   program_id uuid NOT NULL,
 
   PRIMARY KEY (target_id),
   CONSTRAINT fk_children FOREIGN KEY(program_id) REFERENCES programs(program_id)
 );
+
+CREATE TABLE measurementPolarQuestions (
+  measurement_id uuid DEFAULT uuid_generate_v4(),
+  measurement_created timestamp not null default CURRENT_TIMESTAMP,
+  measurement_yes BOOLEAN,
+  target_id uuid NOT NULL,
+
+
+  PRIMARY KEY (measurement_id),
+  CONSTRAINT fk_children FOREIGN KEY(target_id) REFERENCES targets(target_id)
+);
+
+CREATE TABLE measurementProgramLevelOptions (
+  measurement_id uuid DEFAULT uuid_generate_v4(),
+  measurement_created timestamp not null default CURRENT_TIMESTAMP,
+  measurement_frequency SMALLINT,
+  target_id uuid NOT NULL,
+
+  PRIMARY KEY (measurement_id),
+  CONSTRAINT fk_children FOREIGN KEY(target_id) REFERENCES targets(target_id)
+);
+
+CREATE TABLE programLevelOptions (
+  program_id uuid DEFAULT uuid_generate_v4(),
+  target_title VARCHAR(255) NOT NULL,
+  measurement_id uuid NOT NULL,
+ 
+  PRIMARY KEY (program_id),
+  CONSTRAINT fk_children FOREIGN KEY(measurement_id) REFERENCES measurementProgramLevelOptions(measurement_id)
+
+);
+

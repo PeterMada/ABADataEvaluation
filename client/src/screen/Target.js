@@ -7,10 +7,31 @@ export const Target = () => {
   const [curretnTarget, setCurretnTarget] = useState([]);
   const { id } = useParams();
 
+  useEffect(() => {
+    const fetchTargetDetails = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}targetDetail`,
+          {
+            method: 'GET',
+            headers: { token: localStorage.token, target_id: id },
+          }
+        );
+        const parseRes = await response.json();
+
+        setCurretnTarget(parseRes);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const childResult = fetchTargetDetails().catch(console.error);
+  }, []);
+
   return (
     <>
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
-        Target detail page
+        {curretnTarget.target_title}
       </h1>
       <p>Some information about current target</p>
     </>

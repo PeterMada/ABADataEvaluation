@@ -20,6 +20,7 @@ app.use('/childrenList', require('./routes/childrenList'));
 app.use('/skillDetail', require('./routes/skillDetail'));
 app.use('/programDetail', require('./routes/programDetail'));
 app.use('/childDetail', require('./routes/childDetail'));
+app.use('/targetDetail', require('./routes/targetDetail'));
 
 // Add
 app.use('/addSkill', require('./routes/addSkill'));

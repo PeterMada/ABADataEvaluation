@@ -20,7 +20,6 @@ export const Skill = () => {
           }
         );
         const parseRes = await response.json();
-        console.log(parseRes);
         setCurrentSkill(parseRes.skillDetail);
         setCurrentPrograms(parseRes.allPrograms);
       } catch (err) {
@@ -34,7 +33,7 @@ export const Skill = () => {
   return (
     <>
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
-        Skill detail page
+        {currentSkill.skill_title}
       </h1>
       <p>Some information about current skill</p>
 

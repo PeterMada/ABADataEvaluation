@@ -58,8 +58,14 @@ router.post('/', authorization, validinfo, async (req, res) => {
     }
 
     const target = await pool.query(
-      'INSERT INTO targets (target_title, target_description, target_type, program_id) VALUES ($1, $2, $3, $4) RETURNING *',
-      [targetTitle, targetDescription, targetType, program_id]
+      'INSERT INTO targets (target_title, target_description, target_type, program_id, child_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [
+        targetTitle,
+        targetDescription,
+        targetType,
+        program_id,
+        childFromSkill.rows[0].child_id,
+      ]
     );
 
     const newTarget = target.rows[0].target_id;

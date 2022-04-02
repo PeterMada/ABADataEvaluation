@@ -35,6 +35,8 @@ app.use('/editSkill', require('./routes/editSkill'));
 
 // Other
 app.use('/profile', require('./routes/profile'));
+app.use('/allChildrenTargets', require('./routes/allChildrenTargets'));
+app.use('/recordMeasurement', require('./routes/recordMeasurement'));
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server started succesfully`);

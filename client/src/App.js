@@ -27,6 +27,8 @@ import { Program } from './screen/Program';
 import { AddTarget } from './forms/addTarget/AddTarget';
 import { Target } from './screen/Target';
 import { EditSkill } from './forms/editSkill/editSkill';
+import { Recording } from './screen/Recording';
+import { RecordAll } from './screen/RecordAll';
 
 toast.configure();
 /*
@@ -280,6 +282,28 @@ export const App = () => {
             element={
               isAuthenticated ? (
                 <Target />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/recording/:id"
+            element={
+              isAuthenticated ? (
+                <Recording />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/recordAll/:id"
+            element={
+              isAuthenticated ? (
+                <RecordAll />
               ) : (
                 <Navigate replace to="/login" />
               )

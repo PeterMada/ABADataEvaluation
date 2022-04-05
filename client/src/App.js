@@ -29,6 +29,7 @@ import { Target } from './screen/Target';
 import { EditSkill } from './forms/editSkill/editSkill';
 import { Recording } from './screen/Recording';
 import { RecordAll } from './screen/RecordAll';
+import { ReviewAll } from './screen/ReviewAll';
 
 toast.configure();
 /*
@@ -77,7 +78,6 @@ export const App = () => {
   };
 
   const isAuth = async () => {
-    console.log('auth hook');
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}auth/verify`,
@@ -304,6 +304,17 @@ export const App = () => {
             element={
               isAuthenticated ? (
                 <RecordAll />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/reviewAll/:id"
+            element={
+              isAuthenticated ? (
+                <ReviewAll />
               ) : (
                 <Navigate replace to="/login" />
               )

@@ -22,14 +22,14 @@ export const Frequency = ({ data, setRemove, current }) => {
 
       <Formik
         initialValues={{
-          frequencyCount: 0,
+          frequencyCount: frequency,
         }}
         validate={(values) => {
           const errors = {};
-
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {
+          console.log(values);
           try {
             const response = await fetch(
               `${process.env.REACT_APP_API_URL}recordmeasurement`,
@@ -57,23 +57,24 @@ export const Frequency = ({ data, setRemove, current }) => {
             toast.error('Oops, failed to fetch!');
           }
         }}>
-        {({ isSubmitting, isValid, dirty }) => (
+        {({ isSubmitting, isValid, dirty, setFieldValue }) => (
           <Form data-testid="addSkill">
             <div className="mt-4">
               <button
                 className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 type="button"
-                onClick={handleMinusClick}>
+                onClick={() => { setFrequency(frequency - 1 ); setFieldValue('frequencyCount', frequency - 1)}}>
                 -
               </button>
               <button
                 className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 type="button"
-                onClick={handlePlusClick}>
+                onClick={() => {setFrequency(frequency + 1); setFieldValue('frequencyCount', frequency + 1)}}>
                 +
               </button>
               <Field
                 name="frequencyCount"
+                id="frequencyCount"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 disabled
                 value={frequency}

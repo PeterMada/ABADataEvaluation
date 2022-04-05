@@ -34,6 +34,7 @@ router.post('/', authorization, async (req, res) => {
 
       if (target_type === 'frequency') {
         const { frequencyCount } = req.body;
+        console.log(frequencyCount);
         const target = await pool.query(
           'INSERT INTO frequency (measurement_frequency, measuremend_by, target_id) VALUES ($1, $2, $3) RETURNING *',
           [frequencyCount, user_id, target_id]

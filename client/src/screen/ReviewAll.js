@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Frequency } from '../components/measurement/Frequency';
+import { FrequencyTime } from '../components/measurement/FrequencyTime';
+import { PolarQuestion } from '../components/measurement/PolarQuestion';
 export const ReviewAll = () => {
   const { id } = useParams();
-  const [ measurement, setMeasurement] = useState([]);
-  const [ targets, setTargets] = useState([]);
+  const [measurement, setMeasurement] = useState([]);
+  const [targets, setTargets] = useState([]);
 
   useEffect(() => {
     const fetchAllOpenTargetsForChild = async () => {
@@ -17,22 +20,21 @@ export const ReviewAll = () => {
           }
         );
         const parseRes = await response.json();
-        console.log(parseRes);
-        setMeasurement(parseRes);
+        setTargets(parseRes);
       } catch (err) {
         console.error(err);
       }
     };
 
-    const targetResult = fetchAllOpenTargetsForChild().catch(console.error);
+    const targetResult = fetchAllOpenTargetsForChild().catch(
+      console.error
+    );
   }, []);
 
   useEffect(() => {
-  //  setTargets(targets.filter((item) => item.target_id !== remove));
+    //  setTargets(targets.filter((item) => item.target_id !== remove));
   }, []);
 
-  return <>test</>;
-  /*
   return !targets ? (
     <p>Loading....</p>
   ) : (
@@ -48,20 +50,12 @@ export const ReviewAll = () => {
               break;
             case 'yes/no':
               currentMeasurmentComponent = (
-                <PolarQuestion
-                  data={target}
-                  setRemove={setRemove}
-                  current={current}
-                />
+                <PolarQuestion data={target} current={current} />
               );
               break;
             case 'frequency':
               currentMeasurmentComponent = (
-                <Frequency
-                  data={target}
-                  setRemove={setRemove}
-                  current={current}
-                />
+                <Frequency data={target} current={current} />
               );
               break;
             default:
@@ -79,5 +73,4 @@ export const ReviewAll = () => {
       </div>
     </>
   );
-  */
 };

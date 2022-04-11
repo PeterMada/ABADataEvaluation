@@ -15,26 +15,15 @@ router.get('/', authorization, async (req, res) => {
     );
 
     const fromMidnight = new Date();
-    fromMidnight.setHours(0, 0, 0, 0);
     const toMidnight = new Date();
+    fromMidnight.setHours(0, 0, 0, 0);
     toMidnight.setHours(24, 0, 0, 0);
-
-    /*
-    const allMeasurementPolarQuestions = await pool.query(
-      'SELECT * FROM measurementPolarQuestions WHERE measurement_created >= $1 AND measurement_created < $2',
-      [fromMidnight.toISOString(), toMidnight.toISOString()]
-    );
-*/
-    //select * from termin where DATE(dateTimeField) >= CURRENT_DATE AND DATE(dateTimeField) < CURRENT_DATE + INTERVAL '1 DAY'
-    let thisTargetsWasAlreadyMeasured = [];
-    console.log(fromMidnight.toISOString());
-    console.log(toMidnight.toISOString());
 
     let queryValues = [];
     queryValues.push(child_id);
     let poolValues = '';
     let k = 2;
-    // check if ther was already some measurment
+
     const promises = allTargets.rows.map(async (target, i) => {
       let measurmentTargets = [];
 
@@ -51,7 +40,7 @@ router.get('/', authorization, async (req, res) => {
 
           if (measurmentTargetsQuery.rows.length === 1) {
             queryValues.push(target.target_id);
-            poolValues += ` AND target_id != $${k}`;
+            poolValues += ` OR target_id != $${k}`;
             k++;
           }
           break;
@@ -67,7 +56,7 @@ router.get('/', authorization, async (req, res) => {
 
           if (measurmentFreqvency.rows.length === 1) {
             queryValues.push(target.target_id);
-            poolValues += ` AND target_id != $${k}`;
+            poolValues += ` OR target_id != $${k}`;
             k++;
           }
 
@@ -76,9 +65,10 @@ router.get('/', authorization, async (req, res) => {
     });
 
     const result = await Promise.all(promises);
+    poolValues = poolValues.slice(3);
 
     const targetWhitoutTodayMeasurment = await pool.query(
-      `SELECT * FROM targets WHERE child_id = $1 ${poolValues}`,
+      `SELECT * FROM targets WHERE child_id = $1 AND (${poolValues})`,
       queryValues
     );
 

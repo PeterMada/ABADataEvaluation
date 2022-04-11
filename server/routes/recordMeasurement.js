@@ -10,28 +10,24 @@ router.post('/', authorization, async (req, res) => {
 
   // TODO check if user can measure this target
   try {
+    const measurment = await pool.query(
+      'INSERT INTO measurements (measuremend_by, target_id) VALUES ($1, $2) RETURNING measurement_id',
+      [user_id, target_id]
+    );
+
     if (target_type) {
       if (target_type === 'yes/no') {
         const { answer } = req.body;
-        let answerYes = false;
-        let answerNo = false;
-
-        if (answer === 'Yes') {
-          answerYes = true;
-        } else if (answer === 'No') {
-          answerNo = true;
-        }
 
         const target = await pool.query(
-          'INSERT INTO measurementPolarQuestions (measurement_yes, measurement_no, measuremend_by, target_id) VALUES ($1, $2, $3, $4) RETURNING *',
-          [answerYes, answerNo, user_id, target_id]
+          'INSERT INTO measurementPolarQuestions (question_result, measurement_id) VALUES ($1, $2) RETURNING *',
+          [answer, answerNo, measurment.measurement_id]
         );
 
-        // TODO check if user can measure this target
-
-        res.json({ measrumentId: target.rows[0].measurement_id });
+        res.json({ measrumentId: measurment.rows[0].measurement_id });
       }
 
+      /*
       if (target_type === 'frequency') {
         const { frequencyCount } = req.body;
         console.log(frequencyCount);
@@ -42,6 +38,7 @@ router.post('/', authorization, async (req, res) => {
 
         res.json({ measrumentId: target.rows[0].measurement_id });
       }
+      */
     }
   } catch (err) {
     console.log(err.message);

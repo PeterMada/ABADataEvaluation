@@ -9,15 +9,17 @@ router.get('/', authorization, async (req, res) => {
   try {
     // TODO check if user can view this targets
 
-    const allTargets = await pool.query(
-      'SELECT * FROM targets WHERE child_id = $1',
-      [child_id]
-    );
-
     const fromMidnight = new Date();
     const toMidnight = new Date();
     fromMidnight.setHours(0, 0, 0, 0);
     toMidnight.setHours(24, 0, 0, 0);
+
+    const allTargets = await pool.query(
+      'SELECT * FROM targets AS t WHERE t.child_id = $1 AND NOT EXISTS (SELECT * FROM measurements AS m WHERE m.target_id = t.target_id AND (m.measurement_created NOT between $2 AND $3))',
+      [child_id, fromMidnight, toMidnight]
+    );
+
+    /*
 
     let queryValues = [];
     queryValues.push(child_id);
@@ -71,8 +73,9 @@ router.get('/', authorization, async (req, res) => {
       `SELECT * FROM targets WHERE child_id = $1 AND (${poolValues})`,
       queryValues
     );
+    */
 
-    res.json(targetWhitoutTodayMeasurment.rows);
+    res.json(allTargets.rows);
   } catch (err) {
     console.log(err.message);
     res.status(500).json('Server Error');

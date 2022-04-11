@@ -80,19 +80,30 @@ CREATE TABLE targets (
   CONSTRAINT fk_children FOREIGN KEY(child_id) REFERENCES children(child_id) 
 );
 
-CREATE TABLE measurementPolarQuestions (
+CREATE TABLE measurements (
   measurement_id uuid DEFAULT uuid_generate_v4(),
   measurement_created timestamp not null default CURRENT_TIMESTAMP,
-  measurement_yes BOOLEAN,
-  measurement_no BOOLEAN,
   measuremend_by uuid NOT NULL,
   measurement_closed BOOLEAN DEFAULT FALSE,
   target_id uuid NOT NULL,
 
   PRIMARY KEY (measurement_id),
-  CONSTRAINT fk_target FOREIGN KEY(target_id) REFERENCES targets(target_id),
-  CONSTRAINT fk_user FOREIGN KEY(measuremend_by) REFERENCES users(user_id)
+  CONSTRAINT fk_target FOREIGN KEY(target_id) REFERENCES targets(target_id)
 );
+
+CREATE TABLE measurementPolarQuestions (
+  question_id uuid DEFAULT uuid_generate_v4(),
+  question_result BOOLEAN,
+  measurement_id uuid NOT NULL,
+
+  PRIMARY KEY (question_id),
+  CONSTRAINT fk_target FOREIGN KEY(measurement_id) REFERENCES measurements(measurement_id)
+);
+
+
+
+
+
 
 CREATE TABLE frequency (
   measurement_id uuid DEFAULT uuid_generate_v4(),

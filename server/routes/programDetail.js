@@ -15,7 +15,7 @@ router.get('/', authorization, async (req, res) => {
     );
 
     const allTargetsFromProgram = await pool.query(
-      'SELECT * FROM targets WHERE  program_id = $1',
+      'SELECT * FROM targets WHERE program_id = $1',
       [program_id]
     );
 

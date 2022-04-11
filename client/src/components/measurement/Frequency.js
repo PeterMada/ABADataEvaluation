@@ -16,7 +16,7 @@ export const Frequency = ({ data, setRemove, current }) => {
   };
 
   return (
-    <>
+    <div className="mt-10 mb-10">
       <h2>{data.target_title}</h2>
       <p>{data.target_description}</p>
 
@@ -63,13 +63,19 @@ export const Frequency = ({ data, setRemove, current }) => {
               <button
                 className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 type="button"
-                onClick={() => { setFrequency(frequency - 1 ); setFieldValue('frequencyCount', frequency - 1)}}>
+                onClick={() => {
+                  setFrequency(frequency - 1);
+                  setFieldValue('frequencyCount', frequency - 1);
+                }}>
                 -
               </button>
               <button
                 className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 type="button"
-                onClick={() => {setFrequency(frequency + 1); setFieldValue('frequencyCount', frequency + 1)}}>
+                onClick={() => {
+                  setFrequency(frequency + 1);
+                  setFieldValue('frequencyCount', frequency + 1);
+                }}>
                 +
               </button>
               <Field
@@ -90,6 +96,6 @@ export const Frequency = ({ data, setRemove, current }) => {
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   );
 };

@@ -10,7 +10,7 @@ router.get('/', authorization, async (req, res) => {
     // TODO check if user can view this targets
 
     const allTargets = await pool.query(
-      'SELECT * FROM targets WHERE  child_id = $1',
+      'SELECT * FROM targets WHERE child_id = $1',
       [child_id]
     );
 
@@ -19,36 +19,70 @@ router.get('/', authorization, async (req, res) => {
     const toMidnight = new Date();
     toMidnight.setHours(24, 0, 0, 0);
 
+    /*
     const allMeasurementPolarQuestions = await pool.query(
       'SELECT * FROM measurementPolarQuestions WHERE measurement_created >= $1 AND measurement_created < $2',
       [fromMidnight.toISOString(), toMidnight.toISOString()]
     );
-
-    console.log(allMeasurementPolarQuestions.rows);
-
+*/
     //select * from termin where DATE(dateTimeField) >= CURRENT_DATE AND DATE(dateTimeField) < CURRENT_DATE + INTERVAL '1 DAY'
+    let thisTargetsWasAlreadyMeasured = [];
+    console.log(fromMidnight.toISOString());
+    console.log(toMidnight.toISOString());
 
-    console.log(Date.now());
-    const promises = allTargets.rows.map(async (target) => {
-      switch (target) {
+    let queryValues = [];
+    queryValues.push(child_id);
+    let poolValues = '';
+    let k = 2;
+    // check if ther was already some measurment
+    const promises = allTargets.rows.map(async (target, i) => {
+      let measurmentTargets = [];
+
+      switch (target.target_type) {
         case 'yes/no':
-          const allMeasurementPolarQuestions = await pool.query(
-            'SELECT * FROM measurementPolarQuestions WHERE target_id = $1 AND measurement_closed = FALSE',
-            [target.target_id]
+          const measurmentTargetsQuery = await pool.query(
+            'SELECT * FROM measurementPolarQuestions WHERE target_id = $1 AND measurement_closed = FALSE AND measurement_created between $2 AND $3',
+            [
+              target.target_id,
+              fromMidnight.toISOString(),
+              toMidnight.toISOString(),
+            ]
           );
+
+          if (measurmentTargetsQuery.rows.length === 1) {
+            queryValues.push(target.target_id);
+            poolValues += ` AND target_id != $${k}`;
+            k++;
+          }
+          break;
+        case 'frequency':
+          const measurmentFreqvency = await pool.query(
+            'SELECT * FROM frequency WHERE target_id = $1 AND measurement_closed = FALSE AND measurement_created between $2 AND $3',
+            [
+              target.target_id,
+              fromMidnight.toISOString(),
+              toMidnight.toISOString(),
+            ]
+          );
+
+          if (measurmentFreqvency.rows.length === 1) {
+            queryValues.push(target.target_id);
+            poolValues += ` AND target_id != $${k}`;
+            k++;
+          }
 
           break;
       }
-
-      return {
-        target: target,
-        measurement: allMeasurementPolarQuestions.rows,
-      };
     });
 
     const result = await Promise.all(promises);
 
-    res.json(allTargets.rows);
+    const targetWhitoutTodayMeasurment = await pool.query(
+      `SELECT * FROM targets WHERE child_id = $1 ${poolValues}`,
+      queryValues
+    );
+
+    res.json(targetWhitoutTodayMeasurment.rows);
   } catch (err) {
     console.log(err.message);
     res.status(500).json('Server Error');

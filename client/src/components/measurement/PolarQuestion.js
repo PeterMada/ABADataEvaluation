@@ -8,7 +8,7 @@ export const PolarQuestion = ({ data, setRemove, current }) => {
   const [frequency, setFrequency] = useState(0);
 
   return (
-    <>
+    <div className="mt-10 mb-10">
       <h2>{data.target_title}</h2>
       <p>{data.target_description}</p>
 
@@ -69,6 +69,6 @@ export const PolarQuestion = ({ data, setRemove, current }) => {
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   );
 };

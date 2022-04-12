@@ -22,7 +22,7 @@ export const Program = () => {
         const parseRes = await response.json();
         console.log(parseRes);
         setCurrentProgram(parseRes.programDetail);
-        setCurrentTargets(parseRes.allTargets);
+        setCurrentTargets(parseRes.results);
       } catch (err) {
         console.error(err);
       }
@@ -42,8 +42,29 @@ export const Program = () => {
         <h2>All targets for this program</h2>
         <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
           {currentTargets.map((target) => {
-            console.log(target);
-            return <TargetBox key={target.target_id} target={target} />;
+            let programDonePercentage = 0;
+            let baselineStart = 0;
+            let baselineFinish = 3;
+
+            target.measurements.map((meas) => {
+              if (meas.question_result === true) {
+                baselineStart++;
+              } else {
+                return;
+              }
+            });
+
+            programDonePercentage = Math.floor(
+              (baselineStart / baselineFinish) * 100
+            );
+
+            return (
+              <TargetBox
+                key={target.target.target_id}
+                target={target.target}
+                percentageDone={programDonePercentage}
+              />
+            );
           })}
         </div>
       </div>

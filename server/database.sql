@@ -71,7 +71,8 @@ CREATE TABLE targets (
   target_id uuid DEFAULT uuid_generate_v4(),
   target_title VARCHAR(255) NOT NULL,
   target_description TEXT,
-  target_type target_type, 
+  target_type target_type,
+  target_complete BOOLEAN DEFAULT FALSE,
   program_id uuid NOT NULL,
   child_id uuid NOT NULL,
 

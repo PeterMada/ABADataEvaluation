@@ -48,6 +48,8 @@ app.use(
   require('./routes/saveAllChildrenOpenTargets')
 );
 
+app.use('/targetMeasurements', require('./routes/targetMeasurements'));
+
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server started succesfully`);
 });

@@ -82,7 +82,7 @@ CREATE TABLE targets (
 
 CREATE TABLE measurements (
   measurement_id uuid DEFAULT uuid_generate_v4(),
-  measurement_created timestamp not null default CURRENT_TIMESTAMP,
+  measurement_created timestamptz not null default CURRENT_TIMESTAMP,
   measuremend_by uuid NOT NULL,
   measurement_closed BOOLEAN DEFAULT FALSE,
   target_id uuid NOT NULL,

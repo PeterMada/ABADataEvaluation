@@ -1,11 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-export const PolarQuestion = ({ data, setRemove, current }) => {
+export const PolarQuestion = ({
+  data,
+  setRemove,
+  current,
+  fillForm = false,
+}) => {
   const { id } = useParams();
-  const [frequency, setFrequency] = useState(0);
+  const [formData, setformData] = useState([]);
+  const [answerValue, setAnswerValue] = useState('');
+
+  useEffect(() => {
+    const fetchValuesForMeasurment = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}measurmentDetail`,
+          {
+            method: 'GET',
+            headers: {
+              token: localStorage.token,
+              measurement_id: data.measurement_id,
+              target_type: data.target_type,
+            },
+          }
+        );
+        const parseRes = await response.json();
+
+        if (parseRes) {
+          setformData(parseRes);
+          setAnswerValue('No');
+          if (parseRes.question_result) {
+            setAnswerValue('Yes');
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (fillForm) {
+      const targetResult = fetchValuesForMeasurment().catch(console.error);
+    }
+  }, []);
 
   return (
     <div className="mt-10 mb-10">
@@ -14,9 +53,9 @@ export const PolarQuestion = ({ data, setRemove, current }) => {
 
       <Formik
         initialValues={{
-          answerYes: '',
-          answerNo: '',
+          answer: answerValue,
         }}
+        enableReinitialize={true}
         onSubmit={async (values, { setSubmitting }) => {
           try {
             const response = await fetch(

@@ -14,6 +14,7 @@ router.post('/', authorization, async (req, res) => {
       'INSERT INTO measurements (measuremend_by, target_id) VALUES ($1, $2) RETURNING measurement_id',
       [user_id, target_id]
     );
+    console.log(measurment.rows);
 
     if (target_type) {
       if (target_type === 'yes/no') {
@@ -21,7 +22,7 @@ router.post('/', authorization, async (req, res) => {
 
         const target = await pool.query(
           'INSERT INTO measurementPolarQuestions (question_result, measurement_id) VALUES ($1, $2) RETURNING *',
-          [answer, answerNo, measurment.measurement_id]
+          [answer, measurment.rows[0].measurement_id]
         );
 
         res.json({ measrumentId: measurment.rows[0].measurement_id });

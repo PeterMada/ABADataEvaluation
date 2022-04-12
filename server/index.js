@@ -36,8 +36,17 @@ app.use('/editSkill', require('./routes/editSkill'));
 // Other
 app.use('/profile', require('./routes/profile'));
 app.use('/allChildrenTargets', require('./routes/allChildrenTargets'));
-app.use('/allChildrenOpenTargets', require('./routes/allChildrenOpenTargets'));
+app.use(
+  '/allChildrenOpenTargets',
+  require('./routes/allChildrenOpenTargets')
+);
 app.use('/recordMeasurement', require('./routes/recordMeasurement'));
+app.use('/measurmentDetail', require('./routes/measurmentDetail'));
+
+app.use(
+  '/saveAllChildrenOpenTargets',
+  require('./routes/saveAllChildrenOpenTargets')
+);
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server started succesfully`);

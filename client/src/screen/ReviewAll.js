@@ -35,6 +35,24 @@ export const ReviewAll = () => {
     //  setTargets(targets.filter((item) => item.target_id !== remove));
   }, []);
 
+  const handleSaveAll = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}saveAllChildrenOpenTargets`,
+        {
+          method: 'POST',
+          headers: { token: localStorage.token, child_id: id },
+        }
+      );
+      const parseRes = await response.json();
+      console.log(parseRes);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return !targets ? (
     <p>Loading....</p>
   ) : (
@@ -50,7 +68,11 @@ export const ReviewAll = () => {
               break;
             case 'yes/no':
               currentMeasurmentComponent = (
-                <PolarQuestion data={target} current={current} />
+                <PolarQuestion
+                  data={target}
+                  current={current}
+                  fillForm={true}
+                />
               );
               break;
             case 'frequency':
@@ -70,6 +92,17 @@ export const ReviewAll = () => {
             </div>
           );
         })}
+        {targets.length ? (
+          <div>
+            <button
+              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleSaveAll}>
+              Save All
+            </button>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     </>
   );

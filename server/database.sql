@@ -72,7 +72,13 @@ CREATE TABLE targets (
   target_title VARCHAR(255) NOT NULL,
   target_description TEXT,
   target_type target_type,
+  target_baseline_from SMALLINT,
+  target_baseline_to SMALLINT,
+  target_baseline_done BOOLEAN DEFAULT FALSE,
+  target_criterion_from SMALLINT,
+  target_criterion_to SMALLINT,
   target_complete BOOLEAN DEFAULT FALSE,
+  target_created timestamp not null default CURRENT_TIMESTAMP,
   program_id uuid NOT NULL,
   child_id uuid NOT NULL,
 

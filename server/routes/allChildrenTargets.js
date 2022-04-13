@@ -15,65 +15,15 @@ router.get('/', authorization, async (req, res) => {
     toMidnight.setHours(24, 0, 0, 0);
 
     const allTargets = await pool.query(
-      'SELECT * FROM targets AS t WHERE t.child_id = $1 AND NOT EXISTS (SELECT * FROM measurements AS m WHERE m.target_id = t.target_id AND (m.measurement_created between $2 AND $3))',
+      `SELECT * FROM targets AS t
+        WHERE t.child_id = $1
+          AND target_baseline_done = TRUE 
+          AND NOT EXISTS 
+          (SELECT * FROM measurements AS m 
+            WHERE m.target_id = t.target_id 
+            AND (m.measurement_created between $2 AND $3))`,
       [child_id, fromMidnight, toMidnight]
     );
-
-    /*
-
-    let queryValues = [];
-    queryValues.push(child_id);
-    let poolValues = '';
-    let k = 2;
-
-    const promises = allTargets.rows.map(async (target, i) => {
-      let measurmentTargets = [];
-
-      switch (target.target_type) {
-        case 'yes/no':
-          const measurmentTargetsQuery = await pool.query(
-            'SELECT * FROM measurementPolarQuestions WHERE target_id = $1 AND measurement_closed = FALSE AND measurement_created between $2 AND $3',
-            [
-              target.target_id,
-              fromMidnight.toISOString(),
-              toMidnight.toISOString(),
-            ]
-          );
-
-          if (measurmentTargetsQuery.rows.length === 1) {
-            queryValues.push(target.target_id);
-            poolValues += ` OR target_id != $${k}`;
-            k++;
-          }
-          break;
-        case 'frequency':
-          const measurmentFreqvency = await pool.query(
-            'SELECT * FROM frequency WHERE target_id = $1 AND measurement_closed = FALSE AND measurement_created between $2 AND $3',
-            [
-              target.target_id,
-              fromMidnight.toISOString(),
-              toMidnight.toISOString(),
-            ]
-          );
-
-          if (measurmentFreqvency.rows.length === 1) {
-            queryValues.push(target.target_id);
-            poolValues += ` OR target_id != $${k}`;
-            k++;
-          }
-
-          break;
-      }
-    });
-
-    const result = await Promise.all(promises);
-    poolValues = poolValues.slice(3);
-
-    const targetWhitoutTodayMeasurment = await pool.query(
-      `SELECT * FROM targets WHERE child_id = $1 AND (${poolValues})`,
-      queryValues
-    );
-    */
 
     res.json(allTargets.rows);
   } catch (err) {

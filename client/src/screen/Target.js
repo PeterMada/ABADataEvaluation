@@ -87,7 +87,7 @@ export const Target = () => {
                 const year = date.getFullYear();
                 const month = date.getMonth() + 1;
                 const dt = date.getDate();
-
+                console.log(meas.measurement_closed);
                 let rowColor = 'bg-orange-300 text-black';
                 if (meas.measurement_closed) {
                   rowColor = 'bg-green-600 text-white';
@@ -111,7 +111,7 @@ export const Target = () => {
                       {meas.question_result ? 'Yes' : 'No'}
                     </td>
                     <td className="px-6 py-4">
-                      {meas.measurement_closed ? 'Open' : 'Closed'}
+                      {meas.measurement_closed ? 'Closed' : 'Open'}
                     </td>
                   </tr>
                 );

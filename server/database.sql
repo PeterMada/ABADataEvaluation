@@ -2,6 +2,7 @@ CREATE DATABASE ABADataEvaluation;
 
 CREATE TYPE sex AS ENUM ('', 'man', 'woman');
 CREATE TYPE target_type AS ENUM ('yes/no', 'prompt level', 'duration', 'frequency', 'frequency/time', 'text');
+CREATE TYPE measuremend_type AS ENUM ('normal', 'baseline');
 
 -- // TODO add user roles
 -- // TODO add temporaly password
@@ -92,6 +93,7 @@ CREATE TABLE measurements (
   measurement_created timestamptz not null default CURRENT_TIMESTAMP,
   measuremend_by uuid NOT NULL,
   measurement_closed BOOLEAN DEFAULT FALSE,
+  measuremend_type measuremend_type,
   target_id uuid NOT NULL,
 
   PRIMARY KEY (measurement_id),

@@ -30,6 +30,7 @@ import { EditSkill } from './forms/editSkill/editSkill';
 import { Recording } from './screen/Recording';
 import { RecordAll } from './screen/RecordAll';
 import { ReviewAll } from './screen/ReviewAll';
+import { RecordAllBaseline } from './screen/RecordAllBaseline';
 
 toast.configure();
 /*
@@ -315,6 +316,17 @@ export const App = () => {
             element={
               isAuthenticated ? (
                 <ReviewAll />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/recordAllBaseline/:id"
+            element={
+              isAuthenticated ? (
+                <RecordAllBaseline />
               ) : (
                 <Navigate replace to="/login" />
               )

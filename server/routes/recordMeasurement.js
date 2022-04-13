@@ -7,14 +7,16 @@ router.post('/', authorization, async (req, res) => {
   const child_id = req.headers['child_id'];
   const target_id = req.headers['target_id'];
   const target_type = req.headers['target_type'];
+  const measuremend_type = req.headers['measuremend_type']
+    ? req.headers['measuremend_type']
+    : 'normal';
 
   // TODO check if user can measure this target
   try {
     const measurment = await pool.query(
-      'INSERT INTO measurements (measuremend_by, target_id) VALUES ($1, $2) RETURNING measurement_id',
-      [user_id, target_id]
+      'INSERT INTO measurements (measuremend_by, target_id, measuremend_type) VALUES ($1, $2, $3) RETURNING measurement_id',
+      [user_id, target_id, measuremend_type]
     );
-    console.log(measurment.rows);
 
     if (target_type) {
       if (target_type === 'yes/no') {

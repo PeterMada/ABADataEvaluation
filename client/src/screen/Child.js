@@ -75,6 +75,11 @@ export const Child = (props) => {
         </Link>
         <Link
           className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          to={`/recordAllBaseline/${id}`}>
+          Start baseline session
+        </Link>
+        <Link
+          className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           to={`/reviewAll/${id}`}>
           Review open session
         </Link>

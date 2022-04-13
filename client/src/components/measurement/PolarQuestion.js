@@ -8,6 +8,8 @@ export const PolarQuestion = ({
   setRemove,
   current,
   fillForm = false,
+  doNotShowDetails = false,
+  elementId = false,
 }) => {
   const { id } = useParams();
   const [formData, setformData] = useState([]);
@@ -48,8 +50,14 @@ export const PolarQuestion = ({
 
   return (
     <div className="mt-10 mb-10">
-      <h2>{data.target_title}</h2>
-      <p>{data.target_description}</p>
+      {!doNotShowDetails ? (
+        <>
+          <h2>{data.target_title}</h2>
+          <p>{data.target_description}</p>
+        </>
+      ) : (
+        ''
+      )}
 
       <Formik
         initialValues={{
@@ -57,6 +65,8 @@ export const PolarQuestion = ({
         }}
         enableReinitialize={true}
         onSubmit={async (values, { setSubmitting }) => {
+          const measuremendType = doNotShowDetails ? 'baseline' : '';
+
           try {
             const response = await fetch(
               `${process.env.REACT_APP_API_URL}recordmeasurement`,
@@ -68,6 +78,7 @@ export const PolarQuestion = ({
                   child_id: id,
                   target_type: data.target_type,
                   target_id: data.target_id,
+                  measuremend_type: measuremendType,
                 },
                 body: JSON.stringify(values),
               }
@@ -76,7 +87,11 @@ export const PolarQuestion = ({
             const parseRes = await response.json();
             if (parseRes.measrumentId) {
               toast.success('Target measurement saved succesfuly');
-              setRemove(data.target_id);
+              if (doNotShowDetails) {
+                setRemove(`${data.target_id}-${new Date().getTime()}`);
+              } else {
+                setRemove(data.target_id);
+              }
             } else {
               toast.error(parseRes);
             }
@@ -85,7 +100,7 @@ export const PolarQuestion = ({
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
-          <Form data-testid="addSkill">
+          <Form>
             <div className="mt-4">
               <div role="group">
                 <label>

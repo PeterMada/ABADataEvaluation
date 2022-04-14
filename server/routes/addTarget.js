@@ -11,14 +11,24 @@ router.post('/', authorization, validinfo, async (req, res) => {
       targetTitle,
       targetDescription,
       targetType,
-      targetBaselineTarget,
+      targetBaselineFrom,
+      targetBaselineTo,
       targetBaselineDone,
+      targetBaselineCurrent,
       criterionFrom,
       criterionTo,
     } = req.body;
 
     if (!req.user) {
       return res.status(401).json('Server Error');
+    }
+
+    let isTargetDone = false;
+    if (targetBaselineDone) {
+      isTargetDone = true;
+    } else {
+      isTargetDone =
+        targetBaselineFrom <= targetBaselineCurrent ? true : false;
     }
 
     //TODO check if has premission to add program to child
@@ -68,19 +78,22 @@ router.post('/', authorization, validinfo, async (req, res) => {
     const target = await pool.query(
       `INSERT INTO targets 
         (target_title, target_description, target_type,
-           program_id, child_id, target_baseline_complete, target_criterion_from,
-            target_criterion_to, target_baseline_target) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+          target_baseline_from, target_baseline_to, target_baseline_current,
+          target_baseline_complete, target_criterion_from, target_criterion_to,
+          program_id, child_id) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
       [
         targetTitle,
         targetDescription,
         targetType,
-        program_id,
-        childFromSkill.rows[0].child_id,
-        targetBaselineDone ? true : false,
+        targetBaselineFrom ? targetBaselineFrom : 0,
+        targetBaselineTo ? targetBaselineTo : 0,
+        targetBaselineCurrent ? targetBaselineCurrent : 0,
+        isTargetDone,
         criterionFrom,
         criterionTo,
-        targetBaselineTarget ? true : false,
+        program_id,
+        childFromSkill.rows[0].child_id,
       ]
     );
 

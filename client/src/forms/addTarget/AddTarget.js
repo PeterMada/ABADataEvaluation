@@ -17,17 +17,17 @@ export const AddTarget = () => {
           targetTitle: '',
           targetDescription: '',
           targetBaselineCurrent: '',
+          targetBaselineDone: '',
         }}
         validate={(values) => {
           const errors = {};
           if (!values.targetTitle) {
-            errors.targetTitle = 'Target title field is required';
+            errors.targetTitle = 'Field is required';
           }
 
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {
-          console.log(values);
           try {
             const response = await fetch(
               `${process.env.REACT_APP_API_URL}addTarget`,

@@ -10,29 +10,17 @@ router.post('/', authorization, validinfo, async (req, res) => {
     const {
       targetTitle,
       targetDescription,
-      targetBaselineFrom,
-      targetBaselineTo,
       targetBaselineDone,
       targetBaselineCurrent,
-      criterionFrom,
-      criterionTo,
     } = req.body;
 
     if (!req.user) {
       return res.status(401).json('Server Error');
     }
 
-    let isTargetDone = false;
-    if (targetBaselineDone) {
-      isTargetDone = true;
-    } else {
-      isTargetDone =
-        targetBaselineFrom <= targetBaselineCurrent ? true : false;
-    }
-
     //TODO check if has premission to add program to child
     const skillFromProgram = await pool.query(
-      'SELECT skill_id FROM programs WHERE program_id = $1',
+      'SELECT skill_id, target_baseline_from FROM programs WHERE program_id = $1',
       [program_id]
     );
 
@@ -74,22 +62,28 @@ router.post('/', authorization, validinfo, async (req, res) => {
       return;
     }
 
+    let isTargetDone = false;
+    if (targetBaselineDone) {
+      isTargetDone = true;
+    } else {
+      isTargetDone =
+        skillFromProgram.rows[0].target_baseline_from <=
+        targetBaselineCurrent
+          ? true
+          : false;
+    }
+
     const target = await pool.query(
       `INSERT INTO targets 
         (target_title, target_description,
-          target_baseline_from, target_baseline_to, target_baseline_current,
-          target_baseline_complete, target_criterion_from, target_criterion_to,
+          target_baseline_current, target_baseline_complete,
           program_id, child_id) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
       [
         targetTitle,
         targetDescription,
-        targetBaselineFrom ? targetBaselineFrom : 0,
-        targetBaselineTo ? targetBaselineTo : 0,
         targetBaselineCurrent ? targetBaselineCurrent : 0,
         isTargetDone,
-        criterionFrom,
-        criterionTo,
         program_id,
         childFromSkill.rows[0].child_id,
       ]

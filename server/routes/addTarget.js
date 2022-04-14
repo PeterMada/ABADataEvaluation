@@ -10,7 +10,6 @@ router.post('/', authorization, validinfo, async (req, res) => {
     const {
       targetTitle,
       targetDescription,
-      targetType,
       targetBaselineFrom,
       targetBaselineTo,
       targetBaselineDone,
@@ -77,7 +76,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
 
     const target = await pool.query(
       `INSERT INTO targets 
-        (target_title, target_description, target_type,
+        (target_title, target_description,
           target_baseline_from, target_baseline_to, target_baseline_current,
           target_baseline_complete, target_criterion_from, target_criterion_to,
           program_id, child_id) 
@@ -85,7 +84,6 @@ router.post('/', authorization, validinfo, async (req, res) => {
       [
         targetTitle,
         targetDescription,
-        targetType,
         targetBaselineFrom ? targetBaselineFrom : 0,
         targetBaselineTo ? targetBaselineTo : 0,
         targetBaselineCurrent ? targetBaselineCurrent : 0,

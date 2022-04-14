@@ -15,31 +15,13 @@ export const AddTarget = () => {
       <Formik
         initialValues={{
           targetTitle: '',
-          targetType: 'Select target type',
           targetDescription: '',
-          //  targetBaselineFrom: '',
-          //   targetBaselineTo: '',
-          //  targetBaselineDone: '',
           targetBaselineCurrent: '',
-          //   criterionFrom: '',
-          //   criterionTo: '',
         }}
         validate={(values) => {
           const errors = {};
           if (!values.targetTitle) {
             errors.targetTitle = 'Target title field is required';
-          }
-
-          if (values.targetType === 'Select target type') {
-            errors.targetType = 'Target type field is required';
-          }
-
-          if (!values.criterionFrom) {
-            errors.criterionFrom = 'Field is required';
-          }
-
-          if (!values.criterionTo) {
-            errors.criterionTo = 'Field is required';
           }
 
           return errors;
@@ -101,58 +83,7 @@ export const AddTarget = () => {
                 component="div"
               />
             </div>
-            <div className="mb-4">
-              <label htmlFor="targetType">Target type</label>
-              <Field
-                className="form-select appearance-none block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                as="select"
-                name="targetType"
-                aria-label="Target type">
-                <option value="Select target type">
-                  Select target type
-                </option>
-                <option value="yes/no">Yes/no</option>
-                <option value="prompt level">Prompt level</option>
-                <option value="duration">Duration</option>
-                <option value="frequency">Frequency</option>
-                <option value="frequency/time">Frequency/time</option>
-                <option value="text">Text</option>
-              </Field>
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="targetType"
-                component="div"
-              />
-            </div>
 
-            <div className="mb-4">
-              <label htmlFor="targetBaselineFrom">Baseline From</label>
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                id="targetBaselineFrom"
-                name="targetBaselineFrom"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="targetBaselineFrom"
-                component="div"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="targetBaselineTo">Baseline To</label>
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                id="targetBaselineTo"
-                name="targetBaselineTo"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="targetBaselineTo"
-                component="div"
-              />
-            </div>
             <div className="mb-4">
               <label htmlFor="targetBaselineCurrent">
                 Baseline Current
@@ -175,36 +106,6 @@ export const AddTarget = () => {
                 <Field type="checkbox" name="targetBaselineDone" />
                 Baseline done
               </label>
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="criterionFrom">Criterion From</label>
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                id="criterionFrom"
-                name="criterionFrom"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="criterionFrom"
-                component="div"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="criterionTo">Criterion To</label>
-
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                id="criterionTo"
-                name="criterionTo"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="criterionTo"
-                component="div"
-              />
             </div>
 
             <div className="flex items-center justify-between">

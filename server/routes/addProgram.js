@@ -18,7 +18,10 @@ router.post('/', authorization, validinfo, async (req, res) => {
       targetBaselineTo,
       targetCriterionFrom,
       targetCriterionTo,
+      targetType,
     } = req.body;
+    console.log(req.body);
+    console.log(targetType);
 
     if (!req.user) {
       return res.status(401).json('Server Error');
@@ -69,8 +72,8 @@ router.post('/', authorization, validinfo, async (req, res) => {
         program_baseline_to, program_baseline_result,
         program_baseline_done, target_baseline_from, target_baseline_to,
         target_criterion_from, target_criterion_to, skill_id,
-        program_created_by, program_created) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`,
+        program_created_by, program_created, target_type) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *`,
       [
         programTitle,
         programDescription,
@@ -85,6 +88,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
         skill_id,
         req.user,
         new Date(),
+        targetType,
       ]
     );
 

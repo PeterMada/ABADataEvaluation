@@ -25,6 +25,7 @@ export const RecordAllBaseline = () => {
           }
         );
         const parseRes = await response.json();
+        console.log(parseRes);
         setTargets(parseRes);
       } catch (err) {
         console.error(err);
@@ -34,13 +35,6 @@ export const RecordAllBaseline = () => {
 
     const targetResult = fetchProgramDetails().catch(console.error);
   }, [remove]);
-
-  /*
-  useEffect(() => {
-    console.log(`remove: ${remove}`);
-    // setTargets(targets.filter((item) => item.target_id !== remove));
-  }, [remove]);
-  */
 
   return !targets ? (
     <p>Loading....</p>
@@ -55,11 +49,12 @@ export const RecordAllBaseline = () => {
           let currentMeasurmentComponent;
           let i = 0;
           const repeatNumber =
-            target.target_baseline_to - parseInt(target.alreadymeasured);
+            target.target_criterion_to - parseInt(target.alreadymeasured);
           const done = parseInt(target.alreadymeasured);
-          const from = target.target_baseline_to;
+          const from = target.target_criterion_to;
           const alreadyDone = (done / from) * 100;
           console.log((done / from) * 100);
+
           returnComponent.push(
             <div key={`${target.target_id}-${current}-${i}`}>
               <h2 className="font-medium leading-tight text-4xl mt-6 mb-2 text-blue-600">

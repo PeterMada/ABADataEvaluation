@@ -17,9 +17,8 @@ export const AddTarget = () => {
           targetTitle: '',
           targetType: 'Select target type',
           targetDescription: '',
-          targetBaselineFrom: '',
-          targetBaselineTo: '',
           targetBaselineDone: '',
+          targetBaselineTarget: '',
           criterionFrom: '',
           criterionTo: '',
         }}
@@ -31,14 +30,6 @@ export const AddTarget = () => {
 
           if (values.targetType === 'Select target type') {
             errors.targetType = 'Target type field is required';
-          }
-
-          if (!values.targetBaselineFrom) {
-            errors.targetBaselineFrom = 'Field is required';
-          }
-
-          if (!values.targetBaselineTo) {
-            errors.targetBaselineTo = 'Field is required';
           }
 
           if (!values.criterionFrom) {
@@ -132,35 +123,6 @@ export const AddTarget = () => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="targetBaselineFrom">Baseline</label>
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                id="targetBaselineFrom"
-                name="targetBaselineFrom"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="targetBaselineFrom"
-                component="div"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="targetBaselineTo">Baseline To</label>
-
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                id="targetBaselineTo"
-                name="targetBaselineTo"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="targetBaselineTo"
-                component="div"
-              />
-            </div>
-            <div className="mb-4">
               <label htmlFor="criterionFrom">Criterion From</label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -189,7 +151,12 @@ export const AddTarget = () => {
                 component="div"
               />
             </div>
-
+            <div className="mb-4">
+              <label>
+                <Field type="checkbox" name="targetBaselineTarget" />
+                Is baseline target
+              </label>
+            </div>
             <div className="mb-4">
               <label>
                 <Field type="checkbox" name="targetBaselineDone" />

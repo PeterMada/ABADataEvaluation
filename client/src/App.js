@@ -31,6 +31,7 @@ import { Recording } from './screen/Recording';
 import { RecordAll } from './screen/RecordAll';
 import { ReviewAll } from './screen/ReviewAll';
 import { RecordAllBaseline } from './screen/RecordAllBaseline';
+import { EditProgram } from './forms/editProgram/EditProgram';
 
 toast.configure();
 /*
@@ -250,6 +251,17 @@ export const App = () => {
             element={
               isAuthenticated ? (
                 <AddProgram />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/editProgram/:id"
+            element={
+              isAuthenticated ? (
+                <EditProgram />
               ) : (
                 <Navigate replace to="/login" />
               )

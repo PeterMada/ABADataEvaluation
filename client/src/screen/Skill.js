@@ -20,6 +20,7 @@ export const Skill = () => {
           }
         );
         const parseRes = await response.json();
+        console.log(parseRes);
         setCurrentSkill(parseRes.skillDetail);
         setCurrentPrograms(parseRes.allPrograms);
       } catch (err) {

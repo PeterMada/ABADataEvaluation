@@ -6,7 +6,8 @@ const validinfo = require('../middleware/validinfo');
 
 router.post('/', authorization, validinfo, async (req, res) => {
   try {
-    const skill_id = req.headers['skill_id'];
+    const program_id = req.headers['program_id'];
+
     const {
       programTitle,
       programDescription,
@@ -29,10 +30,14 @@ router.post('/', authorization, validinfo, async (req, res) => {
     }
 
     //TODO check if has premission to add program to child
+    const skillFromProgram = await pool.query(
+      'SELECT skill_id FROM programs WHERE program_id = $1',
+      [program_id]
+    );
 
     const childFromSkill = await pool.query(
       'SELECT child_id FROM skills WHERE skill_id = $1',
-      [skill_id]
+      [skillFromProgram.rows[0].skill_id]
     );
 
     if (childFromSkill.rows.length !== 1) {
@@ -60,11 +65,11 @@ router.post('/', authorization, validinfo, async (req, res) => {
     }
 
     const program = await pool.query(
-      `INSERT INTO programs
-       (program_title, program_description, program_baseline_from,
-        program_baseline_to, program_baseline_result,
-        program_baseline_done, skill_id) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+      `UPDATE programs SET
+        program_title = $1, program_description = $2,
+        program_baseline_from = $3, program_baseline_to = $4,
+        program_baseline_result = $5, program_baseline_done = $6
+        WHERE program_id = $7 RETURNING program_id`,
       [
         programTitle,
         programDescription,
@@ -72,7 +77,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
         programBaselineTo,
         programBaselineCurrent ? programBaselineCurrent : 0,
         isProgramDone,
-        skill_id,
+        program_id,
       ]
     );
 

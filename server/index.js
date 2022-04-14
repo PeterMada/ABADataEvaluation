@@ -32,6 +32,7 @@ app.use('/addChild', require('./routes/addChild'));
 // Edit
 app.use('/skillList', require('./routes/skillList'));
 app.use('/editSkill', require('./routes/editSkill'));
+app.use('/editProgram', require('./routes/editProgram'));
 
 // Other
 app.use('/profile', require('./routes/profile'));

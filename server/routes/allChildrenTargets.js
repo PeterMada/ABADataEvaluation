@@ -21,14 +21,15 @@ router.get('/', authorization, async (req, res) => {
           AND m.measuremend_type = 'baseline') AS alreadyMeasured
           FROM targets AS t
           WHERE t.child_id = $1
-            AND target_baseline_done = FALSE`,
+            AND t.target_baseline_complete = FALSE 
+            AND t.target_baseline_target = TRUE`,
         [child_id]
       );
     } else {
       allTargets = await pool.query(
         `SELECT * FROM targets AS t
           WHERE t.child_id = $1
-            AND target_baseline_done = TRUE 
+            AND target_baseline_complete = TRUE 
             AND NOT EXISTS 
             (SELECT * FROM measurements AS m 
               WHERE m.target_id = t.target_id 

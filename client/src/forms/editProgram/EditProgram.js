@@ -1,25 +1,48 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-export const AddProgram = () => {
+export const EditProgram = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [currentProgram, setCurrentProgram] = useState([]);
 
-  return (
+  useEffect(() => {
+    const fetchSkillDetail = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}programDetail`,
+          {
+            method: 'GET',
+            headers: { token: localStorage.token, program_id: id },
+          }
+        );
+        const parseRes = await response.json();
+        setCurrentProgram(parseRes.programDetail);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const childResult = fetchSkillDetail().catch(console.error);
+  }, []);
+
+  return !currentProgram.program_title ? (
+    <div>Loading...</div>
+  ) : (
     <>
-      <h1>Add Program</h1>
+      <h1>Edit Program</h1>
       <Formik
         initialValues={{
-          programTitle: '',
-          programDescription: '',
-          programBaselineFrom: '',
-          programBaselineTo: '',
-          programBaselineDone: '',
-          programBaselineCurrent: '',
+          programTitle: currentProgram.program_title,
+          programDescription: currentProgram.program_description,
+          programBaselineFrom: currentProgram.program_baseline_from,
+          programBaselineTo: currentProgram.program_baseline_to,
+          programBaselineDone: currentProgram.program_baseline_done,
+          programBaselineCurrent: currentProgram.program_baseline_result,
         }}
         validate={(values) => {
           const errors = {};
@@ -40,13 +63,13 @@ export const AddProgram = () => {
         onSubmit={async (values, { setSubmitting }) => {
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}addProgram`,
+              `${process.env.REACT_APP_API_URL}editProgram`,
               {
                 method: 'POST',
                 headers: {
                   'Content-type': 'application/json',
                   token: localStorage.token,
-                  skill_id: id,
+                  program_id: id,
                 },
                 body: JSON.stringify(values),
               }
@@ -54,13 +77,13 @@ export const AddProgram = () => {
 
             const parseRes = await response.json();
             if (parseRes.programId) {
-              toast.success('Program added succesfully');
+              toast.success('Program updated succesfully');
               navigate(`/program/${parseRes.programId}`);
             } else {
               toast.error(parseRes);
             }
           } catch (err) {
-            toast.error('Oops, failed to fetch!');
+            toast.error('Oops, server error!');
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
@@ -159,7 +182,7 @@ export const AddProgram = () => {
                   }
                   type="submit"
                   disabled={!dirty}>
-                  Add program
+                  Save program
                 </button>
               ) : (
                 <span

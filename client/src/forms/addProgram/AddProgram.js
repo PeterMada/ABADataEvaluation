@@ -20,8 +20,13 @@ export const AddProgram = () => {
           programBaselineTo: '',
           programBaselineDone: '',
           programBaselineCurrent: '',
+          targetBaselineFrom: '',
+          targetBaselineTo: '',
+          targetCriterionFrom: '',
+          targetCriterionTo: '',
         }}
         validate={(values) => {
+          // TODO validate only numbers
           const errors = {};
           if (!values.programTitle) {
             errors.programTitle = 'Program title field is required';
@@ -31,8 +36,17 @@ export const AddProgram = () => {
             errors.programBaselineFrom = 'Field is required';
           }
 
-          if (!values.programBaselineTo) {
-            errors.programBaselineTo = 'Field is required';
+          if (!values.targetBaselineFrom) {
+            errors.targetBaselineFrom = 'Field is required';
+          }
+          if (!values.targetBaselineTo) {
+            errors.targetBaselineTo = 'Field is required';
+          }
+          if (!values.targetCriterionFrom) {
+            errors.targetCriterionFrom = 'Field is required';
+          }
+          if (!values.targetCriterionTo) {
+            errors.targetCriterionTo = 'Field is required';
           }
 
           return errors;
@@ -96,7 +110,9 @@ export const AddProgram = () => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="programBaselineFrom">Baseline</label>
+              <label htmlFor="programBaselineFrom">
+                Program Baseline from
+              </label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
@@ -110,7 +126,9 @@ export const AddProgram = () => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="programBaselineTo">Baseline To</label>
+              <label htmlFor="programBaselineTo">
+                Program Baseline To
+              </label>
 
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -128,13 +146,13 @@ export const AddProgram = () => {
             <div className="mb-4">
               <label>
                 <Field type="checkbox" name="programBaselineDone" />
-                Baseline done
+                Program Baseline done
               </label>
             </div>
 
             <div className="mb-4">
               <label htmlFor="programBaselineCurrent">
-                Baseline Current
+                Program Baseline Current
               </label>
 
               <Field
@@ -146,6 +164,74 @@ export const AddProgram = () => {
               <ErrorMessage
                 className="text-red-500 text-xs mt-1 ml-1"
                 name="programBaselineCurrent"
+                component="div"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="targetBaselineFrom">
+                Targets Baseline From
+              </label>
+
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
+                id="targetBaselineFrom"
+                name="targetBaselineFrom"
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="targetBaselineFrom"
+                component="div"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="targetBaselineTo">Targets Baseline to</label>
+
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
+                id="targetBaselineTo"
+                name="targetBaselineTo"
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="targetBaselineTo"
+                component="div"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="targetCriterionFrom">
+                Targets Criterion From
+              </label>
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
+                id="targetCriterionFrom"
+                name="targetCriterionFrom"
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="targetCriterionFrom"
+                component="div"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="targetCriterionTo">
+                Targets Criterion To
+              </label>
+
+              <Field
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
+                id="targetCriterionTo"
+                name="targetCriterionTo"
+              />
+              <ErrorMessage
+                className="text-red-500 text-xs mt-1 ml-1"
+                name="targetCriterionTo"
                 component="div"
               />
             </div>

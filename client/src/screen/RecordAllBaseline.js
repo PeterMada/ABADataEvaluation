@@ -53,7 +53,6 @@ export const RecordAllBaseline = () => {
           const done = parseInt(target.alreadymeasured);
           const from = target.target_criterion_to;
           const alreadyDone = (done / from) * 100;
-          console.log((done / from) * 100);
 
           returnComponent.push(
             <div key={`${target.target_id}-${current}-${i}`}>

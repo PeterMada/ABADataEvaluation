@@ -66,26 +66,28 @@ CREATE TABLE programs (
   program_baseline_to SMALLINT,
   program_baseline_result SMALLINT,
   program_baseline_done BOOLEAN DEFAULT FALSE,
+  target_baseline_from SMALLINT,
+  target_baseline_to SMALLINT,
+  target_criterion_from SMALLINT,
+  target_criterion_to SMALLINT,
+  program_created timestamptz not null,
+  program_created_by uuid NOT NULL,
   skill_id uuid NOT NULL,
 
   PRIMARY KEY (program_id),
   CONSTRAINT fk_skill FOREIGN KEY(skill_id) REFERENCES skills(skill_id)
 );
 
-
 CREATE TABLE targets (
   target_id uuid DEFAULT uuid_generate_v4(),
   target_title VARCHAR(255) NOT NULL,
   target_description TEXT,
   target_type target_type,
-  target_baseline_from SMALLINT,
-  target_baseline_to SMALLINT,
   target_baseline_current SMALLINT,
   target_baseline_complete BOOLEAN DEFAULT FALSE,
-  target_criterion_from SMALLINT,
-  target_criterion_to SMALLINT,
   target_complete BOOLEAN DEFAULT FALSE,
-  target_created timestamp not null default CURRENT_TIMESTAMP,
+  target_created timestamptz not null default CURRENT_TIMESTAMP,
+  target_baseline_completed_time timestamptz,
   program_id uuid NOT NULL,
   child_id uuid NOT NULL,
 

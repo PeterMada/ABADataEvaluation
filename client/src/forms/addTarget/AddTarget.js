@@ -17,12 +17,12 @@ export const AddTarget = () => {
           targetTitle: '',
           targetType: 'Select target type',
           targetDescription: '',
-          targetBaselineFrom: '',
-          targetBaselineTo: '',
-          targetBaselineDone: '',
+          //  targetBaselineFrom: '',
+          //   targetBaselineTo: '',
+          //  targetBaselineDone: '',
           targetBaselineCurrent: '',
-          criterionFrom: '',
-          criterionTo: '',
+          //   criterionFrom: '',
+          //   criterionTo: '',
         }}
         validate={(values) => {
           const errors = {};

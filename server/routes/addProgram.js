@@ -14,6 +14,10 @@ router.post('/', authorization, validinfo, async (req, res) => {
       programBaselineTo,
       programBaselineDone,
       programBaselineCurrent,
+      targetBaselineFrom,
+      targetBaselineTo,
+      targetCriterionFrom,
+      targetCriterionTo,
     } = req.body;
 
     if (!req.user) {
@@ -63,8 +67,10 @@ router.post('/', authorization, validinfo, async (req, res) => {
       `INSERT INTO programs
        (program_title, program_description, program_baseline_from,
         program_baseline_to, program_baseline_result,
-        program_baseline_done, skill_id) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+        program_baseline_done, target_baseline_from, target_baseline_to,
+        target_criterion_from, target_criterion_to, skill_id,
+        program_created_by, program_created) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`,
       [
         programTitle,
         programDescription,
@@ -72,7 +78,13 @@ router.post('/', authorization, validinfo, async (req, res) => {
         programBaselineTo,
         programBaselineCurrent ? programBaselineCurrent : 0,
         isProgramDone,
+        targetBaselineFrom ? targetBaselineFrom : 0,
+        targetBaselineTo ? targetBaselineTo : 0,
+        targetCriterionFrom ? targetCriterionFrom : 0,
+        targetCriterionTo ? targetCriterionTo : 0,
         skill_id,
+        req.user,
+        new Date(),
       ]
     );
 

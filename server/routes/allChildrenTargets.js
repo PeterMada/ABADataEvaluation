@@ -21,8 +21,7 @@ router.get('/', authorization, async (req, res) => {
           AND m.measuremend_type = 'baseline') AS alreadyMeasured
           FROM targets AS t
           WHERE t.child_id = $1
-            AND t.target_baseline_complete = FALSE 
-            AND t.target_baseline_target = TRUE`,
+            AND t.target_baseline_complete = FALSE`,
         [child_id]
       );
     } else {
@@ -32,7 +31,7 @@ router.get('/', authorization, async (req, res) => {
             AND target_baseline_complete = TRUE 
             AND NOT EXISTS 
             (SELECT * FROM measurements AS m 
-              WHERE m.target_id = t.target_id 
+              WHERE m.target_id = t.target_id AND measuremend_type != 'baseline'
               AND (m.measurement_created between $2 AND $3))`,
         [child_id, fromMidnight, toMidnight]
       );

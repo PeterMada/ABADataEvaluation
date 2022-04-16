@@ -85,6 +85,7 @@ CREATE TABLE targets (
   target_description TEXT,
   target_baseline_current SMALLINT,
   target_baseline_complete BOOLEAN DEFAULT FALSE,
+  target_done_from_baseline BOOLEAN DEFAULT FALSE,
   target_complete BOOLEAN DEFAULT FALSE,
   target_created timestamptz not null default CURRENT_TIMESTAMP,
   target_baseline_completed_time timestamptz,

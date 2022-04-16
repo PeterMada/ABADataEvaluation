@@ -77,13 +77,17 @@ router.post('/', authorization, validinfo, async (req, res) => {
       `INSERT INTO targets 
         (target_title, target_description,
           target_baseline_current, target_baseline_complete,
+          target_done_from_baseline, target_complete, target_baseline_completed_time,
           program_id, child_id) 
-        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
       [
         targetTitle,
         targetDescription,
         targetBaselineCurrent ? targetBaselineCurrent : 0,
         isTargetDone,
+        isTargetDone,
+        isTargetDone,
+        isTargetDone ? new Date() : null,
         program_id,
         childFromSkill.rows[0].child_id,
       ]

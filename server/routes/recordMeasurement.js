@@ -44,13 +44,23 @@ router.post('/', authorization, async (req, res) => {
       // Check if target baseline is completed
       if (measuremend_type === 'baseline') {
         const currentTarget = await pool.query(
-          `SELECT target_baseline_from, target_baseline_to 
-        FROM targets 
+          `SELECT * FROM targets 
         WHERE target_id = $1`,
           [target_id]
         );
 
         if (currentTarget.rows.length !== 1) {
+          res.status(500).json('Server Error');
+        }
+
+        const currentProgram = await pool.query(
+          `SELECT target_baseline_from, target_baseline_to 
+        FROM programs 
+        WHERE program_id = $1`,
+          [currentTarget.rows[0].program_id]
+        );
+
+        if (currentProgram.rows.length !== 1) {
           res.status(500).json('Server Error');
         }
 
@@ -61,7 +71,7 @@ router.post('/', authorization, async (req, res) => {
         ON m.measurement_id = mp.measurement_id
         WHERE target_id = $1 ORDER BY m.measurement_created DESC 
         LIMIT $2`,
-          [target_id, currentTarget.rows[0].target_baseline_to]
+          [target_id, currentProgram.rows[0].target_baseline_to]
         );
 
         let succesfulMeasurmentCount = 0;
@@ -71,18 +81,36 @@ router.post('/', authorization, async (req, res) => {
           }
         });
 
-        // Baseline for target is done
         if (
           succesfulMeasurmentCount >=
-          currentTarget.rows[0].target_baseline_from
+          currentProgram.rows[0].target_baseline_from
         ) {
+          // Baseline for target is succesfuly done
+          // target do not go to session to next day
+          // close target
           const measurment = await pool.query(
             `UPDATE targets 
-              SET target_baseline_complete = TRUE, target_baseline_completed_time = $2
+              SET target_baseline_complete = TRUE,
+              target_baseline_completed_time = $2,
+              target_done_from_baseline = TRUE
               WHERE target_id = $1`,
             [target_id, new Date().toISOString()]
           );
+        } else if (
+          allMeasurments.rows.length >=
+          currentProgram.rows[0].target_baseline_to
+        ) {
+          // Masrument vas unsucesfful - baseline is not completed
+          // target go to session next day
+          const measurment = await pool.query(
+            `UPDATE targets 
+            SET target_baseline_complete = TRUE, target_baseline_completed_time = $2
+            WHERE target_id = $1`,
+            [target_id, new Date().toISOString()]
+          );
         }
+      } else {
+        // check if target is complete
       }
 
       res.json({ measrumentId: measurment.rows[0].measurement_id });

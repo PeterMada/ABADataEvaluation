@@ -5,9 +5,9 @@ import { Frequency } from '../components/measurement/Frequency';
 import { FrequencyTime } from '../components/measurement/FrequencyTime';
 import { PolarQuestion } from '../components/measurement/PolarQuestion';
 
-export const RecordAll = () => {
-  const { id } = useParams();
+export const RecordAll = ({ id }) => {
   const [targets, setTargets] = useState([]);
+  const [baselineTargets, setBaselineTargets] = useState([]);
   const [remove, setRemove] = useState();
 
   useEffect(() => {
@@ -42,6 +42,7 @@ export const RecordAll = () => {
       <div>
         {targets.map((target, current) => {
           let currentMeasurmentComponent;
+          console.log(target);
 
           switch (target.target_type) {
             case 'frequency/time':

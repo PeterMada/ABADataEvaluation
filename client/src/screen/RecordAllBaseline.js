@@ -5,8 +5,8 @@ import { Frequency } from '../components/measurement/Frequency';
 import { FrequencyTime } from '../components/measurement/FrequencyTime';
 import { PolarQuestion } from '../components/measurement/PolarQuestion';
 
-export const RecordAllBaseline = () => {
-  const { id } = useParams();
+export const RecordAllBaseline = ({ id }) => {
+  // const { id } = useParams();
   const [targets, setTargets] = useState([]);
   const [remove, setRemove] = useState();
 
@@ -45,6 +45,7 @@ export const RecordAllBaseline = () => {
       </h1>
       <div>
         {targets.map((target, current) => {
+          console.log(target);
           let returnComponent = [];
           let currentMeasurmentComponent;
           let i = 0;
@@ -104,76 +105,6 @@ export const RecordAllBaseline = () => {
             return returnComponent;
           } else {
           }
-
-          /*
-          const testArray = Array.from({ length: repeatNumber });
-
-          const test = testArray.map((t) => {
-            i++;
-            let currentMeasurmentComponent;
-
-            switch (target.target_type) {
-              case 'yes/no':
-                currentMeasurmentComponent = (
-                  <PolarQuestion
-                    key={`${target.target_id}-${i}-${current}`}
-                    data={target}
-                    setRemove={setRemove}
-                    current={current}
-                    doNotShowDetails={true}
-                  />
-                );
-                break;
-              default:
-                currentMeasurmentComponent = (
-                  <p>Measurement type does not exist.</p>
-                );
-            }
-
-            return (
-              <div
-                className="mt-4 mb-4"
-                key={`${target.target_id}-${current}-${i}`}>
-                {currentMeasurmentComponent}
-              </div>
-            );
-          });
-
-          returnComponent.push(test);
-          return returnComponent;
-
-          /*
-          for (let i = 0; i < repeatNumber; i++) {
-            let currentMeasurmentComponent;
-
-            switch (target.target_type) {
-              case 'yes/no':
-                currentMeasurmentComponent = (
-                  <PolarQuestion
-                    data={target}
-                    setRemove={setRemove}
-                    current={current}
-                    doNotShowDetails={true}
-                  />
-                );
-                break;
-              default:
-                currentMeasurmentComponent = (
-                  <p>Measurement type does not exist.</p>
-                );
-            }
-
-            returnComponent.push(
-              <div className="mt-4 mb-4" key={`${target.target_id}-${i}`}>
-                {currentMeasurmentComponent}
-              </div>
-            );
-
-            //
-          }
-
-          return returnComponent;
-          */
         })}
       </div>
     </>

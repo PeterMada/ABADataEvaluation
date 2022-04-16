@@ -15,17 +15,14 @@ export const AddTarget = () => {
       <Formik
         initialValues={{
           targetTitle: '',
-          targetType: 'Select target type',
           targetDescription: '',
+          targetBaselineCurrent: '',
+          targetBaselineDone: '',
         }}
         validate={(values) => {
           const errors = {};
           if (!values.targetTitle) {
-            errors.targetTitle = 'Target title field is required';
-          }
-
-          if (values.targetType === 'Select target type') {
-            errors.targetType = 'Target type field is required';
+            errors.targetTitle = 'Field is required';
           }
 
           return errors;
@@ -86,28 +83,29 @@ export const AddTarget = () => {
                 component="div"
               />
             </div>
+
             <div className="mb-4">
-              <label htmlFor="targetType">Target type</label>
+              <label htmlFor="targetBaselineCurrent">
+                Baseline Current
+              </label>
               <Field
-                className="form-select appearance-none block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                as="select"
-                name="targetType"
-                aria-label="Target type">
-                <option value="Select target type">
-                  Select target type
-                </option>
-                <option value="yes/no">Yes/no</option>
-                <option value="prompt level">Prompt level</option>
-                <option value="duration">Duration</option>
-                <option value="frequency">Frequency</option>
-                <option value="frequency/time">Frequency/time</option>
-                <option value="text">Text</option>
-              </Field>
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
+                id="targetBaselineCurrent"
+                name="targetBaselineCurrent"
+              />
               <ErrorMessage
                 className="text-red-500 text-xs mt-1 ml-1"
-                name="targetType"
+                name="targetBaselineCurrent"
                 component="div"
               />
+            </div>
+
+            <div className="mb-4">
+              <label>
+                <Field type="checkbox" name="targetBaselineDone" />
+                Baseline done
+              </label>
             </div>
 
             <div className="flex items-center justify-between">

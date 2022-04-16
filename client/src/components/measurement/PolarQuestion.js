@@ -1,23 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-export const PolarQuestion = ({ data, setRemove, current }) => {
+export const PolarQuestion = ({
+  data,
+  setRemove,
+  current,
+  fillForm = false,
+  doNotShowDetails = false,
+  elementId = false,
+}) => {
   const { id } = useParams();
-  const [frequency, setFrequency] = useState(0);
+  const [formData, setformData] = useState([]);
+  const [answerValue, setAnswerValue] = useState('');
+
+  useEffect(() => {
+    const fetchValuesForMeasurment = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}measurmentDetail`,
+          {
+            method: 'GET',
+            headers: {
+              token: localStorage.token,
+              measurement_id: data.measurement_id,
+              target_type: data.target_type,
+            },
+          }
+        );
+        const parseRes = await response.json();
+
+        if (parseRes) {
+          setformData(parseRes);
+          setAnswerValue('No');
+          if (parseRes.question_result) {
+            setAnswerValue('Yes');
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (fillForm) {
+      const targetResult = fetchValuesForMeasurment().catch(console.error);
+    }
+  }, []);
 
   return (
-    <>
-      <h2>{data.target_title}</h2>
-      <p>{data.target_description}</p>
+    <div className="mt-10 mb-10">
+      {!doNotShowDetails ? (
+        <>
+          <h2>{data.target_title}</h2>
+          <p>{data.target_description}</p>
+        </>
+      ) : (
+        ''
+      )}
 
       <Formik
         initialValues={{
-          answerYes: '',
-          answerNo: '',
+          answer: answerValue,
         }}
+        enableReinitialize={true}
         onSubmit={async (values, { setSubmitting }) => {
+          const measuremendType = doNotShowDetails ? 'baseline' : '';
+
           try {
             const response = await fetch(
               `${process.env.REACT_APP_API_URL}recordmeasurement`,
@@ -29,6 +78,7 @@ export const PolarQuestion = ({ data, setRemove, current }) => {
                   child_id: id,
                   target_type: data.target_type,
                   target_id: data.target_id,
+                  measuremend_type: measuremendType,
                 },
                 body: JSON.stringify(values),
               }
@@ -37,7 +87,11 @@ export const PolarQuestion = ({ data, setRemove, current }) => {
             const parseRes = await response.json();
             if (parseRes.measrumentId) {
               toast.success('Target measurement saved succesfuly');
-              setRemove(data.target_id);
+              if (doNotShowDetails) {
+                setRemove(`${data.target_id}-${new Date().getTime()}`);
+              } else {
+                setRemove(data.target_id);
+              }
             } else {
               toast.error(parseRes);
             }
@@ -46,7 +100,7 @@ export const PolarQuestion = ({ data, setRemove, current }) => {
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
-          <Form data-testid="addSkill">
+          <Form>
             <div className="mt-4">
               <div role="group">
                 <label>
@@ -69,6 +123,6 @@ export const PolarQuestion = ({ data, setRemove, current }) => {
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   );
 };

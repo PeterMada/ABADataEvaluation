@@ -32,11 +32,24 @@ app.use('/addChild', require('./routes/addChild'));
 // Edit
 app.use('/skillList', require('./routes/skillList'));
 app.use('/editSkill', require('./routes/editSkill'));
+app.use('/editProgram', require('./routes/editProgram'));
 
 // Other
 app.use('/profile', require('./routes/profile'));
 app.use('/allChildrenTargets', require('./routes/allChildrenTargets'));
+app.use(
+  '/allChildrenOpenTargets',
+  require('./routes/allChildrenOpenTargets')
+);
 app.use('/recordMeasurement', require('./routes/recordMeasurement'));
+app.use('/measurmentDetail', require('./routes/measurmentDetail'));
+
+app.use(
+  '/saveAllChildrenOpenTargets',
+  require('./routes/saveAllChildrenOpenTargets')
+);
+
+app.use('/targetMeasurements', require('./routes/targetMeasurements'));
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Server started succesfully`);

@@ -1,33 +1,50 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-export const AddProgram = () => {
+export const EditProgram = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [currentProgram, setCurrentProgram] = useState([]);
 
-  return (
+  useEffect(() => {
+    const fetchSkillDetail = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}programDetail`,
+          {
+            method: 'GET',
+            headers: { token: localStorage.token, program_id: id },
+          }
+        );
+        const parseRes = await response.json();
+        setCurrentProgram(parseRes.programDetail);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const childResult = fetchSkillDetail().catch(console.error);
+  }, []);
+
+  return !currentProgram.program_title ? (
+    <div>Loading...</div>
+  ) : (
     <>
-      <h1>Add Program</h1>
+      <h1>Edit Program</h1>
       <Formik
         initialValues={{
-          programTitle: '',
-          programDescription: '',
-          programBaselineFrom: '',
-          programBaselineTo: '',
-          programBaselineDone: '',
-          programBaselineCurrent: '',
-          targetBaselineFrom: '',
-          targetBaselineTo: '',
-          targetCriterionFrom: '',
-          targetCriterionTo: '',
-          targetType: 'Select target type',
+          programTitle: currentProgram.program_title,
+          programDescription: currentProgram.program_description,
+          programBaselineFrom: currentProgram.program_baseline_from,
+          programBaselineTo: currentProgram.program_baseline_to,
+          programBaselineDone: currentProgram.program_baseline_done,
+          programBaselineCurrent: currentProgram.program_baseline_result,
         }}
         validate={(values) => {
-          // TODO validate only numbers
           const errors = {};
           if (!values.programTitle) {
             errors.programTitle = 'Program title field is required';
@@ -37,20 +54,8 @@ export const AddProgram = () => {
             errors.programBaselineFrom = 'Field is required';
           }
 
-          if (!values.targetBaselineFrom) {
-            errors.targetBaselineFrom = 'Field is required';
-          }
-          if (!values.targetBaselineTo) {
-            errors.targetBaselineTo = 'Field is required';
-          }
-          if (!values.targetCriterionFrom) {
-            errors.targetCriterionFrom = 'Field is required';
-          }
-          if (!values.targetCriterionTo) {
-            errors.targetCriterionTo = 'Field is required';
-          }
-          if (values.targetType === 'Select target type') {
-            errors.targetType = 'Target type field is required';
+          if (!values.programBaselineTo) {
+            errors.programBaselineTo = 'Field is required';
           }
 
           return errors;
@@ -58,13 +63,13 @@ export const AddProgram = () => {
         onSubmit={async (values, { setSubmitting }) => {
           try {
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}addProgram`,
+              `${process.env.REACT_APP_API_URL}editProgram`,
               {
                 method: 'POST',
                 headers: {
                   'Content-type': 'application/json',
                   token: localStorage.token,
-                  skill_id: id,
+                  program_id: id,
                 },
                 body: JSON.stringify(values),
               }
@@ -72,13 +77,13 @@ export const AddProgram = () => {
 
             const parseRes = await response.json();
             if (parseRes.programId) {
-              toast.success('Program added succesfully');
+              toast.success('Program updated succesfully');
               navigate(`/program/${parseRes.programId}`);
             } else {
               toast.error(parseRes);
             }
           } catch (err) {
-            toast.error('Oops, failed to fetch!');
+            toast.error('Oops, server error!');
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
@@ -114,32 +119,7 @@ export const AddProgram = () => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="targetType">Target type</label>
-              <Field
-                className="form-select appearance-none block w-full px-3 py-2 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                as="select"
-                name="targetType"
-                aria-label="Target type">
-                <option value="Select target type">
-                  Select target type
-                </option>
-                <option value="yes/no">Yes/no</option>
-                <option value="prompt level">Prompt level</option>
-                <option value="duration">Duration</option>
-                <option value="frequency">Frequency</option>
-                <option value="frequency/time">Frequency/time</option>
-                <option value="text">Text</option>
-              </Field>
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="targetType"
-                component="div"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="programBaselineFrom">
-                Program Baseline from
-              </label>
+              <label htmlFor="programBaselineFrom">Baseline</label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
@@ -153,9 +133,7 @@ export const AddProgram = () => {
               />
             </div>
             <div className="mb-4">
-              <label htmlFor="programBaselineTo">
-                Program Baseline To
-              </label>
+              <label htmlFor="programBaselineTo">Baseline To</label>
 
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -173,13 +151,13 @@ export const AddProgram = () => {
             <div className="mb-4">
               <label>
                 <Field type="checkbox" name="programBaselineDone" />
-                Program Baseline done
+                Baseline done
               </label>
             </div>
 
             <div className="mb-4">
               <label htmlFor="programBaselineCurrent">
-                Program Baseline Current
+                Baseline Current
               </label>
 
               <Field
@@ -195,74 +173,6 @@ export const AddProgram = () => {
               />
             </div>
 
-            <div className="mb-4">
-              <label htmlFor="targetBaselineFrom">
-                Targets Baseline From
-              </label>
-
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                id="targetBaselineFrom"
-                name="targetBaselineFrom"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="targetBaselineFrom"
-                component="div"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="targetBaselineTo">Targets Baseline to</label>
-
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                id="targetBaselineTo"
-                name="targetBaselineTo"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="targetBaselineTo"
-                component="div"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="targetCriterionFrom">
-                Targets Criterion From
-              </label>
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                id="targetCriterionFrom"
-                name="targetCriterionFrom"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="targetCriterionFrom"
-                component="div"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="targetCriterionTo">
-                Targets Criterion To
-              </label>
-
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                id="targetCriterionTo"
-                name="targetCriterionTo"
-              />
-              <ErrorMessage
-                className="text-red-500 text-xs mt-1 ml-1"
-                name="targetCriterionTo"
-                component="div"
-              />
-            </div>
-
             <div className="flex items-center justify-between">
               {!isSubmitting ? (
                 <button
@@ -272,7 +182,7 @@ export const AddProgram = () => {
                   }
                   type="submit"
                   disabled={!dirty}>
-                  Add program
+                  Save program
                 </button>
               ) : (
                 <span

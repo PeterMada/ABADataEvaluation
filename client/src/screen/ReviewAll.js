@@ -4,17 +4,16 @@ import { toast } from 'react-toastify';
 import { Frequency } from '../components/measurement/Frequency';
 import { FrequencyTime } from '../components/measurement/FrequencyTime';
 import { PolarQuestion } from '../components/measurement/PolarQuestion';
-
-export const RecordAll = ({ id }) => {
+export const ReviewAll = () => {
+  const { id } = useParams();
+  const [measurement, setMeasurement] = useState([]);
   const [targets, setTargets] = useState([]);
-  const [baselineTargets, setBaselineTargets] = useState([]);
-  const [remove, setRemove] = useState();
 
   useEffect(() => {
-    const fetchProgramDetails = async () => {
+    const fetchAllOpenTargetsForChild = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API_URL}allChildrenTargets`,
+          `${process.env.REACT_APP_API_URL}allChildrenOpenTargets`,
           {
             method: 'GET',
             headers: { token: localStorage.token, child_id: id },
@@ -27,12 +26,32 @@ export const RecordAll = ({ id }) => {
       }
     };
 
-    const targetResult = fetchProgramDetails().catch(console.error);
+    const targetResult = fetchAllOpenTargetsForChild().catch(
+      console.error
+    );
   }, []);
 
   useEffect(() => {
-    setTargets(targets.filter((item) => item.target_id !== remove));
-  }, [remove]);
+    //  setTargets(targets.filter((item) => item.target_id !== remove));
+  }, []);
+
+  const handleSaveAll = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}saveAllChildrenOpenTargets`,
+        {
+          method: 'POST',
+          headers: { token: localStorage.token, child_id: id },
+        }
+      );
+      const parseRes = await response.json();
+      console.log(parseRes);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return !targets ? (
     <p>Loading....</p>
@@ -42,7 +61,6 @@ export const RecordAll = ({ id }) => {
       <div>
         {targets.map((target, current) => {
           let currentMeasurmentComponent;
-          console.log(target);
 
           switch (target.target_type) {
             case 'frequency/time':
@@ -52,18 +70,14 @@ export const RecordAll = ({ id }) => {
               currentMeasurmentComponent = (
                 <PolarQuestion
                   data={target}
-                  setRemove={setRemove}
                   current={current}
+                  fillForm={true}
                 />
               );
               break;
             case 'frequency':
               currentMeasurmentComponent = (
-                <Frequency
-                  data={target}
-                  setRemove={setRemove}
-                  current={current}
-                />
+                <Frequency data={target} current={current} />
               );
               break;
             default:
@@ -78,6 +92,17 @@ export const RecordAll = ({ id }) => {
             </div>
           );
         })}
+        {targets.length ? (
+          <div>
+            <button
+              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleSaveAll}>
+              Save All
+            </button>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     </>
   );

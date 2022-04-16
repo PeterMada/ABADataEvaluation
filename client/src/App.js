@@ -29,6 +29,10 @@ import { Target } from './screen/Target';
 import { EditSkill } from './forms/editSkill/editSkill';
 import { Recording } from './screen/Recording';
 import { RecordAll } from './screen/RecordAll';
+import { ReviewAll } from './screen/ReviewAll';
+import { RecordAllBaseline } from './screen/RecordAllBaseline';
+import { EditProgram } from './forms/editProgram/EditProgram';
+import { Session } from './screen/Session';
 
 toast.configure();
 /*
@@ -77,7 +81,6 @@ export const App = () => {
   };
 
   const isAuth = async () => {
-    console.log('auth hook');
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}auth/verify`,
@@ -256,6 +259,17 @@ export const App = () => {
           />
           <Route
             exact
+            path="/editProgram/:id"
+            element={
+              isAuthenticated ? (
+                <EditProgram />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
             path="/program/:id"
             element={
               isAuthenticated ? (
@@ -304,6 +318,39 @@ export const App = () => {
             element={
               isAuthenticated ? (
                 <RecordAll />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/reviewAll/:id"
+            element={
+              isAuthenticated ? (
+                <ReviewAll />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/recordAllBaseline/:id"
+            element={
+              isAuthenticated ? (
+                <RecordAllBaseline />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/session/:id"
+            element={
+              isAuthenticated ? (
+                <Session />
               ) : (
                 <Navigate replace to="/login" />
               )

@@ -7,7 +7,12 @@ const validinfo = require('../middleware/validinfo');
 router.post('/', authorization, validinfo, async (req, res) => {
   try {
     const program_id = req.headers['program_id'];
-    const { targetTitle, targetDescription, targetType } = req.body;
+    const {
+      targetTitle,
+      targetDescription,
+      targetBaselineDone,
+      targetBaselineCurrent,
+    } = req.body;
 
     if (!req.user) {
       return res.status(401).json('Server Error');
@@ -15,7 +20,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
 
     //TODO check if has premission to add program to child
     const skillFromProgram = await pool.query(
-      'SELECT skill_id FROM programs WHERE program_id = $1',
+      'SELECT skill_id, target_baseline_from FROM programs WHERE program_id = $1',
       [program_id]
     );
 
@@ -57,12 +62,32 @@ router.post('/', authorization, validinfo, async (req, res) => {
       return;
     }
 
+    let isTargetDone = false;
+    if (targetBaselineDone) {
+      isTargetDone = true;
+    } else {
+      isTargetDone =
+        skillFromProgram.rows[0].target_baseline_from <=
+        targetBaselineCurrent
+          ? true
+          : false;
+    }
+
     const target = await pool.query(
-      'INSERT INTO targets (target_title, target_description, target_type, program_id, child_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      `INSERT INTO targets 
+        (target_title, target_description,
+          target_baseline_current, target_baseline_complete,
+          target_done_from_baseline, target_complete, target_baseline_completed_time,
+          program_id, child_id) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
       [
         targetTitle,
         targetDescription,
-        targetType,
+        targetBaselineCurrent ? targetBaselineCurrent : 0,
+        isTargetDone,
+        isTargetDone,
+        isTargetDone,
+        isTargetDone ? new Date() : null,
         program_id,
         childFromSkill.rows[0].child_id,
       ]

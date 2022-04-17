@@ -3,11 +3,18 @@ import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { TargetBox } from '../components/targetBox/TargetBox';
+import { CategoryScale } from 'chart.js';
+import { Chart as ChartJS } from 'chart.js/auto';
+
+import { Line } from 'react-chartjs-2';
 
 export const Program = () => {
   const [currentProgram, setCurrentProgram] = useState([]);
   const [currentTargets, setCurrentTargets] = useState([]);
   const { id } = useParams();
+  const [labels, setLabels] = useState([]);
+  const [completedTargets, setCompletedTargets] = useState([]);
+  const [completedBaseline, setCompletedBaseline] = useState([]);
 
   useEffect(() => {
     const fetchProgramDetails = async () => {
@@ -23,6 +30,67 @@ export const Program = () => {
         console.log(parseRes);
         setCurrentProgram(parseRes.programDetail);
         setCurrentTargets(parseRes.results);
+
+        const today = new Date();
+        const programStartDate = parseRes.programDetail.program_created;
+        const diference =
+          today.getTime() - new Date(programStartDate).getTime();
+        const dayDiference =
+          diference / (1000 * 3600 * 24) < 0.5
+            ? 0
+            : Math.ceil(diference / (1000 * 3600 * 24));
+        let labelDates = ['baseline'];
+        let targetsCompleted = [null];
+        let j = 0;
+        for (let i = dayDiference; i >= 0; i--) {
+          const d = new Date();
+          d.setHours(0, 0, 0, 0);
+          d.setDate(d.getDate() - i);
+
+          labelDates.push(d.toLocaleDateString('en-GB'));
+          const targetCompleted = parseRes.allTargets.filter((target) => {
+            const targetCompletedDate = new Date(
+              target.target_completed_time
+            );
+            targetCompletedDate.setHours(0, 0, 0, 0);
+
+            if (
+              (target.target_complete ||
+                target.target_done_from_baseline) &&
+              targetCompletedDate.toDateString() === d.toDateString()
+            ) {
+              return true;
+            }
+          });
+          const prevTargetCompleted = targetsCompleted[j - 1]
+            ? targetsCompleted[j - 1]
+            : 0;
+
+          //console.log(targetsCompleted);
+          targetsCompleted.push(
+            prevTargetCompleted + targetCompleted.length
+          );
+          j++;
+        }
+
+        setLabels(labelDates);
+        setCompletedTargets(targetsCompleted);
+
+        const targetBaselineCompleted = parseRes.allTargets.filter(
+          (target) => {
+            if (target.target_done_from_baseline) {
+              return true;
+            }
+          }
+        );
+
+        let baselineLine = [];
+        const targetsCompletedMap = targetsCompleted;
+        targetsCompletedMap.map((target) => {
+          baselineLine.push(targetBaselineCompleted.length);
+        });
+
+        setCompletedBaseline(baselineLine);
       } catch (err) {
         console.error(err);
       }
@@ -30,6 +98,25 @@ export const Program = () => {
 
     const childResult = fetchProgramDetails().catch(console.error);
   }, []);
+
+  let options = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+    scales: {
+      y: {
+        max: currentProgram.program_baseline_from,
+        min: 0,
+        ticks: {
+          stepSize: 1,
+        },
+      },
+    },
+  };
+
+  console.log(currentProgram);
 
   return (
     <>
@@ -43,13 +130,39 @@ export const Program = () => {
         currentProgram.program_baseline_done ? 'Yes' : 'No'
       }`}</p>
 
+      <div className="mt-10 mb-10 w-2/4	">
+        <Line
+          datasetIdKey="id"
+          data={{
+            labels: labels,
+            datasets: [
+              {
+                id: 1,
+                label: '',
+                data: completedTargets,
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+              },
+              {
+                id: 2,
+                label: '',
+                data: [currentProgram.program_baseline_result],
+                borderColor: 'rgb(51, 204, 51)',
+                backgroundColor: 'rgba(51, 204, 51, 0.5)',
+              },
+            ],
+          }}
+          options={options}
+        />
+      </div>
+
       <div className="mt-10">
         <h2>All targets for this program</h2>
         <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
           {currentTargets.map((target) => {
             let programDonePercentage = 0;
             let baselineStart = 0;
-            let baselineFinish = 3;
+            let baselineFinish = currentProgram.target_criterion_from;
 
             target.measurements.map((meas) => {
               if (meas.question_result === true) {

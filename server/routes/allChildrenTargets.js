@@ -34,14 +34,17 @@ router.get('/', authorization, async (req, res) => {
           WHERE t.child_id = $1
             AND t.target_baseline_complete = TRUE 
             AND t.target_done_from_baseline = FALSE
+            AND t.target_done_from_baseline = FALSE
+            AND t.target_complete = FALSE
             AND (t.target_baseline_completed_time between $2 AND $3)
-            AND NOT EXISTS 
+            AND  EXISTS 
             (SELECT * FROM measurements AS m 
               WHERE m.target_id = t.target_id AND measuremend_type != 'baseline'
               AND (m.measurement_created between $2 AND $3))`,
         [child_id, fromMidnight, toMidnight]
       );
     }
+
     res.json(allTargets.rows);
   } catch (err) {
     console.log(err.message);

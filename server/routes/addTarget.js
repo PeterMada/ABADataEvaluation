@@ -75,11 +75,11 @@ router.post('/', authorization, validinfo, async (req, res) => {
 
     const target = await pool.query(
       `INSERT INTO targets 
-        (target_title, target_description,
-          target_baseline_current, target_baseline_complete,
-          target_done_from_baseline, target_complete, target_baseline_completed_time,
+        (target_title, target_description, target_baseline_current,
+          target_baseline_complete, target_done_from_baseline,
+          target_complete, target_baseline_completed_time, target_completed_time,
           program_id, child_id) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
       [
         targetTitle,
         targetDescription,
@@ -87,7 +87,8 @@ router.post('/', authorization, validinfo, async (req, res) => {
         isTargetDone,
         isTargetDone,
         isTargetDone,
-        isTargetDone ? new Date() : null,
+        isTargetDone ? new Date().toISOString() : null,
+        isTargetDone ? new Date().toISOString() : null,
         program_id,
         childFromSkill.rows[0].child_id,
       ]

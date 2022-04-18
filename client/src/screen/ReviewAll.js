@@ -20,6 +20,7 @@ export const ReviewAll = () => {
           }
         );
         const parseRes = await response.json();
+        console.log(parseRes);
         setTargets(parseRes);
       } catch (err) {
         console.error(err);
@@ -47,7 +48,6 @@ export const ReviewAll = () => {
         }
       );
       const parseRes = await response.json();
-      console.log(parseRes);
     } catch (err) {
       console.error(err);
     }
@@ -61,7 +61,7 @@ export const ReviewAll = () => {
       <div>
         {targets.map((target, current) => {
           let currentMeasurmentComponent;
-
+          console.log(target);
           switch (target.target_type) {
             case 'frequency/time':
               currentMeasurmentComponent = <FrequencyTime />;
@@ -87,22 +87,11 @@ export const ReviewAll = () => {
           }
 
           return (
-            <div className="mt-4 mb-4" key={target.target_id}>
+            <div className="mt-4 mb-4" key={`${target.measurement_id}`}>
               {currentMeasurmentComponent}
             </div>
           );
         })}
-        {targets.length ? (
-          <div>
-            <button
-              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleSaveAll}>
-              Save All
-            </button>
-          </div>
-        ) : (
-          ''
-        )}
       </div>
     </>
   );

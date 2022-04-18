@@ -28,19 +28,30 @@ router.get('/', authorization, async (req, res) => {
       );
     } else {
       // TODO add not to between - this is just for testing
+      /*
+          `SELECT * FROM targets AS t
+          LEFT JOIN programs AS p ON p.program_id = t.program_id
+          WHERE t.child_id = $1
+            AND t.target_baseline_complete = TRUE 
+            AND t.target_done_from_baseline = FALSE
+            AND t.target_complete = FALSE
+            AND (t.target_baseline_completed_time NOT between $2 AND $3)
+            AND NOT EXISTS 
+            (SELECT * FROM measurements AS m 
+              WHERE m.target_id = t.target_id 
+              AND measuremend_type != 'baseline'
+              AND (m.measurement_created between $2 AND $3))`
+              */
+
       allTargets = await pool.query(
         `SELECT * FROM targets AS t
           LEFT JOIN programs AS p ON p.program_id = t.program_id
           WHERE t.child_id = $1
             AND t.target_baseline_complete = TRUE 
             AND t.target_done_from_baseline = FALSE
-            AND t.target_done_from_baseline = FALSE
             AND t.target_complete = FALSE
             AND (t.target_baseline_completed_time between $2 AND $3)
-            AND  EXISTS 
-            (SELECT * FROM measurements AS m 
-              WHERE m.target_id = t.target_id AND measuremend_type != 'baseline'
-              AND (m.measurement_created between $2 AND $3))`,
+            `,
         [child_id, fromMidnight, toMidnight]
       );
     }

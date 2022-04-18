@@ -13,18 +13,21 @@ router.get('/', authorization, async (req, res) => {
     const toMidnight = new Date();
     fromMidnight.setHours(0, 0, 0, 0);
     toMidnight.setHours(24, 0, 0, 0);
-
+    console.log(child_id);
     const allTargets = await pool.query(
-      `SELECT t.*, ms.* FROM targets AS t
+      `SELECT t.*, ms.*, p.* FROM targets AS t
+        LEFT JOIN programs AS p ON p.program_id = t.program_id
         INNER JOIN measurements AS ms ON t.target_id = ms.target_id
           WHERE t.child_id = $1 
-            AND (ms.measurement_created between $4 AND $5) 
+            AND t.target_complete = FALSE
+            AND t.target_baseline_complete = TRUE
+            AND t.target_done_from_baseline = FALSE 
             AND EXISTS 
               (SELECT * FROM measurements AS m 
                 WHERE m.target_id = t.target_id 
-                AND measurement_closed = FALSE
-                AND (m.measurement_created between $2 AND $3))`,
-      [child_id, fromMidnight, toMidnight, fromMidnight, toMidnight]
+                AND m.measurement_closed = FALSE
+                AND m.measuremend_type != 'baseline')`,
+      [child_id]
     );
 
     res.json(allTargets.rows);

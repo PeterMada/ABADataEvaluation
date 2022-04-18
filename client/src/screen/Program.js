@@ -43,6 +43,7 @@ export const Program = () => {
         let targetsCompleted = [null];
         let j = 0;
         for (let i = dayDiference; i >= 0; i--) {
+          j++;
           const d = new Date();
           d.setHours(0, 0, 0, 0);
           d.setDate(d.getDate() - i);
@@ -70,7 +71,6 @@ export const Program = () => {
           targetsCompleted.push(
             prevTargetCompleted + targetCompleted.length
           );
-          j++;
         }
 
         setLabels(labelDates);
@@ -115,8 +115,6 @@ export const Program = () => {
       },
     },
   };
-
-  console.log(currentProgram);
 
   return (
     <>

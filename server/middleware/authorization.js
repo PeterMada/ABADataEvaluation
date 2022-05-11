@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
     const jwtToken = req.header('token');
 
     if (!jwtToken) {
-      return res.status(403).json('Not Authorize access');
+      return res.status(403).json('Neoprávněný přístup');
     }
 
     const payload = jwt.verify(jwtToken, process.env.jwtSecret);
@@ -14,6 +14,6 @@ module.exports = async (req, res, next) => {
     req.user = payload.user;
     next();
   } catch (err) {
-    return res.status(403).json('Not Authorize access');
+    return res.status(403).json('Neoprávněný přístup');
   }
 };

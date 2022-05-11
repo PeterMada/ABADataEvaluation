@@ -361,3 +361,18 @@ export const App = () => {
     </BrowserRouter>
   );
 };
+
+/*
+<Route
+  exact
+  path="/"
+  index
+  element={
+    !isAuthenticated ? (
+      <Login setAuth={setAuth} />
+    ) : (
+      <Navigate replace to="/dashboard" />
+    )
+  }
+/>;
+*/

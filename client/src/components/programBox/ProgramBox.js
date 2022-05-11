@@ -3,22 +3,9 @@ import { Link } from 'react-router-dom';
 
 export const ProgramBox = ({ program, targets }) => {
   const criterionFrom = targets.filter((target) => target.target_complete);
-  const baselineCompleted = targets.filter(
-    (target) => target.target_baseline_done
-  );
-  console.log(program);
 
-  const percentageBaseline =
-    (program.program_baseline_result / program.program_baseline_to) * 100;
   const percentageCriterion =
-    (criterionFrom / program.target_baseline_to) * 100;
-
-  let percentageSliderBaseline = percentageBaseline;
-  if (percentageBaseline < 10) {
-    percentageSliderBaseline = 10;
-  } else if (percentageBaseline > 100) {
-    percentageSliderBaseline = 100;
-  }
+    (criterionFrom / program.program_baseline_from) * 100;
 
   let percentageSliderCriterion = percentageCriterion;
   if (percentageCriterion < 10) {
@@ -33,33 +20,25 @@ export const ProgramBox = ({ program, targets }) => {
         <h3 className="text-xl font-bold">{program.program_title}</h3>
         <p>{`Baseline: ${program.program_baseline_from} out of ${program.program_baseline_to}`}</p>
         {program.program_baseline_done ? <p>✔️</p> : ''}
-        <div className="mt-4">
-          Baseline
-          <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
-            <div
-              className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-              style={{
-                width: `${percentageSliderBaseline}%`,
-              }}>
-              {`${program.program_baseline_result}/${program.program_baseline_to}`}
-            </div>
-          </div>
-        </div>
+
         <div className="mt-4 mb-6">
-          Targets
+          Done
           <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
             <div
               className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
               style={{
                 width: `${percentageSliderCriterion}%`,
               }}>
-              {`${criterionFrom.length}/${program.target_baseline_to}`}
+              {`${criterionFrom.length}/${program.program_baseline_from}`}
             </div>
           </div>
         </div>
 
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-          {targets.map((target) => {
+          {targets.map((target, i) => {
+            if (i > 5) {
+              return '';
+            }
             return (
               <div
                 key={target.target_id}

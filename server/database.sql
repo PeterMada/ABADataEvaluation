@@ -89,6 +89,7 @@ CREATE TABLE targets (
   target_complete BOOLEAN DEFAULT FALSE,
   target_created timestamptz not null default CURRENT_TIMESTAMP,
   target_baseline_completed_time timestamptz,
+  target_completed_time timestamptz,
   program_id uuid NOT NULL,
   child_id uuid NOT NULL,
 

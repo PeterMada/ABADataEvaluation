@@ -8,21 +8,21 @@ module.exports = (req, res, next) => {
 
   if (req.path === '/register') {
     if (![email, firstName, lastName, password].every(Boolean)) {
-      return res.status(401).json('Missing Credentials');
+      return res.status(401).json('Chybějící údaje');
     } else if (!validEmail(email)) {
-      return res.status(401).json('Invalid Email');
+      return res.status(401).json('Neplatný e-mail');
     }
   } else if (req.path === '/login') {
     if (![email, password].every(Boolean)) {
-      return res.status(401).json('Missing Credentials');
+      return res.status(401).json('Chybějící přihlašovací údaje');
     } else if (!validEmail(email)) {
-      return res.status(401).json('Invalid Email');
+      return res.status(401).json('Neplatný e-mail');
     }
   } else if (req.path === '/addPerson') {
     if (![firstName, lastName, email].every(Boolean)) {
       return res.status(401).json('Missing required fields');
     } else if (!validEmail(email)) {
-      return res.status(401).json('Invalid Email');
+      return res.status(401).json('Neplatný e-mail');
     }
   } else if (req.path === '/addChild') {
     if (![firstName, lastName].every(Boolean)) {

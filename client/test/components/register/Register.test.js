@@ -318,16 +318,12 @@ describe('Register', () => {
         rest.post(
           `${process.env.REACT_APP_API_URL}auth/register`,
           (req, res, ctx) => {
-            return res(
-              ctx.status(200),
-              ctx.json('Authentication was unsuccessful')
-            );
+            return res(ctx.status(200), ctx.json('Ověření se nezdařilo'));
           }
         )
       );
 
-      const passwordConfirmField =
-        screen.getByLabelText('Confirm Password');
+      const passwordConfirmField = screen.getByLabelText('Potvrďte heslo');
       const submitButton = screen.getByRole('button', 'submit');
       fillFormWithRightValues();
 

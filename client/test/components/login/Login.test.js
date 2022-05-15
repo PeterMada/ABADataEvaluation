@@ -47,7 +47,7 @@ describe('Login', () => {
     );
   });
 
-  it('render input for eamil', () => {
+  it.only('render input for email', () => {
     renderLogin();
     const field = screen.getByPlaceholderText('Email');
     expect(field).toBeInTheDocument();

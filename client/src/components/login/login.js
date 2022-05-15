@@ -63,15 +63,15 @@ export const Login = ({ setAuth }) => {
         validate={(values) => {
           const errors = {};
           if (!values.email) {
-            errors.email = 'Required';
+            errors.email = 'Povinné pole';
           } else if (
             !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
           ) {
-            errors.email = 'Invalid email address';
+            errors.email = 'Špatná emailová adresa';
           }
 
           if (!values.password) {
-            errors.password = 'Required';
+            errors.password = 'Povinné pole';
           }
           return errors;
         }}

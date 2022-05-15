@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom';
 import { TargetBox } from '../components/targetBox/TargetBox';
 import { CategoryScale } from 'chart.js';
 import { Chart as ChartJS } from 'chart.js/auto';
+import { LeftMenu } from '../components/leftMenu/LeftMenu';
 
 import { Line } from 'react-chartjs-2';
 
-export const Program = () => {
+export const Program = ({ setAuth }) => {
   const [currentProgram, setCurrentProgram] = useState([]);
   const [currentTargets, setCurrentTargets] = useState([]);
   const { id } = useParams();
@@ -27,7 +28,6 @@ export const Program = () => {
           }
         );
         const parseRes = await response.json();
-        console.log(parseRes);
         setCurrentProgram(parseRes.programDetail);
         setCurrentTargets(parseRes.results);
 
@@ -117,86 +117,93 @@ export const Program = () => {
   };
 
   return (
-    <>
-      <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
-        {currentProgram.program_title}
-      </h1>
-      <p>{currentProgram.program_description}</p>
-      <p>{`Baseline: ${currentProgram.program_baseline_from}/${currentProgram.program_baseline_to}`}</p>
-      <p>{`Measured baseline: ${currentProgram.program_baseline_result}`}</p>
-      <p>{`Measured done: ${
-        currentProgram.program_baseline_done ? 'Yes' : 'No'
-      }`}</p>
+    <div className=" m-auto">
+      <div className="flex">
+        <div className=" border-r-2 border-blue-600">
+          <LeftMenu setAuth={setAuth} />
+        </div>
+        <div className="w-full pl-10 ">
+          <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
+            {currentProgram.program_title}
+          </h1>
+          <p>{currentProgram.program_description}</p>
+          <p>{`Baseline: ${currentProgram.program_baseline_from}/${currentProgram.program_baseline_to}`}</p>
+          <p>{`Measured baseline: ${currentProgram.program_baseline_result}`}</p>
+          <p>{`Measured done: ${
+            currentProgram.program_baseline_done ? 'Yes' : 'No'
+          }`}</p>
 
-      <div className="mt-10 mb-10 w-2/4	">
-        <Line
-          datasetIdKey="id"
-          data={{
-            labels: labels,
-            datasets: [
-              {
-                id: 1,
-                label: '',
-                data: completedTargets,
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-              },
-              {
-                id: 2,
-                label: '',
-                data: [currentProgram.program_baseline_result],
-                borderColor: 'rgb(51, 204, 51)',
-                backgroundColor: 'rgba(51, 204, 51, 0.5)',
-              },
-            ],
-          }}
-          options={options}
-        />
-      </div>
+          <div className="mt-10 mb-10 w-2/4	">
+            <Line
+              datasetIdKey="id"
+              data={{
+                labels: labels,
+                datasets: [
+                  {
+                    id: 1,
+                    label: '',
+                    data: completedTargets,
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                  },
+                  {
+                    id: 2,
+                    label: '',
+                    data: [currentProgram.program_baseline_result],
+                    borderColor: 'rgb(51, 204, 51)',
+                    backgroundColor: 'rgba(51, 204, 51, 0.5)',
+                  },
+                ],
+              }}
+              options={options}
+            />
+          </div>
 
-      <div className="mt-10">
-        <h2>All targets for this program</h2>
-        <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-          {currentTargets.map((target) => {
-            let programDonePercentage = 0;
-            let baselineStart = 0;
-            let baselineFinish = currentProgram.target_criterion_from;
+          <div className="mt-10">
+            <h2>All targets for this program</h2>
+            <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
+              {currentTargets.map((target) => {
+                let programDonePercentage = 0;
+                let baselineStart = 0;
+                let baselineFinish = currentProgram.target_criterion_from;
 
-            target.measurements.map((meas) => {
-              if (meas.question_result === true) {
-                baselineStart++;
-              } else {
-                return;
-              }
-            });
+                target.measurements.map((meas) => {
+                  if (meas.question_result === true) {
+                    baselineStart++;
+                  } else {
+                    return;
+                  }
+                });
 
-            programDonePercentage = Math.floor(
-              (baselineStart / baselineFinish) * 100
-            );
+                programDonePercentage = Math.floor(
+                  (baselineStart / baselineFinish) * 100
+                );
 
-            return (
-              <TargetBox
-                key={target.target.target_id}
-                target={target.target}
-                percentageDone={programDonePercentage}
-              />
-            );
-          })}
+                return (
+                  <TargetBox
+                    key={target.target.target_id}
+                    target={target.target}
+                    percentageDone={programDonePercentage}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <Link
+              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              to={`/addTarget/${id}`}>
+              Add new target to this program
+            </Link>
+            <Link
+              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              to={`/editProgram/${id}`}>
+              Edit program
+            </Link>
+          </div>
         </div>
       </div>
-
-      <div className="mt-6">
-        <Link
-          className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          to={`/addTarget/${id}`}>
-          Add new target to this program
-        </Link>
-        <Link
-          className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          to={`/editProgram/${id}`}>
-          Edit program
-        </Link>
-      </div>
-    </>
+    </div>
   );
 };

@@ -34,7 +34,7 @@ export const Header = ({ isAuthenticated }) => {
   return (
     <header className="max-w-screen-xl m-auto py-2 px-4">
       <div className="flex items-center	justify-between">
-        <img src={logo} alt="Logo" style={{ maxWidth: '200px' }} />
+        <p></p>
         <div>
           <Link to="/profile" className="header-profile flex items-center">
             <img

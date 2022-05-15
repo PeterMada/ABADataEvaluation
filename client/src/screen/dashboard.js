@@ -143,7 +143,6 @@ export const Dashboard = ({ setAuth }) => {
               className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-5">
               {allPersons.length > 0 ? (
                 allPersons.map((person) => {
-                  console.log(person);
                   return (
                     <div key={person.user_id}>
                       <Link

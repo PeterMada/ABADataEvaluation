@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { SmallInfoBox } from '../components/smallInfoBox/SmallInfoBox';
 import { SkillBox } from '../components/skillBox/SkillBox';
 import { LeftMenu } from '../components/leftMenu/LeftMenu';
@@ -24,7 +25,6 @@ export const Child = ({ setAuth }) => {
           }
         );
         const parseRes = await response.json();
-        console.log(parseRes);
         setCurrentChild(parseRes.childDetails);
         setCurrentSkills(parseRes.allSkils);
       } catch (err) {
@@ -72,17 +72,17 @@ export const Child = ({ setAuth }) => {
 
           <div className="mt-16 text-right">
             <Link
-              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               to={`/addSkill/${id}`}>
               Přidejte dovednost
             </Link>
             <Link
-              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               to={`/session/${id}`}>
               Zahájit relaci
             </Link>
             <Link
-              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               to={`/reviewAll/${id}`}>
               Revizne relace
             </Link>

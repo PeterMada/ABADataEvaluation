@@ -16,10 +16,13 @@ export const ProgramBox = ({ program, targets }) => {
 
   return (
     <>
-      <div className="bg-white px-4 py-4 rounded-lg shadow-md">
-        <h3 className="text-xl font-bold">{program.program_title}</h3>
+      <div className="bg-[#2563eb0f] px-4 py-4 rounded-lg shadow-md flex flex-col">
+        <h3 className="flex justify-between text-xl font-bold">
+          <p>{program.program_title}</p>
+          {program.program_baseline_done ? <p>✔️</p> : ''}
+        </h3>
         <p>{`Baseline: ${program.program_baseline_from} z ${program.program_baseline_to}`}</p>
-        {program.program_baseline_done ? <p>✔️</p> : ''}
+        <p>{`Kritérium cíle: ${program.target_baseline_from} z ${program.target_baseline_to}`}</p>
 
         <div className="mt-4 mb-6">
           Hotovo
@@ -34,25 +37,24 @@ export const ProgramBox = ({ program, targets }) => {
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
+        <div className="mt-4 mb-6 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2  gap-5">
           {targets.map((target, i) => {
+            console.log(target);
             if (i > 5) {
               return '';
             }
             return (
-              <div
+              <Link
+                to={`/target/${target.target_id}`}
                 key={target.target_id}
-                className="bg-white p-2 rounded-lg shadow-md">
-                <h4>
-                  <Link to={`/target/${target.target_id}`}>
-                    {target.target_title}
-                  </Link>
-                </h4>
-              </div>
+                className="bg-white p-2 rounded-lg shadow-md hover:shadow-xl flex justify-between">
+                <h4>{target.target_title}</h4>
+                {target.target_complete ? <p>✔️</p> : ''}
+              </Link>
             );
           })}
         </div>
-        <div className="flex flex-col items-end justify-end mt-6">
+        <div className="flex flex-col items-end justify-end mt-auto">
           <Link
             className="hover:underline hover:text-blue-600"
             to={`/program/${program.program_id}`}>

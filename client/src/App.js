@@ -207,7 +207,7 @@ export const App = () => {
             path="/child/:id"
             element={
               isAuthenticated ? (
-                <Child />
+                <Child setAuth={setAuth} />
               ) : (
                 <Navigate replace to="/login" />
               )
@@ -240,7 +240,7 @@ export const App = () => {
             path="/skill/:id"
             element={
               isAuthenticated ? (
-                <Skill />
+                <Skill setAuth={setAuth} />
               ) : (
                 <Navigate replace to="/login" />
               )
@@ -273,7 +273,7 @@ export const App = () => {
             path="/program/:id"
             element={
               isAuthenticated ? (
-                <Program />
+                <Program setAuth={setAuth} />
               ) : (
                 <Navigate replace to="/login" />
               )
@@ -295,7 +295,7 @@ export const App = () => {
             path="/target/:id"
             element={
               isAuthenticated ? (
-                <Target />
+                <Target setAuth={setAuth} />
               ) : (
                 <Navigate replace to="/login" />
               )

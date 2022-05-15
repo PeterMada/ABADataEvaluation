@@ -13,6 +13,11 @@ export const LeftMenu = ({ setAuth }) => {
   return (
     <div className="flex flex-col w-48">
       <Link
+        to="/dashboard"
+        className="hover:underline hover:text-blue-600 py-2 px-4">
+        Dashboard
+      </Link>
+      <Link
         to="/profile"
         className="hover:underline hover:text-blue-600 py-2 px-4">
         Profil

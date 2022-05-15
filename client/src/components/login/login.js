@@ -18,10 +18,7 @@ export const Login = ({ setAuth }) => {
   };
 
   const onSubmitForm = async (values) => {
-    //e.preventDefault();
-
     try {
-      //const body = { email, password };
       const body = values;
 
       const response = await fetch(
@@ -41,7 +38,7 @@ export const Login = ({ setAuth }) => {
         // TODO save token to cookie
         localStorage.setItem('token', parseRes.token);
         setAuth(true);
-        toast.success('Login succesfully');
+        toast.success('Přihlášení proběhlo úspěšně');
         navigate(`/dashboard`);
       } else {
         setAuth(false);
@@ -76,8 +73,6 @@ export const Login = ({ setAuth }) => {
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
-          console.log(values);
-
           onSubmitForm(values);
           setSubmitting(false);
         }}>

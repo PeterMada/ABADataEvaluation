@@ -5,28 +5,34 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
-import * userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { createMemoryHistory } from 'history';
+/*
 import {
   fetchResponseOk,
   fetchResponseError,
   requestBodyOf,
 } from '../../spyHelpers';
+*/
 import 'whatwg-fetch';
 import { BrowserRouter } from 'react-router-dom';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 import { Login } from '../../../src/components/login/Login';
 import { App } from '../../../src/App';
 import { ToastContainer } from 'react-toastify';
+require('dotenv').config();
 
 describe('Login', () => {
+  /*
   beforeEach(() => {
     jest.spyOn(window, 'fetch').mockReturnValue(fetchResponseOk({}));
   });
 
   afterEach(() => {
     window.fetch.mockRestore();
-  });
+  })
+  */
 
   const renderLogin = () => {
     render(
@@ -130,48 +136,99 @@ describe('Login', () => {
     expect(await screen.findByText('Povinné pole')).toBeInTheDocument();
   });
 
-
-  // TODO finish this test
-  it.skip('submit empty login form', () => {
+  it('has submit button', () => {
     render(
       <BrowserRouter>
-        <Login setAuth={() => null} />
+        <Login />
       </BrowserRouter>
     );
-    const form = screen.getByTestId('loginForm');
-    const emptyBody = {
-      email: '',
-      password: '',
-    };
 
-    fireEvent.submit(form);
-    expect(window.fetch).toHaveBeenCalledWith(
-      `${process.env.REACT_APP_API_URL}auth/login`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(emptyBody),
-      }
-    );
+    const submitButton = screen.getByRole('button', 'submit');
+    expect(submitButton).toBeInTheDocument();
+    expect(submitButton.textContent).toEqual('Přihlásit se');
   });
 
-  // TODO finish this test
-  it.skip('show error message when empty form is submited', async () => {
-    render(
-      <BrowserRouter>
-        <Login setAuth={() => null} />
-      </BrowserRouter>
+  describe('submiting', () => {
+    const fillFormWithRightValues = () => {
+      const email = screen.getByLabelText('Email');
+      const passwordField = screen.getByLabelText('Heslo');
+      fireEvent.change(email, { target: { value: 'test@test.sk' } });
+      fireEvent.change(passwordField, {
+        target: { value: 'asdf123456' },
+      });
+    };
+
+    const server = setupServer(
+      rest.post(
+        `${process.env.REACT_APP_API_URL}auth/Login`,
+        (req, res, ctx) => {
+          return res(ctx.status(200), ctx.json({ token: '123' }));
+        }
+      )
     );
-    const form = screen.getByTestId('loginForm');
-    const submitButton = screen.getByRole('button', 'submit');
 
-    fireEvent.click(submitButton);
-    //+ await waitFor(() => screen.findByRole('alert'));
+    beforeAll(() => server.listen());
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
 
-    expect(
-      await screen.findByText('Chybějící přihlašovací údaje')
-    ).toBeInTheDocument();
+    it('shows success message on sucessful login', async () => {
+      const setAuth = jest.fn();
+
+      /*
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}auth/login`,
+          (req, res, ctx) => {
+            return res(ctx.status(200), ctx.json({ token: '123' }));
+          }
+        )
+      );
+      */
+
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <Login setAuth={setAuth} />
+        </BrowserRouter>
+      );
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fillFormWithRightValues();
+
+      fireEvent.click(submitButton);
+
+      expect(
+        await screen.findByText('Přihlášení proběhlo úspěšně')
+      ).toBeInTheDocument();
+      expect(setAuth).toHaveBeenCalledWith(true);
+    });
+
+    it('shows error message on unsucessful login', async () => {
+      const setAuth = jest.fn();
+
+      server.use(
+        rest.post(
+          `${process.env.REACT_APP_API_URL}auth/login`,
+          (req, res, ctx) => {
+            return res(ctx.status(500), ctx.json('Chyba serveru'));
+          }
+        )
+      );
+
+      render(
+        <BrowserRouter>
+          <ToastContainer />
+          <Login setAuth={setAuth} />
+        </BrowserRouter>
+      );
+
+      const submitButton = screen.getByRole('button', 'submit');
+      fillFormWithRightValues();
+
+      fireEvent.click(submitButton);
+
+      expect(await screen.findByText('Chyba serveru')).toBeInTheDocument();
+      expect(setAuth).toHaveBeenCalledWith(false);
+    });
   });
 });

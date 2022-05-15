@@ -32,21 +32,19 @@ export const Header = ({ isAuthenticated }) => {
   });
 
   return (
-    <header>
-      <img src={logo} alt="Logo" style={{ maxWidth: '200px' }} />
-      <div>
-        {isAuthenticated ? (
-          <Link to="/profile" className="header-profile">
+    <header className="max-w-screen-xl m-auto py-2 px-4">
+      <div className="flex items-center	justify-between">
+        <img src={logo} alt="Logo" style={{ maxWidth: '200px' }} />
+        <div>
+          <Link to="/profile" className="header-profile flex items-center">
             <img
               className="header-profile__img"
               src={profileDefault}
               alt={name}
             />
-            <p>{name}</p>
+            <p className="pl-4">{name}</p>
           </Link>
-        ) : (
-          ''
-        )}
+        </div>
       </div>
     </header>
   );

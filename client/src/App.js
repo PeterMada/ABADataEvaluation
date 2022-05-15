@@ -13,7 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Header } from './layout/header/Header';
-import { Dashboard } from './components/dashboard/dashboard';
+import { Dashboard } from './screen/dashboard';
 import { Login } from './components/login/login';
 import { Register } from './components/register/register';
 import { Profile } from './components/profile/profile';
@@ -128,7 +128,7 @@ export const App = () => {
   return (
     <BrowserRouter>
       <Header isAuthenticated={isAuthenticated} />
-      <div className="container max-w-5xl min-w-[320px] mx-auto py-8 px-4">
+      <div className="container max-w-screen-xl min-w-[320px] mx-auto py-8 px-4">
         <Routes>
           <Route
             exact

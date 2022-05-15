@@ -13,7 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Header } from './layout/header/Header';
-import { Dashboard } from './screen/dashboard';
+import { Dashboard } from './screen/Dashboard';
 import { Login } from './components/login/login';
 import { Register } from './components/register/register';
 import { Profile } from './components/profile/profile';

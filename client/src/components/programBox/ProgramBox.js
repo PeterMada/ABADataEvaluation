@@ -16,13 +16,13 @@ export const ProgramBox = ({ program, targets }) => {
 
   return (
     <>
-      <div className="bg-white p-10 rounded-lg shadow-md">
+      <div className="bg-white px-4 py-4 rounded-lg shadow-md">
         <h3 className="text-xl font-bold">{program.program_title}</h3>
-        <p>{`Baseline: ${program.program_baseline_from} out of ${program.program_baseline_to}`}</p>
+        <p>{`Baseline: ${program.program_baseline_from} z ${program.program_baseline_to}`}</p>
         {program.program_baseline_done ? <p>✔️</p> : ''}
 
         <div className="mt-4 mb-6">
-          Done
+          Hotovo
           <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
             <div
               className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
@@ -52,17 +52,17 @@ export const ProgramBox = ({ program, targets }) => {
             );
           })}
         </div>
-        <div className="mt-6">
+        <div className="flex flex-col items-end justify-end mt-6">
           <Link
-            className="bg-blue-500  ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="hover:underline hover:text-blue-600"
             to={`/program/${program.program_id}`}>
-            Program detail
+            Detail programu
           </Link>
 
           <Link
-            className="bg-blue-500  ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="hover:underline hover:text-blue-600"
             to={`/addTarget/${program.program_id}`}>
-            Add target
+            Přidat cíl
           </Link>
         </div>
       </div>

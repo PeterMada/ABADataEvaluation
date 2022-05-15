@@ -4,8 +4,9 @@ import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import { SmallInfoBox } from '../components/smallInfoBox/SmallInfoBox';
 import { SkillBox } from '../components/skillBox/SkillBox';
+import { LeftMenu } from '../components/leftMenu/LeftMenu';
 
-export const Child = (props) => {
+export const Child = ({ setAuth }) => {
   const data = useLocation();
   // TODO show loading
   const [currentChild, setCurrentChild] = useState([]);
@@ -35,50 +36,59 @@ export const Child = (props) => {
   }, []);
 
   return (
-    <>
-      {currentChild ? (
-        <SmallInfoBox
-          name={`${currentChild.child_first_name} ${currentChild.child_last_name}`}
-          info={``}
-        />
-      ) : (
-        <p>Loading child details</p>
-      )}
+    <div className=" m-auto">
+      <div className="flex">
+        <div className=" border-r-2 border-blue-600">
+          <LeftMenu setAuth={setAuth} />
+        </div>
+        <div className="w-full pl-10 ">
+          {currentChild.length ? (
+            'loading'
+          ) : (
+            <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
+              {`${currentChild?.child_first_name} ${currentChild?.child_last_name}`}
+            </h1>
+          )}
 
-      <div className="mt-6 mb-6">
-        <h2>All child skills</h2>
-        <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-          {currentSkills
-            ? currentSkills.map((skill) => {
-                return (
-                  <SkillBox
-                    key={skill.skill.skill_id}
-                    skill={skill.skill}
-                    programs={skill.programs}
-                  />
-                );
-              })
-            : 'There are no skills for this child'}
+          <div className="mt-10 mb-6">
+            <h2 className="font-medium leading-tight text-xl mt-0 mb-4 text-blue-600">
+              Dovednosti
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-5">
+              {currentSkills
+                ? currentSkills.map((skill) => {
+                    return (
+                      <SkillBox
+                        key={skill.skill.skill_id}
+                        skill={skill.skill}
+                        programs={skill.programs}
+                      />
+                    );
+                  })
+                : 'There are no skills for this child'}
+            </div>
+          </div>
+
+          <div className="mt-16 text-right">
+            <Link
+              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              to={`/addSkill/${id}`}>
+              Přidejte dovednost
+            </Link>
+            <Link
+              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              to={`/session/${id}`}>
+              Zahájit relaci
+            </Link>
+            <Link
+              className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              to={`/reviewAll/${id}`}>
+              Revizne relace
+            </Link>
+          </div>
         </div>
       </div>
-
-      <div className="mt-6">
-        <Link
-          className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          to={`/addSkill/${id}`}>
-          Add Skill
-        </Link>
-        <Link
-          className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          to={`/session/${id}`}>
-          Start session
-        </Link>
-        <Link
-          className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          to={`/reviewAll/${id}`}>
-          Review open session
-        </Link>
-      </div>
-    </>
+    </div>
   );
 };

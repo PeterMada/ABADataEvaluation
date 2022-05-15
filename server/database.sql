@@ -51,6 +51,7 @@ CREATE TABLE children(
 CREATE TABLE skills (
   skill_id uuid DEFAULT uuid_generate_v4(),
   skill_title VARCHAR(255) NOT NULL,
+  skill_description TEXT,
   child_id uuid NOT NULL,
 
   PRIMARY KEY (skill_id),

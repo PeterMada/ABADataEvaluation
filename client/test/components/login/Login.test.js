@@ -5,6 +5,7 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
+import * userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { createMemoryHistory } from 'history';
 import {
@@ -43,11 +44,11 @@ describe('Login', () => {
   it('render heading for form', () => {
     renderLogin();
     expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual(
-      'Login'
+      'Přihlášení'
     );
   });
 
-  it.only('render input for email', () => {
+  it('render input for email', () => {
     renderLogin();
     const field = screen.getByPlaceholderText('Email');
     expect(field).toBeInTheDocument();
@@ -70,7 +71,7 @@ describe('Login', () => {
 
   it('render label for password input', () => {
     renderLogin();
-    expect(screen.getByLabelText('Password')).toBeInTheDocument();
+    expect(screen.getByLabelText('Heslo')).toBeInTheDocument();
   });
 
   it('render a login button', () => {
@@ -81,34 +82,25 @@ describe('Login', () => {
 
   it('has right name in submit button', () => {
     renderLogin();
-    const field = screen.getByRole('button', { name: 'Login' });
+    const field = screen.getByRole('button', { name: 'Přihlásit se' });
     expect(field).toBeInTheDocument();
   });
 
   it('has link to register page', () => {
     renderLogin();
-    const field = screen.getByRole('link', { name: 'Register' });
+    const field = screen.getByRole('link', { name: 'Registrace' });
     expect(field).toBeInTheDocument();
     expect(field).toHaveAttribute('href', '/register');
   });
 
   it('has link to forgot password page', () => {
     renderLogin();
-    const field = screen.getByRole('link', { name: 'Forgot password?' });
+    const field = screen.getByRole('link', { name: 'Zapomenuté heslo?' });
     expect(field).toBeInTheDocument();
     expect(field).toHaveAttribute('href', '/resetPassword');
   });
 
-  // TODO is this test realy nescesary?
-  it.skip('has right value in email input when changed', () => {
-    renderLogin();
-    const field = screen.getByLabelText('Email');
-    fireEvent.change(field, { target: { value: 'testemail@email.sk' } });
-    expect(field.value).toBe('testemail@email.sk');
-  });
-
-  // TODO fix this
-  it.skip('show error message when email field is empty on submit', async () => {
+  it('show error message when email field is empty on submit', async () => {
     render(
       <BrowserRouter>
         <ToastContainer />
@@ -116,11 +108,28 @@ describe('Login', () => {
       </BrowserRouter>
     );
     const submitButton = screen.getByRole('button', 'submit');
+    const passwordField = screen.getByLabelText('Heslo');
+    fireEvent.change(passwordField, { target: { value: 'asdf123456' } });
+
     fireEvent.click(submitButton);
-    expect(
-      await screen.findByText('Missing Credentials')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Povinné pole')).toBeInTheDocument();
   });
+
+  it('show error message when password field is empty on submit', async () => {
+    render(
+      <BrowserRouter>
+        <ToastContainer />
+        <Login setAuth={() => null} />
+      </BrowserRouter>
+    );
+    const submitButton = screen.getByRole('button', 'submit');
+    const passwordField = screen.getByLabelText('Email');
+    fireEvent.change(passwordField, { target: { value: 'test@test.cz' } });
+
+    fireEvent.click(submitButton);
+    expect(await screen.findByText('Povinné pole')).toBeInTheDocument();
+  });
+
 
   // TODO finish this test
   it.skip('submit empty login form', () => {
@@ -162,7 +171,7 @@ describe('Login', () => {
     //+ await waitFor(() => screen.findByRole('alert'));
 
     expect(
-      await screen.findByText('Missing Credentials')
+      await screen.findByText('Chybějící přihlašovací údaje')
     ).toBeInTheDocument();
   });
 });

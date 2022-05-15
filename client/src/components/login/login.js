@@ -54,8 +54,8 @@ export const Login = ({ setAuth }) => {
   };
 
   return (
-    <>
-      <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
+    <div className="max-w-xl m-auto">
+      <h1 className="font-medium leading-tight text-5xl mt-0 mb-10 text-blue-600">
         Přihlášení
       </h1>
       <Formik
@@ -107,7 +107,7 @@ export const Login = ({ setAuth }) => {
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="password">
-                Password
+                Heslo
               </label>
               <Field
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
@@ -122,19 +122,24 @@ export const Login = ({ setAuth }) => {
                 component="div"
               />
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col items-end justify-end">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="submit"
                 disabled={isSubmitting}>
-                Login
+                Přihlásit se
               </button>
+
+              <div className="mt-4">
+                <Link to="/register">Registrace</Link>
+                <Link to="/resetPassword" className="ml-4">
+                  Zapomenuté heslo?
+                </Link>
+              </div>
             </div>
           </Form>
         )}
       </Formik>
-      <Link to="/register">Register</Link>
-      <Link to="/resetPassword">Forgot password?</Link>
-    </>
+    </div>
   );
 };

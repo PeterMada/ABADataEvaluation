@@ -45,10 +45,7 @@ export const Header = ({ isAuthenticated }) => {
             <p>{name}</p>
           </Link>
         ) : (
-          <div>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
-          </div>
+          ''
         )}
       </div>
     </header>

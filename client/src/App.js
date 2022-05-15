@@ -128,7 +128,7 @@ export const App = () => {
   return (
     <BrowserRouter>
       <Header isAuthenticated={isAuthenticated} />
-      <div className="container">
+      <div className="container max-w-5xl min-w-[320px] mx-auto py-8 px-4">
         <Routes>
           <Route
             exact

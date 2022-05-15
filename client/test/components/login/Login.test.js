@@ -56,7 +56,7 @@ describe('Login', () => {
 
   it('render input for email', () => {
     renderLogin();
-    const field = screen.getByPlaceholderText('Email');
+    const field = screen.getByLabelText('Email');
     expect(field).toBeInTheDocument();
     expect(field.type).toEqual('email');
     expect(field.id).toEqual('email');
@@ -69,7 +69,7 @@ describe('Login', () => {
 
   it('render input for password', () => {
     renderLogin();
-    const field = screen.getByPlaceholderText('**********');
+    const field = screen.getByLabelText('Heslo');
     expect(field).toBeInTheDocument();
     expect(field.type).toEqual('password');
     expect(field.id).toEqual('password');
@@ -173,17 +173,6 @@ describe('Login', () => {
 
     it('shows success message on sucessful login', async () => {
       const setAuth = jest.fn();
-
-      /*
-      server.use(
-        rest.post(
-          `${process.env.REACT_APP_API_URL}auth/login`,
-          (req, res, ctx) => {
-            return res(ctx.status(200), ctx.json({ token: '123' }));
-          }
-        )
-      );
-      */
 
       render(
         <BrowserRouter>

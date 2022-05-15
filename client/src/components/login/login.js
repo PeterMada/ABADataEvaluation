@@ -45,7 +45,7 @@ export const Login = ({ setAuth }) => {
         toast.error(parseRes);
       }
     } catch (err) {
-      console.log('Login fetch error');
+      toast.error('Jejda, načtení se nezdařilo!');
       console.error(err.message);
     }
   };
@@ -85,11 +85,10 @@ export const Login = ({ setAuth }) => {
                 Email
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 type="email"
                 id="email"
                 name="email"
-                placeholder="Email"
               />
 
               <ErrorMessage
@@ -105,11 +104,10 @@ export const Login = ({ setAuth }) => {
                 Heslo
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:shadow-outline"
                 id="password"
                 name="password"
                 type="password"
-                placeholder="**********"
               />
               <ErrorMessage
                 className="text-red-500 text-xs mt-1 ml-1"
@@ -119,15 +117,21 @@ export const Login = ({ setAuth }) => {
             </div>
             <div className="flex flex-col items-end justify-end">
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline"
                 type="submit"
                 disabled={isSubmitting}>
                 Přihlásit se
               </button>
 
               <div className="mt-4">
-                <Link to="/register">Registrace</Link>
-                <Link to="/resetPassword" className="ml-4">
+                <Link
+                  to="/register"
+                  className="hover:underline hover:text-blue-600">
+                  Registrace
+                </Link>
+                <Link
+                  to="/resetPassword"
+                  className="ml-4 hover:underline hover:text-blue-600">
                   Zapomenuté heslo?
                 </Link>
               </div>

@@ -79,6 +79,7 @@ export const Register = ({ setAuth }) => {
             }
           } catch (err) {
             toast.error('Jejda, načtení se nezdařilo!');
+            console.error(err.message);
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
@@ -90,7 +91,7 @@ export const Register = ({ setAuth }) => {
                 Jméno
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 id="firstName"
                 name="firstName"
               />
@@ -107,7 +108,7 @@ export const Register = ({ setAuth }) => {
                 Příjmení
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 id="lastName"
                 name="lastName"
               />
@@ -124,7 +125,7 @@ export const Register = ({ setAuth }) => {
                 Email
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 id="email"
                 name="email"
                 type="email"
@@ -142,7 +143,7 @@ export const Register = ({ setAuth }) => {
                 Heslo
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 id="password"
                 name="password"
                 type="password"
@@ -160,7 +161,7 @@ export const Register = ({ setAuth }) => {
                 Potvrďte heslo
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 id="passwordConfirm"
                 name="passwordConfirm"
                 type="password"
@@ -177,7 +178,7 @@ export const Register = ({ setAuth }) => {
                 <button
                   className={
                     (!dirty ? 'opacity-50 cursor-not-allowed ' : '') +
-                    'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                    'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline'
                   }
                   type="submit"
                   disabled={!dirty}>
@@ -209,7 +210,11 @@ export const Register = ({ setAuth }) => {
               )}
 
               <div className="mt-4">
-                <Link to="/login">Přihlášení</Link>
+                <Link
+                  to="/login"
+                  className="hover:underline hover:text-blue-600">
+                  Přihlášení
+                </Link>
               </div>
             </div>
           </Form>

@@ -34,11 +34,13 @@ export const RecordAll = ({ id }) => {
     setTargets(targets.filter((item) => item.target_id !== remove));
   }, [remove]);
 
-  return !targets ? (
-    <p>Loading....</p>
+  return !targets.length ? (
+    ''
   ) : (
-    <>
-      Record all page
+    <div>
+      <h2 className="font-medium leading-tight text-xl mt-0 mb-4 text-blue-600">
+        Měření
+      </h2>
       <div>
         {targets.map((target, current) => {
           let currentMeasurmentComponent;
@@ -79,6 +81,6 @@ export const RecordAll = ({ id }) => {
           );
         })}
       </div>
-    </>
+    </div>
   );
 };

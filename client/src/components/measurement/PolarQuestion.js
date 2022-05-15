@@ -52,7 +52,7 @@ export const PolarQuestion = ({
     <div className="mt-10 mb-10">
       {!doNotShowDetails ? (
         <>
-          <h2>{data.target_title}</h2>
+          <h3>{data.target_title}</h3>
           <p>{data.target_description}</p>
         </>
       ) : (

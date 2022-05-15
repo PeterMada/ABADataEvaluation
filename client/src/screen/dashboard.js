@@ -172,7 +172,7 @@ export const Dashboard = ({ setAuth }) => {
             </div>
 
             {allPersons.length > 0 ? (
-              <div className="text-right mt-6 mb-10">
+              <div className="text-right mt-6">
                 <Link
                   to="/"
                   className="hover:underline hover:text-blue-600 py-2 px-4">
@@ -183,12 +183,6 @@ export const Dashboard = ({ setAuth }) => {
               ''
             )}
           </div>
-
-          <button
-            className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={logout}>
-            Log out
-          </button>
         </div>
       </div>
     </div>

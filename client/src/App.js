@@ -350,7 +350,7 @@ export const App = () => {
             path="/session/:id"
             element={
               isAuthenticated ? (
-                <Session />
+                <Session setAuth={setAuth} />
               ) : (
                 <Navigate replace to="/login" />
               )

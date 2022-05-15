@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { LeftMenu } from '../components/leftMenu/LeftMenu';
 import { Frequency } from '../components/measurement/Frequency';
 import { FrequencyTime } from '../components/measurement/FrequencyTime';
 import { PolarQuestion } from '../components/measurement/PolarQuestion';
 
-export const RecordAllBaseline = ({ id }) => {
+export const RecordAllBaseline = ({ id, setAuth }) => {
   // const { id } = useParams();
   const [targets, setTargets] = useState([]);
   const [remove, setRemove] = useState();
@@ -31,18 +32,17 @@ export const RecordAllBaseline = ({ id }) => {
         console.error(err);
       }
     };
-    console.log('REMOVE RUNN');
 
     const targetResult = fetchProgramDetails().catch(console.error);
   }, [remove]);
 
-  return !targets ? (
-    <p>Loading....</p>
+  return !targets.length ? (
+    ''
   ) : (
-    <>
-      <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
-        Record all baseline page
-      </h1>
+    <div className=" m-auto">
+      <h2 className="font-medium leading-tight text-xl mt-0 mb-4 text-blue-600">
+        Měření baseline
+      </h2>
       <div>
         {targets.map((target, current) => {
           console.log(target);
@@ -107,6 +107,6 @@ export const RecordAllBaseline = ({ id }) => {
           }
         })}
       </div>
-    </>
+    </div>
   );
 };

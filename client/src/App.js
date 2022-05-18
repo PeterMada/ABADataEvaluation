@@ -14,7 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { Header } from './layout/header/Header';
 import { Dashboard } from './screen/Dashboard';
-import { Login } from './components/login/Login';
+//import { Login } from './components/login/Login';
 import { Register } from './components/register/register';
 import { Profile } from './components/profile/profile';
 import { PersonForm } from './forms/personForm/PersonForm';
@@ -338,6 +338,26 @@ export const App = () => {
               )
             }
           />
+        </Routes>
+      </div>
+    </BrowserRouter>
+  );
+};
+
+/*
+<Route
+  exact
+  path="/"
+  index
+  element={
+    !isAuthenticated ? (
+      <Login setAuth={setAuth} />
+    ) : (
+      <Navigate replace to="/dashboard" />
+    )
+  }
+/>;
+
 
           <Route
             exact
@@ -362,23 +382,4 @@ export const App = () => {
               )
             }
           />
-        </Routes>
-      </div>
-    </BrowserRouter>
-  );
-};
-
-/*
-<Route
-  exact
-  path="/"
-  index
-  element={
-    !isAuthenticated ? (
-      <Login setAuth={setAuth} />
-    ) : (
-      <Navigate replace to="/dashboard" />
-    )
-  }
-/>;
 */

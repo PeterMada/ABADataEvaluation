@@ -35,7 +35,6 @@ export const AddProgram = ({ setAuth }) => {
               targetType: 'Vyberte typ cíle',
             }}
             validate={(values) => {
-              // TODO validate only numbers
               const errors = {};
               if (!values.programTitle) {
                 errors.programTitle = 'Pole je povinné';

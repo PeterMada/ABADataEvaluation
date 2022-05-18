@@ -13,9 +13,9 @@ router.get('/', authorization, async (req, res) => {
     const toMidnight = new Date();
     fromMidnight.setHours(0, 0, 0, 0);
     toMidnight.setHours(24, 0, 0, 0);
-    console.log(child_id);
+
     const allTargets = await pool.query(
-      `SELECT t.*, ms.*, p.* FROM targets AS t
+      `SELECT DISTINCT  t.*, ms.*, p.* FROM targets AS t
         LEFT JOIN programs AS p ON p.program_id = t.program_id
         INNER JOIN measurements AS ms ON t.target_id = ms.target_id
           WHERE t.child_id = $1 

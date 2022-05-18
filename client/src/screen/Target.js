@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
+import { LeftMenu } from '../components/leftMenu/LeftMenu';
 
-export const Target = () => {
+export const Target = ({ setAuth }) => {
   const [curretnTarget, setCurretnTarget] = useState([]);
   const [currentMeasurments, setCurrentMeasurments] = useState([]);
   const { id } = useParams();
@@ -36,7 +37,6 @@ export const Target = () => {
           }
         );
         const parseRes = await response.json();
-        console.log(parseRes);
         setCurrentMeasurments(parseRes);
       } catch (err) {
         console.error(err);
@@ -49,129 +49,142 @@ export const Target = () => {
     );
   }, []);
 
-  console.log(curretnTarget);
-
   return (
-    <>
-      <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
-        {curretnTarget.target_title}
-      </h1>
-      <p>Target type: {curretnTarget.target_type}</p>
-      <p>{curretnTarget.target_description}</p>
-
-      {curretnTarget.target_complete ? <p>✔️</p> : ''}
-
-      {curretnTarget.target_complete &&
-      curretnTarget.target_done_from_baseline ? (
-        <p>Done from baseline</p>
-      ) : (
-        ''
-      )}
-      {curretnTarget.target_complete &&
-      !curretnTarget.target_done_from_baseline ? (
-        <p>Done from teaching</p>
-      ) : (
-        ''
-      )}
-
-      <div className="mt-6 mb-10">
-        <h2>All regordings of this target</h2>
-
-        {currentMeasurments.length ? (
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Date
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Time
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Measrurment by
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Result
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Type
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentMeasurments.map((meas, i) => {
-                  const date = new Date(meas.measurement_created);
-                  const year = date.getFullYear();
-                  const month = date.getMonth() + 1;
-                  const dt = date.getDate();
-                  console.log(meas);
-                  let status = `Open`;
-                  if (meas.measurement_closed) {
-                    status = `Closed`;
-                  }
-                  if (meas.measuremend_type === 'baseline') {
-                    status = '-';
-                  }
-
-                  let rowColor;
-                  switch (status) {
-                    case 'Closed':
-                      rowColor = 'bg-green-600 text-white';
-                      break;
-                    case '-':
-                      rowColor = 'bg-indigo-300 text-black';
-                      break;
-                    default:
-                      rowColor = 'bg-orange-300 text-black';
-                      break;
-                  }
-
-                  return (
-                    <tr
-                      key={meas.measurement_id}
-                      className={`${rowColor} border-b dark:bg-gray-800 dark:border-gray-700`}>
-                      <td className="px-6 py-4">
-                        {`${dt}. ${month}. ${year}`}
-                      </td>
-                      <td className="px-6 py-4">
-                        {`${String(date.getHours()).padStart(
-                          2,
-                          '0'
-                        )}:${String(date.getMinutes()).padStart(2, '0')}`}
-                      </td>
-                      <td className="px-6 py-4">{`${meas.user_first_name} ${meas.user_last_name}`}</td>
-                      <td className="px-6 py-4">
-                        {meas.question_result ? 'Yes' : 'No'}
-                      </td>
-                      <td className="px-6 py-4">
-                        {meas.measuremend_type}
-                      </td>
-                      <td className="px-6 py-4">{status}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p>No recordings</p>
-        )}
-      </div>
-      {curretnTarget.target_complete ? (
-        ''
-      ) : (
-        <div className="mt-6 mb-10">
-          <Link
-            className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            to={`/recording/${id}`}>
-            Start recording for this target
-          </Link>
+    <div className=" m-auto">
+      <div className="flex">
+        <div className=" border-r-2 border-blue-600 print:hidden">
+          <LeftMenu setAuth={setAuth} />
         </div>
-      )}
-    </>
+        <div className="w-full pl-10 ">
+          <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
+            {curretnTarget.target_title}
+          </h1>
+          <p>{curretnTarget.target_description}</p>
+
+          {curretnTarget.target_complete ? <p>✔️</p> : ''}
+
+          {curretnTarget.target_complete &&
+          curretnTarget.target_done_from_baseline ? (
+            <p>Hotovo z baseline</p>
+          ) : (
+            ''
+          )}
+          {curretnTarget.target_complete &&
+          !curretnTarget.target_done_from_baseline ? (
+            <p>Hotovo z učení</p>
+          ) : (
+            ''
+          )}
+
+          <div className="mt-6 mb-10">
+            <h2 className="mb-3 font-medium">Všechny záznamy </h2>
+
+            {currentMeasurments.length ? (
+              <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table className="w-full text-sm text-left text-gray-500 ">
+                  <thead className="text-xs text-gray-700 uppercase bg-[#3b82f685] ">
+                    <tr>
+                      <th scope="col" className="px-6 py-3">
+                        Datum
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Čas
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Naměřil
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Výsledek
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Typ
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Stav
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentMeasurments.map((meas, i) => {
+                      const date = new Date(meas.measurement_created);
+                      const year = date.getFullYear();
+                      const month = date.getMonth() + 1;
+                      const dt = date.getDate();
+
+                      let status = `Otevřeno`;
+                      if (meas.measurement_closed) {
+                        status = `Uzavřeno`;
+                      }
+                      if (meas.measuremend_type === 'baseline') {
+                        status = '-';
+                      }
+
+                      let rowColor;
+                      switch (status) {
+                        case 'Uzavřeno':
+                          rowColor = 'bg-green-600 text-white';
+                          break;
+                        case '-':
+                          rowColor = 'bg-[#2563eb33] text-black';
+                          break;
+                        default:
+                          rowColor = 'bg-orange-300 text-black';
+                          break;
+                      }
+
+                      return (
+                        <tr
+                          key={meas.measurement_id}
+                          className={`${rowColor} border-b border-white`}>
+                          <td className="px-6 py-4">
+                            {`${dt}. ${month}. ${year}`}
+                          </td>
+                          <td className="px-6 py-4">
+                            {`${String(date.getHours()).padStart(
+                              2,
+                              '0'
+                            )}:${String(date.getMinutes()).padStart(
+                              2,
+                              '0'
+                            )}`}
+                          </td>
+                          <td className="px-6 py-4">
+                            <Link
+                              to={`/person/${meas.user_id}`}
+                              className="hover:underline hover:text-blue-600">{`${meas.user_first_name} ${meas.user_last_name}`}</Link>
+                          </td>
+                          <td className="px-6 py-4">
+                            {meas.question_result ? 'Yes' : 'No'}
+                          </td>
+                          <td className="px-6 py-4">
+                            {meas.measuremend_type == 'baseline'
+                              ? 'baseline'
+                              : 'normální'}
+                          </td>
+                          <td className="px-6 py-4">{status}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p>Žádné záznamy</p>
+            )}
+          </div>
+          {curretnTarget.target_complete ? (
+            ''
+          ) : (
+            <div className="mt-16 text-right">
+              <Link
+                className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                to={`/recording/${id}`}>
+                Začněni záznam pro tento cíl
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };

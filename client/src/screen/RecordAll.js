@@ -34,15 +34,16 @@ export const RecordAll = ({ id }) => {
     setTargets(targets.filter((item) => item.target_id !== remove));
   }, [remove]);
 
-  return !targets ? (
-    <p>Loading....</p>
+  return !targets.length ? (
+    ''
   ) : (
-    <>
-      Record all page
+    <div>
+      <h2 className="font-medium leading-tight text-xl mt-0 mb-4 text-blue-600">
+        Měření
+      </h2>
       <div>
         {targets.map((target, current) => {
           let currentMeasurmentComponent;
-          console.log(target);
 
           switch (target.target_type) {
             case 'frequency/time':
@@ -73,12 +74,14 @@ export const RecordAll = ({ id }) => {
           }
 
           return (
-            <div className="mt-4 mb-4" key={target.target_id}>
+            <div
+              className="block bg-[#2563eb0f] px-4 py-4 mb-4 rounded-lg shadow-md  overflow-hidden"
+              key={target.target_id}>
               {currentMeasurmentComponent}
             </div>
           );
         })}
       </div>
-    </>
+    </div>
   );
 };

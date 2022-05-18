@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const authorization = require('../middleware/authorization');
 const validinfo = require('../middleware/validinfo');
 
-router.post('/', authorization, validinfo, async (req, res) => {
+router.post('/', validinfo, async (req, res) => {
   try {
     const {
       beforeNameTitle,
@@ -12,11 +12,10 @@ router.post('/', authorization, validinfo, async (req, res) => {
       lastName,
       afterNameTitle,
       email,
-      userRole,
-      password,
+      emailConfirm,
     } = req.body;
 
-    const currentUserRole = userRole ? userRole : 'supervisor';
+    const userRole = 'supervisor';
 
     const person = await pool.query(
       'SELECT * FROM users WHERE user_email = $1',
@@ -27,12 +26,13 @@ router.post('/', authorization, validinfo, async (req, res) => {
       return res.status(401).json('Osoba již existuje!');
     }
 
+    const password = (Math.random() + 1).toString(36).substring(7);
     const saltRound = 10;
     const salt = await bcrypt.genSalt(saltRound);
     const bcryptPassword = await bcrypt.hash(password, salt);
 
     const newPerson = await pool.query(
-      'INSERT INTO users (user_first_name, user_last_name, user_title_before, user_title_after, user_email, user_password, user_role, parent_user, user_date_created) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+      'INSERT INTO users (user_first_name, user_last_name, user_title_before, user_title_after, user_email, user_password, user_role) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
       [
         firstName,
         lastName,
@@ -41,8 +41,6 @@ router.post('/', authorization, validinfo, async (req, res) => {
         email,
         bcryptPassword,
         userRole,
-        req.user,
-        new Date(),
       ]
     );
 

@@ -25,7 +25,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
     res.json({ skillId: newSkill });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send('Chyba serveru');
   }
 });
 

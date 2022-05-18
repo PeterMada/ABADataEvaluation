@@ -29,7 +29,6 @@ export const Frequency = ({ data, setRemove, current }) => {
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {
-          console.log(values);
           try {
             const response = await fetch(
               `${process.env.REACT_APP_API_URL}recordmeasurement`,
@@ -54,7 +53,7 @@ export const Frequency = ({ data, setRemove, current }) => {
               toast.error(parseRes);
             }
           } catch (err) {
-            toast.error('Oops, failed to fetch!');
+            toast.error('Jejda, načtení se nezdařilo!');
           }
         }}>
         {({ isSubmitting, isValid, dirty, setFieldValue }) => (

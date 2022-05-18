@@ -20,7 +20,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
 
     //TODO check if has premission to add program to child
     const skillFromProgram = await pool.query(
-      'SELECT skill_id, target_baseline_from FROM programs WHERE program_id = $1',
+      'SELECT skill_id, target_baseline_from, program_baseline_from FROM programs WHERE program_id = $1',
       [program_id]
     );
 
@@ -94,12 +94,36 @@ router.post('/', authorization, validinfo, async (req, res) => {
       ]
     );
 
+    const completedTargets = await pool.query(
+      'SELECT target_id FROM targets WHERE program_id = $1 AND target_complete = TRUE',
+      [program_id]
+    );
+
+    if (
+      completedTargets.rows.length >=
+      skillFromProgram.rows[0].program_baseline_from
+    ) {
+      const programUpdateDone = await pool.query(
+        `UPDATE programs SET
+          program_baseline_done = TRUE
+          WHERE program_id = $1 RETURNING program_id`,
+        [program_id]
+      );
+    } else {
+      const programUpdateDone = await pool.query(
+        `UPDATE programs SET
+          program_baseline_done = FALSE
+          WHERE program_id = $1 RETURNING program_id`,
+        [program_id]
+      );
+    }
+
     const newTarget = target.rows[0].target_id;
 
     res.json({ targetId: newTarget });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send('Chyba serveru');
   }
 });
 

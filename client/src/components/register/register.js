@@ -5,9 +5,9 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 export const Register = ({ setAuth }) => {
   return (
-    <>
-      <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
-        Register
+    <div className="max-w-xl m-auto">
+      <h1 className="font-medium leading-tight text-5xl mt-0 mb-10 text-blue-600">
+        Registrace
       </h1>
       <Formik
         initialValues={{
@@ -20,30 +20,29 @@ export const Register = ({ setAuth }) => {
         validate={(values) => {
           const errors = {};
           if (!values.firstName) {
-            errors.firstName = 'First name field is required';
+            errors.firstName = 'Pole jméno je povinné';
           }
 
           if (!values.lastName) {
-            errors.lastName = 'Last name field is required';
+            errors.lastName = 'Pole příjmení je povinné';
           }
 
           if (!values.email) {
-            errors.email = 'Email field is required';
+            errors.email = 'Pole email je povinné';
           } else if (
             !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
           ) {
-            errors.email = 'Invalid email address';
+            errors.email = 'Špatná emailová adresa';
           }
 
           if (!values.password) {
-            errors.password = 'Password Field Cannot be empty';
+            errors.password = 'Heslo nemůže být prázdné';
           } else if (values.password.length < 8) {
-            errors.password = 'Password must be 8 characters long';
+            errors.password = 'Heslo musí mít minimálne 8 znaků';
           }
 
           if (!values.passwordConfirm) {
-            errors.passwordConfirm =
-              'Confirm Password Field Cannot be empty';
+            errors.passwordConfirm = 'Potvrzení hesla nemůže být prázdné';
           }
 
           if (
@@ -51,7 +50,7 @@ export const Register = ({ setAuth }) => {
             values.passwordConfirm &&
             values.password !== values.passwordConfirm
           ) {
-            errors.passwordConfirm = 'Password must be matching';
+            errors.passwordConfirm = 'Hesla musí být shodná';
           }
 
           return errors;
@@ -73,13 +72,14 @@ export const Register = ({ setAuth }) => {
               //TODO store token in cookie
               localStorage.setItem('token', parseRes.token);
               setAuth(true);
-              toast.success('Registered succesfully');
+              toast.success('Úspěšná registrace');
             } else {
               setAuth(false);
               toast.error(parseRes);
             }
           } catch (err) {
-            toast.error('Oops, failed to fetch!');
+            toast.error('Jejda, načtení se nezdařilo!');
+            console.error(err.message);
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
@@ -88,10 +88,10 @@ export const Register = ({ setAuth }) => {
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="firstName">
-                First Name
+                Jméno
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 id="firstName"
                 name="firstName"
               />
@@ -105,10 +105,10 @@ export const Register = ({ setAuth }) => {
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="lastName">
-                Last Name
+                Příjmení
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 id="lastName"
                 name="lastName"
               />
@@ -125,7 +125,7 @@ export const Register = ({ setAuth }) => {
                 Email
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 id="email"
                 name="email"
                 type="email"
@@ -140,10 +140,10 @@ export const Register = ({ setAuth }) => {
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="password">
-                Password
+                Heslo
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 id="password"
                 name="password"
                 type="password"
@@ -158,10 +158,10 @@ export const Register = ({ setAuth }) => {
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="passwordConfirm">
-                Confirm Password
+                Potvrďte heslo
               </label>
               <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
                 id="passwordConfirm"
                 name="passwordConfirm"
                 type="password"
@@ -173,16 +173,16 @@ export const Register = ({ setAuth }) => {
               />
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col items-end justify-end">
               {!isSubmitting ? (
                 <button
                   className={
                     (!dirty ? 'opacity-50 cursor-not-allowed ' : '') +
-                    'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                    'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline'
                   }
                   type="submit"
                   disabled={!dirty}>
-                  Register
+                  Registrovat
                 </button>
               ) : (
                 <span
@@ -205,15 +205,21 @@ export const Register = ({ setAuth }) => {
                       fill="currentColor"
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Processing...
+                  Probíhá zpracování...
                 </span>
               )}
+
+              <div className="mt-4">
+                <Link
+                  to="/login"
+                  className="hover:underline hover:text-blue-600">
+                  Přihlášení
+                </Link>
+              </div>
             </div>
           </Form>
         )}
       </Formik>
-
-      <Link to="/login">Login</Link>
-    </>
+    </div>
   );
 };

@@ -71,7 +71,7 @@ describe('Register', () => {
       </BrowserRouter>
     );
     expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual(
-      'Register'
+      'Registrace'
     );
   });
 
@@ -91,17 +91,14 @@ describe('Register', () => {
           <Register />
         </BrowserRouter>
       );
-      checkFormField('First Name', 'firstName');
+      checkFormField('Jméno', 'firstName');
     });
 
-    isThereErrorOnEmptyInputBlur(
-      'First Name',
-      'First name field is required'
-    );
+    isThereErrorOnEmptyInputBlur('Jméno', 'Pole jméno je povinné');
 
     thereIsNoErrorMessageOnSomeTextInInput(
-      'First Name',
-      'First name field is required'
+      'Jméno',
+      'Pole jméno je povinné'
     );
   });
 
@@ -112,17 +109,14 @@ describe('Register', () => {
           <Register />
         </BrowserRouter>
       );
-      checkFormField('Last Name', 'lastName');
+      checkFormField('Příjmení', 'lastName');
     });
 
-    isThereErrorOnEmptyInputBlur(
-      'Last Name',
-      'Last name field is required'
-    );
+    isThereErrorOnEmptyInputBlur('Příjmení', 'Pole příjmení je povinné');
 
     thereIsNoErrorMessageOnSomeTextInInput(
-      'Last Name',
-      'Last name field is required'
+      'Příjmení',
+      'Pole příjmení je povinné'
     );
   });
 
@@ -148,12 +142,12 @@ describe('Register', () => {
 
       await waitFor(() =>
         expect(
-          screen.queryByText('Invalid email address')
+          screen.queryByText('Špatná emailová adresa')
         ).toBeInTheDocument()
       );
     });
 
-    isThereErrorOnEmptyInputBlur('Email', 'Email field is required');
+    isThereErrorOnEmptyInputBlur('Email', 'Pole email je povinné');
   });
 
   describe('password', () => {
@@ -163,13 +157,10 @@ describe('Register', () => {
           <Register />
         </BrowserRouter>
       );
-      checkFormField('Password', 'password', 'password');
+      checkFormField('Heslo', 'password', 'password');
     });
 
-    isThereErrorOnEmptyInputBlur(
-      'Password',
-      'Password Field Cannot be empty'
-    );
+    isThereErrorOnEmptyInputBlur('Heslo', 'Heslo nemůže být prázdné');
 
     it('shows error on password with small length', async () => {
       render(
@@ -178,13 +169,13 @@ describe('Register', () => {
         </BrowserRouter>
       );
 
-      const passwordField = screen.getByLabelText('Password');
+      const passwordField = screen.getByLabelText('Heslo');
       fireEvent.change(passwordField, { target: { value: '123' } });
       fireEvent.blur(passwordField);
 
       await waitFor(() =>
         expect(
-          screen.queryByText('Password must be 8 characters long')
+          screen.queryByText('Heslo musí mít minimálne 8 znaků')
         ).toBeInTheDocument()
       );
     });
@@ -197,12 +188,12 @@ describe('Register', () => {
           <Register />
         </BrowserRouter>
       );
-      checkFormField('Confirm Password', 'passwordConfirm', 'password');
+      checkFormField('Potvrďte heslo', 'passwordConfirm', 'password');
     });
 
     isThereErrorOnEmptyInputBlur(
-      'Confirm Password',
-      'Confirm Password Field Cannot be empty'
+      'Potvrďte heslo',
+      'Potvrzení hesla nemůže být prázdné'
     );
 
     it('shows error when passowrds does not match', async () => {
@@ -212,9 +203,8 @@ describe('Register', () => {
         </BrowserRouter>
       );
 
-      const passwordField = screen.getByLabelText('Password');
-      const passwordConfirmField =
-        screen.getByLabelText('Confirm Password');
+      const passwordField = screen.getByLabelText('Heslo');
+      const passwordConfirmField = screen.getByLabelText('Potvrďte heslo');
       fireEvent.change(passwordField, { target: { value: 'asdf123456' } });
       fireEvent.change(passwordConfirmField, {
         target: { value: '123456asdf' },
@@ -223,7 +213,7 @@ describe('Register', () => {
 
       await waitFor(() =>
         expect(
-          screen.queryByText('Password must be matching')
+          screen.queryByText('Hesla musí být shodná')
         ).toBeInTheDocument()
       );
     });
@@ -238,17 +228,16 @@ describe('Register', () => {
 
     const submitButton = screen.getByRole('button', 'submit');
     expect(submitButton).toBeInTheDocument();
-    expect(submitButton.textContent).toEqual('Register');
+    expect(submitButton.textContent).toEqual('Registrovat');
   });
 
   describe('submiting', () => {
     const fillFormWithRightValues = () => {
-      const firstName = screen.getByLabelText('First Name');
-      const lastName = screen.getByLabelText('Last Name');
+      const firstName = screen.getByLabelText('Jméno');
+      const lastName = screen.getByLabelText('Příjmení');
       const email = screen.getByLabelText('Email');
-      const passwordField = screen.getByLabelText('Password');
-      const passwordConfirmField =
-        screen.getByLabelText('Confirm Password');
+      const passwordField = screen.getByLabelText('Heslo');
+      const passwordConfirmField = screen.getByLabelText('Potvrďte heslo');
       const submitButton = screen.getByRole('button', 'submit');
       fireEvent.change(firstName, {
         target: { value: 'FirstName' },
@@ -267,7 +256,7 @@ describe('Register', () => {
       rest.get(
         `${process.env.REACT_APP_API_URL}auth/register`,
         (req, res, ctx) => {
-          return res(ctx.json({ greeting: 'hello there' }));
+          return res(ctx.status(200), ctx.json({ token: '123' }));
         }
       )
     );
@@ -293,15 +282,14 @@ describe('Register', () => {
         )
       );
 
-      const passwordConfirmField =
-        screen.getByLabelText('Confirm Password');
+      const passwordConfirmField = screen.getByLabelText('Potvrďte heslo');
       const submitButton = screen.getByRole('button', 'submit');
       fillFormWithRightValues();
 
       fireEvent.click(submitButton);
 
       expect(
-        await screen.findByText('Oops, failed to fetch!')
+        await screen.findByText('Jejda, načtení se nezdařilo!')
       ).toBeInTheDocument();
     });
 
@@ -318,23 +306,19 @@ describe('Register', () => {
         rest.post(
           `${process.env.REACT_APP_API_URL}auth/register`,
           (req, res, ctx) => {
-            return res(
-              ctx.status(200),
-              ctx.json('Authentication was unsuccessful')
-            );
+            return res(ctx.status(200), ctx.json('Ověření se nezdařilo'));
           }
         )
       );
 
-      const passwordConfirmField =
-        screen.getByLabelText('Confirm Password');
+      const passwordConfirmField = screen.getByLabelText('Potvrďte heslo');
       const submitButton = screen.getByRole('button', 'submit');
       fillFormWithRightValues();
 
       fireEvent.click(submitButton);
 
       expect(
-        await screen.findByText('Authentication was unsuccessful')
+        await screen.findByText('Ověření se nezdařilo')
       ).toBeInTheDocument();
 
       expect(setAuth).toHaveBeenCalledWith(false);
@@ -365,7 +349,7 @@ describe('Register', () => {
       fireEvent.click(submitButton);
 
       expect(
-        await screen.findByText('Registered succesfully')
+        await screen.findByText('Úspěšná registrace')
       ).toBeInTheDocument();
       expect(setAuth).toHaveBeenCalledWith(true);
     });

@@ -3,8 +3,9 @@ CREATE DATABASE ABADataEvaluation;
 CREATE TYPE sex AS ENUM ('', 'man', 'woman');
 CREATE TYPE target_type AS ENUM ('yes/no', 'prompt level', 'duration', 'frequency', 'frequency/time', 'text');
 CREATE TYPE measuremend_type AS ENUM ('normal', 'baseline');
+CREATE TYPE user_role AS ENUM ('supervisor', 'therapeutist', 'parent');
+CREATE TYPE time_type AS ENUM ('hours', 'minutes', 'seconds');
 
--- // TODO add user roles
 -- // TODO add temporaly password
 CREATE TABLE users(
   user_id uuid DEFAULT uuid_generate_v4(),
@@ -18,9 +19,12 @@ CREATE TABLE users(
   user_password_created BOOLEAN,
   user_date_created DATE,
   user_last_login DATE,
+  user_role user_role,
+  parent_user uuid NULL
   PRIMARY KEY (user_id)
 );
 
+/*
 CREATE TABLE therapeutists (
   therapeutist_id uuid DEFAULT uuid_generate_v4(),
   therapeutist_first_name VARCHAR(255) NOT NULL,
@@ -31,6 +35,7 @@ CREATE TABLE therapeutists (
 
   CONSTRAINT fk_supervisor FOREIGN KEY(supervisor_id) REFERENCES users(user_id)
 );
+*/
 
 CREATE TABLE children(
   child_id uuid DEFAULT uuid_generate_v4(),
@@ -51,6 +56,7 @@ CREATE TABLE children(
 CREATE TABLE skills (
   skill_id uuid DEFAULT uuid_generate_v4(),
   skill_title VARCHAR(255) NOT NULL,
+  skill_description TEXT,
   child_id uuid NOT NULL,
 
   PRIMARY KEY (skill_id),
@@ -113,6 +119,16 @@ CREATE TABLE measurements (
 CREATE TABLE measurementPolarQuestions (
   question_id uuid DEFAULT uuid_generate_v4(),
   question_result BOOLEAN,
+  measurement_id uuid NOT NULL,
+
+  PRIMARY KEY (question_id),
+  CONSTRAINT fk_target FOREIGN KEY(measurement_id) REFERENCES measurements(measurement_id)
+);
+
+CREATE TABLE measurementFrequency(
+  question_id uuid DEFAULT uuid_generate_v4(),
+  question_result SMALLINT NULL,
+  time_type time_type,
   measurement_id uuid NOT NULL,
 
   PRIMARY KEY (question_id),

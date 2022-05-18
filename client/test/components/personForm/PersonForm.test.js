@@ -209,7 +209,7 @@ describe('PersonForm', () => {
     fireEvent.click(screen.getByRole('button', 'submit'));
 
     await waitFor(() =>
-      expect(screen.getByText('Processing...')).toBeInTheDocument()
+      expect(screen.getByText('Probíhá zpracování...')).toBeInTheDocument()
     );
   });
 
@@ -230,10 +230,10 @@ describe('PersonForm', () => {
 
     fireEvent.click(submitButton);
     await waitForElementToBeRemoved(() =>
-      screen.getByText('Processing...')
+      screen.getByText('Probíhá zpracování...')
     );
 
-    expect(screen.queryByText('Processing...')).toBeNull();
+    expect(screen.queryByText('Probíhá zpracování...')).toBeNull();
     expect(screen.getByRole('button', 'submit')).toBeInTheDocument();
   });
 

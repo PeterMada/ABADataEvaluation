@@ -338,6 +338,7 @@ export const App = () => {
               )
             }
           />
+
           <Route
             exact
             path="/"

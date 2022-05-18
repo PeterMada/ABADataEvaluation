@@ -21,8 +21,6 @@ router.get('/', authorization, async (req, res) => {
       [target_id]
     );
 
-    console.log(targetDetail.rows);
-
     res.json(targetDetail.rows);
   } catch (err) {
     console.log(err.message);

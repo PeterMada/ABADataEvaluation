@@ -20,17 +20,17 @@ module.exports = (req, res, next) => {
     }
   } else if (req.path === '/addPerson') {
     if (![firstName, lastName, email].every(Boolean)) {
-      return res.status(401).json('Missing required fields');
+      return res.status(401).json('Chybějící údaje');
     } else if (!validEmail(email)) {
       return res.status(401).json('Neplatný e-mail');
     }
   } else if (req.path === '/addChild') {
-    if (![firstName, lastName].every(Boolean)) {
-      return res.status(401).json('Missing required fields');
+    if (![childCode].every(Boolean)) {
+      return res.status(401).json('Chybějící údaje');
     }
   } else if (req.path === '/addTarget') {
     if (![targetTitle, targetType].every(Boolean)) {
-      return res.status(401).json('Missing required fields');
+      return res.status(401).json('Chybějící údaje');
     }
   }
 

@@ -10,6 +10,7 @@ export const ReviewAll = ({ setAuth }) => {
   const { id } = useParams();
   const [measurement, setMeasurement] = useState([]);
   const [targets, setTargets] = useState([]);
+  const [remove, setRemove] = useState();
 
   useEffect(() => {
     const fetchAllOpenTargetsForChild = async () => {
@@ -34,8 +35,8 @@ export const ReviewAll = ({ setAuth }) => {
   }, []);
 
   useEffect(() => {
-    //  setTargets(targets.filter((item) => item.target_id !== remove));
-  }, []);
+    setTargets(targets.filter((item) => item.target_id !== remove));
+  }, [remove]);
 
   const handleSaveAll = async (e) => {
     e.preventDefault();
@@ -68,6 +69,13 @@ export const ReviewAll = ({ setAuth }) => {
           </h1>
           <div>
             {targets.map((target, current) => {
+              if (
+                target.measuremend_type === 'baseline' ||
+                target.measurement_closed
+              ) {
+                return;
+              }
+
               let currentMeasurmentComponent;
               switch (target.target_type) {
                 case 'frequency/time':
@@ -79,6 +87,8 @@ export const ReviewAll = ({ setAuth }) => {
                       data={target}
                       current={current}
                       fillForm={true}
+                      isUpdate={true}
+                      setRemove={setRemove}
                     />
                   );
                   break;

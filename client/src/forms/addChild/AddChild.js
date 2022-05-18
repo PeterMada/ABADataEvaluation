@@ -1,14 +1,12 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { LeftMenu } from '../../components/leftMenu/LeftMenu';
 
-export const AddSkill = ({ setAuth }) => {
-  const { id } = useParams();
-  let navigate = useNavigate();
+export const AddChild = ({ setAuth }) => {
+  const navigate = useNavigate();
+
   return (
     <div className=" m-auto">
       <div className="flex">
@@ -17,16 +15,21 @@ export const AddSkill = ({ setAuth }) => {
         </div>
         <div className="w-full pl-10 ">
           <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
-            Nová dovednost
+            Nový student
           </h1>
           <Formik
             initialValues={{
-              skillTitle: '',
+              firstName: '',
+              lastName: '',
+              childCode: '',
+              sex: '',
+              dateOfBirth: '',
+              diagnosis: '',
             }}
             validate={(values) => {
               const errors = {};
-              if (!values.skillTitle) {
-                errors.skillTitle = 'Pole je povinné';
+              if (!values.childCode) {
+                errors.childCode = 'Pole je povinné';
               }
 
               return errors;
@@ -34,45 +37,99 @@ export const AddSkill = ({ setAuth }) => {
             onSubmit={async (values, { setSubmitting }) => {
               try {
                 const response = await fetch(
-                  `${process.env.REACT_APP_API_URL}addSkill`,
+                  `${process.env.REACT_APP_API_URL}addChild`,
                   {
                     method: 'POST',
                     headers: {
                       'Content-type': 'application/json',
                       token: localStorage.token,
-                      child_id: id,
                     },
                     body: JSON.stringify(values),
                   }
                 );
-
                 const parseRes = await response.json();
-                if (parseRes.skillId) {
-                  toast.success('Skill added succesfully');
-                  navigate(`/skill/${parseRes.skillId}`);
+
+                if (parseRes.childId) {
+                  toast.success('Student úspěšně přidán');
+
+                  navigate(`/child/${parseRes.childId}`);
                 } else {
                   toast.error(parseRes);
                 }
               } catch (err) {
+                console.log(err);
                 toast.error('Jejda, načtení se nezdařilo!');
               }
             }}>
             {({ isSubmitting, isValid, dirty }) => (
-              <Form data-testid="addSkill">
-                <div className="mb-4">
-                  <label className="mb-2 block" htmlFor="skillTitle">
-                    Název
+              <Form data-testid="addChildForm">
+                <div className="mb-8">
+                  <label className="mb-2 block" htmlFor="firstName">
+                    Jméno
                   </label>
                   <Field
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    id="skillTitle"
-                    name="skillTitle"
+                    name="firstName"
+                    id="firstName"
+                  />
+                </div>
+                <div className="mb-8">
+                  <label className="mb-2 block" htmlFor="lastName">
+                    Příjmení
+                  </label>
+                  <Field
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    name="lastName"
+                    id="lastName"
+                  />
+                </div>
+                <div className="mb-8">
+                  <label className="mb-2 block" htmlFor="childCode">
+                    Kód studenta
+                  </label>
+                  <Field
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    name="childCode"
+                    id="childCode"
                   />
                   <ErrorMessage
                     className="text-red-500 text-xs mt-1 ml-1"
-                    name="skillTitle"
+                    name="childCode"
                     component="div"
+                  />
+                </div>
+                <div className="mb-8">
+                  <label className="mb-2 block" htmlFor="sex">
+                    Pohlaví
+                  </label>
+                  <select
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    name="sex"
+                    id="sex">
+                    <option />
+                    <option value="Woman">Žena</option>
+                    <option value="Man">Muž</option>
+                  </select>
+                </div>
+                <div className="mb-8">
+                  <label className="mb-2 block" htmlFor="dateOfBirth">
+                    Datum narození
+                  </label>
+                  <Field
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    name="dateOfBirth"
+                    id="dateOfBirth"
+                    type="date"
+                  />
+                </div>
+                <div className="mb-8">
+                  <label className="mb-2 block" htmlFor="diagnosis">
+                    Diagnóza
+                  </label>
+                  <Field
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    name="diagnosis"
+                    id="diagnosis"
                   />
                 </div>
 
@@ -85,7 +142,7 @@ export const AddSkill = ({ setAuth }) => {
                       }
                       type="submit"
                       disabled={!dirty}>
-                      Ulož
+                      Přidat
                     </button>
                   ) : (
                     <span

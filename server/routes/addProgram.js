@@ -20,8 +20,6 @@ router.post('/', authorization, validinfo, async (req, res) => {
       targetCriterionTo,
       targetType,
     } = req.body;
-    console.log(req.body);
-    console.log(targetType);
 
     if (!req.user) {
       return res.status(401).json('Server Error');
@@ -97,7 +95,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
     res.json({ programId: newProgram });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send('Chyba serveru');
   }
 });
 

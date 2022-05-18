@@ -59,7 +59,6 @@ export const Target = ({ setAuth }) => {
           <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
             {curretnTarget.target_title}
           </h1>
-          <p>Typ cíle: {curretnTarget.target_type}</p>
           <p>{curretnTarget.target_description}</p>
 
           {curretnTarget.target_complete ? <p>✔️</p> : ''}
@@ -112,9 +111,9 @@ export const Target = ({ setAuth }) => {
                       const month = date.getMonth() + 1;
                       const dt = date.getDate();
 
-                      let status = `Open`;
+                      let status = `Otevřeno`;
                       if (meas.measurement_closed) {
-                        status = `Closed`;
+                        status = `Uzavřeno`;
                       }
                       if (meas.measuremend_type === 'baseline') {
                         status = '-';
@@ -122,7 +121,7 @@ export const Target = ({ setAuth }) => {
 
                       let rowColor;
                       switch (status) {
-                        case 'Closed':
+                        case 'Uzavřeno':
                           rowColor = 'bg-green-600 text-white';
                           break;
                         case '-':
@@ -158,7 +157,9 @@ export const Target = ({ setAuth }) => {
                             {meas.question_result ? 'Yes' : 'No'}
                           </td>
                           <td className="px-6 py-4">
-                            {meas.measuremend_type}
+                            {meas.measuremend_type == 'baseline'
+                              ? 'baseline'
+                              : 'normální'}
                           </td>
                           <td className="px-6 py-4">{status}</td>
                         </tr>

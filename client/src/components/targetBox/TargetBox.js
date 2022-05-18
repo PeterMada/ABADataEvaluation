@@ -4,11 +4,19 @@ import { Link } from 'react-router-dom';
 export const TargetBox = ({ target, percentageDone }) => {
   return (
     <>
-      <div className="bg-white p-10 rounded-lg shadow-md">
+      <Link
+        to={`/target/${target.target_id}`}
+        className="bg-[#2563eb0f] px-4 py-4 rounded-lg shadow-md flex flex-col hover:shadow-xl transition-shadow overflow-hidden">
+        <h2 className="mb-4 flex justify-between text-lg font-bold">
+          <span>{target.target_title}</span>
+
+          {target.target_complete ? <span>✔️</span> : ''}
+        </h2>
+
         {target.target_complete ? (
-          <p>✔️</p>
+          ''
         ) : (
-          <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+          <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700 mb-6">
             <div
               className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
               style={{
@@ -20,34 +28,34 @@ export const TargetBox = ({ target, percentageDone }) => {
         )}
 
         {target.target_complete && target.target_done_from_baseline ? (
-          <p>Done from baseline</p>
+          <p>
+            <strong>Stav:</strong> Hotovo z baseline
+          </p>
         ) : (
           ''
         )}
         {target.target_complete && !target.target_done_from_baseline ? (
-          <p>Done from teaching</p>
+          <p>
+            <strong>Stav:</strong> Hotovo z učení
+          </p>
         ) : (
           ''
         )}
 
         {!target.target_complete ? (
           target.target_baseline_complete ? (
-            <p>In teaching</p>
+            <p>
+              <strong>Stav:</strong> Učení
+            </p>
           ) : (
-            <p>In baseline measurements</p>
+            <p>
+              <strong>Stav:</strong> Měření baseline
+            </p>
           )
         ) : (
           ''
         )}
-
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-          <h2>
-            <Link to={`/target/${target.target_id}`}>
-              {target.target_title}
-            </Link>
-          </h2>
-        </div>
-      </div>
+      </Link>
     </>
   );
 };

@@ -10,7 +10,7 @@ import {
   Navigate,
   useLocation,
 } from 'react-router-dom';
-import { LeftMenu } from '../leftMenu/LeftMenu';
+import { LeftMenu } from '../../components/leftMenu/LeftMenu';
 
 export const PersonForm = ({ setAuth }) => {
   const [submitted, setSubmitted] = useState(false);
@@ -31,12 +31,14 @@ export const PersonForm = ({ setAuth }) => {
           </h1>
           <Formik
             initialValues={{
+              userRole: 'therapeutist',
               beforeNameTitle: '',
               firstName: '',
               lastName: '',
               afterNameTitle: '',
               email: '',
-              emailConfirm: '',
+              password: '',
+              passwordConfirm: '',
             }}
             validate={(values) => {
               const errors = {};
@@ -58,22 +60,23 @@ export const PersonForm = ({ setAuth }) => {
                 errors.email = 'Neplatná emailová adresa';
               }
 
-              if (!values.emailConfirm) {
-                errors.emailConfirm = 'Pole potvrzení emailu je povinné';
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-                  values.emailConfirm
-                )
-              ) {
-                errors.emailConfirm = 'Neplatná emailová adresa';
+              if (!values.password) {
+                errors.password = 'Heslo nemůže být prázdné';
+              } else if (values.password.length < 8) {
+                errors.password = 'Heslo musí mít minimálne 8 znaků';
+              }
+
+              if (!values.passwordConfirm) {
+                errors.passwordConfirm =
+                  'Potvrzení hesla nemůže být prázdné';
               }
 
               if (
-                values.email &&
-                values.emailConfirm &&
-                values.email !== values.emailConfirm
+                values.password &&
+                values.passwordConfirm &&
+                values.password !== values.passwordConfirm
               ) {
-                errors.emailConfirm = 'Email se neshoduje';
+                errors.passwordConfirm = 'Hesla musí být shodná';
               }
 
               return errors;
@@ -86,6 +89,7 @@ export const PersonForm = ({ setAuth }) => {
                     method: 'POST',
                     headers: {
                       'Content-type': 'application/json',
+                      token: localStorage.token,
                     },
                     body: JSON.stringify(values),
                   }
@@ -94,7 +98,7 @@ export const PersonForm = ({ setAuth }) => {
                 const parseRes = await response.json();
                 if (parseRes.personID) {
                   toast.success('Person added succesfully');
-                  //setSubmitted(true);
+                  setSubmitted(true);
                 } else {
                   toast.error(parseRes);
                 }
@@ -170,19 +174,36 @@ export const PersonForm = ({ setAuth }) => {
                     component="div"
                   />
                 </div>
-                <div className="mb-8">
-                  <label className="mb-2 block" htmlFor="emailConfirm">
-                    Potvrzení emailu
+
+                <div className="mb-4">
+                  <label className="mb-2 block" htmlFor="password">
+                    Heslo
                   </label>
                   <Field
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="emailConfirm"
-                    name="emailConfirm"
-                    type="email"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
+                    id="password"
+                    name="password"
+                    type="password"
                   />
                   <ErrorMessage
                     className="text-red-500 text-xs mt-1 ml-1"
-                    name="emailConfirm"
+                    name="password"
+                    component="div"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="mb-2 block" htmlFor="passwordConfirm">
+                    Potvrďte heslo
+                  </label>
+                  <Field
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
+                    id="passwordConfirm"
+                    name="passwordConfirm"
+                    type="password"
+                  />
+                  <ErrorMessage
+                    className="text-red-500 text-xs mt-1 ml-1"
+                    name="passwordConfirm"
                     component="div"
                   />
                 </div>

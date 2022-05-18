@@ -75,10 +75,22 @@ export const RecordAllBaseline = ({ id, setAuth }) => {
           );
 
           if (repeatNumber > 0) {
+            console.log(target.target_type);
             switch (target.target_type) {
               case 'yes/no':
                 currentMeasurmentComponent = (
                   <PolarQuestion
+                    key={`${target.target_id}-${i}-${current}`}
+                    data={target}
+                    setRemove={setRemove}
+                    current={current}
+                    doNotShowDetails={true}
+                  />
+                );
+                break;
+              case 'frequency':
+                currentMeasurmentComponent = (
+                  <FrequencyTime
                     key={`${target.target_id}-${i}-${current}`}
                     data={target}
                     setRemove={setRemove}

@@ -46,9 +46,21 @@ export const Child = ({ setAuth }) => {
           <LeftMenu setAuth={setAuth} />
         </div>
         <div className="w-full pl-10 ">
-          <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
-            {`${currentChild?.child_first_name} ${currentChild?.child_last_name}`}
-          </h1>
+          {currentChild.child_childcode ? (
+            <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
+              {`${currentChild?.child_childcode}`}
+            </h1>
+          ) : (
+            <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
+              {`${currentChild?.child_first_name} ${currentChild?.child_last_name}`}
+            </h1>
+          )}
+
+          {currentChild.child_diagnosis ? (
+            <p>{currentChild.child_diagnosis}</p>
+          ) : (
+            ''
+          )}
 
           <div className="mt-10 mb-6">
             <h2 className="font-medium leading-tight text-xl mt-0 mb-4 text-blue-600">
@@ -71,6 +83,11 @@ export const Child = ({ setAuth }) => {
           </div>
 
           <div className="mt-16 text-right">
+            <Link
+              className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              to={`/addSkill/${id}`}>
+              Přirad terapeuta
+            </Link>
             <Link
               className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               to={`/addSkill/${id}`}>

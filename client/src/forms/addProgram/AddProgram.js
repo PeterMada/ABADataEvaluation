@@ -140,17 +140,12 @@ export const AddProgram = ({ setAuth }) => {
                       Vyberte typ cíle
                     </option>
                     <option value="yes/no">Ano/Ne</option>
+                    <option value="frequency">Frekvence</option>
                     <option value="prompt level" disabled>
                       Úroveň promptu
                     </option>
                     <option value="duration" disabled>
                       Doba trvání
-                    </option>
-                    <option value="frequency" disabled>
-                      Frekvence
-                    </option>
-                    <option value="frequency/time" disabled>
-                      Frekvence/čas
                     </option>
                     <option value="text" disabled>
                       Text

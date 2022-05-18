@@ -10,6 +10,7 @@ export const PolarQuestion = ({
   fillForm = false,
   doNotShowDetails = false,
   elementId = false,
+  isUpdate = false,
 }) => {
   const { id } = useParams();
   const [formData, setformData] = useState([]);
@@ -65,12 +66,18 @@ export const PolarQuestion = ({
         enableReinitialize={true}
         onSubmit={async (values, { setSubmitting }) => {
           const measuremendType = doNotShowDetails ? 'baseline' : '';
-
+          const measuremendId = data.measurement_id;
           try {
+            let currentMethod = 'POST';
+            let fetchUrl = 'recordmeasurement';
+            if (isUpdate) {
+              fetchUrl = 'updatemeasurement';
+              currentMethod = 'PUT';
+            }
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}recordmeasurement`,
+              `${process.env.REACT_APP_API_URL}${fetchUrl}`,
               {
-                method: 'POST',
+                method: currentMethod,
                 headers: {
                   'Content-type': 'application/json',
                   token: localStorage.token,
@@ -78,6 +85,7 @@ export const PolarQuestion = ({
                   target_type: data.target_type,
                   target_id: data.target_id,
                   measuremend_type: measuremendType,
+                  measurement_id: measuremendId,
                 },
                 body: JSON.stringify(values),
               }
@@ -95,6 +103,7 @@ export const PolarQuestion = ({
               toast.error(parseRes);
             }
           } catch (err) {
+            console.log(err.message);
             toast.error('Jejda, načtení se nezdařilo!');
           }
         }}>
@@ -105,28 +114,28 @@ export const PolarQuestion = ({
                 <div className="">
                   <label
                     className="inline-block  cursor-pointer"
-                    htmlFor={`answerYes-${data.target_id}`}>
+                    htmlFor={`answerYes-${data.measurement_id}`}>
                     Áno
                   </label>
                   <Field
                     className="rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                     type="radio"
                     name="answer"
-                    id={`answerYes-${data.target_id}`}
+                    id={`answerYes-${data.measurement_id}`}
                     value="Yes"
                   />
                 </div>
                 <div className="">
                   <label
                     className="inline-block cursor-pointer"
-                    htmlFor={`answerNo-${data.target_id}`}>
+                    htmlFor={`answerNo-${data.measurement_id}`}>
                     Ne
                   </label>
                   <Field
                     className="rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                     type="radio"
                     name="answer"
-                    id={`answerNo-${data.target_id}`}
+                    id={`answerNo-${data.measurement_id}`}
                     value="No"
                   />
                 </div>
@@ -135,7 +144,7 @@ export const PolarQuestion = ({
             <div className="mt-4">
               <button
                 type="submit"
-                className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                className="bg-blue-500 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Ulož
               </button>
             </div>

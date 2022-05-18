@@ -177,8 +177,10 @@ export const Program = ({ setAuth }) => {
           </div>
 
           <div className="mt-10">
-            <h2>All targets for this program</h2>
-            <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
+            <h2 className="font-medium leading-tight text-xl mt-0 mb-4 text-blue-600">
+              Všetky ciele tohto programu
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {currentTargets.map((target) => {
                 let programDonePercentage = 0;
                 let baselineStart = 0;

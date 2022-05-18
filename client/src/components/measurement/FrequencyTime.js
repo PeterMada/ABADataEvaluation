@@ -1,108 +1,171 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-export const FrequencyTime = () => {
-  const [frequency, setFrequency] = useState(0);
+export const FrequencyTime = ({
+  data,
+  setRemove,
+  current,
+  fillForm = false,
+  doNotShowDetails = false,
+  elementId = false,
+  isUpdate = false,
+}) => {
+  const { id } = useParams();
+  const [formData, setformData] = useState([]);
 
-  const handlePlusClick = () => {
-    setFrequency(frequency + 1);
-  };
+  useEffect(() => {
+    const fetchValuesForMeasurment = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}measurmentDetail`,
+          {
+            method: 'GET',
+            headers: {
+              token: localStorage.token,
+              measurement_id: data.measurement_id,
+              target_type: data.target_type,
+            },
+          }
+        );
+        const parseRes = await response.json();
+        if (parseRes) {
+          setformData(parseRes);
 
-  const handleMinusClick = () => {
-    setFrequency(frequency - 1);
-  };
+          if (parseRes.question_result) {
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (fillForm) {
+      const targetResult = fetchValuesForMeasurment().catch(console.error);
+    }
+  }, []);
 
   return (
-    <>
-      <h2>Freq time</h2>
+    <div className="">
+      {!doNotShowDetails ? (
+        <div>
+          <h3>{data.target_title}</h3>
+          <p>{data.target_description}</p>
+        </div>
+      ) : (
+        ''
+      )}
 
       <Formik
         initialValues={{
-          frequencyCount: 0,
-          timeHours: 0,
-          timeMinutes: 0,
+          freq: 0,
+          rate: 0,
         }}
-        validate={(values) => {
-          const errors = {};
-          if (!values.skillTitle) {
-            errors.skillTitle = 'Skill title field is required';
-          }
-
-          return errors;
-        }}
+        enableReinitialize={true}
         onSubmit={async (values, { setSubmitting }) => {
+          const measuremendType = doNotShowDetails ? 'baseline' : '';
+          const measuremendId = data.measurement_id;
           try {
+            let currentMethod = 'POST';
+            let fetchUrl = 'recordmeasurement';
+            if (isUpdate) {
+              fetchUrl = 'updatemeasurement';
+              currentMethod = 'PUT';
+            }
             const response = await fetch(
-              `${process.env.REACT_APP_API_URL}addSkill`,
+              `${process.env.REACT_APP_API_URL}${fetchUrl}`,
               {
-                method: 'POST',
+                method: currentMethod,
                 headers: {
                   'Content-type': 'application/json',
                   token: localStorage.token,
                   child_id: id,
+                  target_type: data.target_type,
+                  target_id: data.target_id,
+                  measuremend_type: measuremendType,
+                  measurement_id: measuremendId,
                 },
                 body: JSON.stringify(values),
               }
             );
 
             const parseRes = await response.json();
-            if (parseRes.skillId) {
-              toast.success('Skill added succesfully');
-              navigate(`/skill/${parseRes.skillId}`);
+            if (parseRes.measrumentId) {
+              toast.success('Target measurement saved succesfuly');
+              if (doNotShowDetails) {
+                setRemove(`${data.target_id}-${new Date().getTime()}`);
+              } else {
+                setRemove(data.target_id);
+              }
             } else {
               toast.error(parseRes);
             }
           } catch (err) {
+            console.log(err.message);
             toast.error('Jejda, načtení se nezdařilo!');
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
-          <Form data-testid="addSkill">
-            <div className="mt-4">
-              <button
-                className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                type="button"
-                onClick={handleMinusClick}>
-                -
-              </button>
-              <button
-                className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                type="button"
-                onClick={handlePlusClick}>
-                +
-              </button>
-              <Field
-                name="frequencyCount"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                disabled
-                value={frequency}
-              />
-
-              <label htmlFor="timeHours">Hours</label>
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="timeHours"
-                name="timeHours"
-              />
-
-              <label htmlFor="timeMinutes">Minutes</label>
-              <Field
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                step="1"
-                id="timeMinutes"
-                name="timeMinutes"
-              />
+          <Form>
+            <div className="mt-4 flex items-center">
+              <div className="mr-4">
+                <Field
+                  className="w-20 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
+                  id="freq"
+                  name="freq"
+                  type="number"
+                  min="1"
+                />
+                <ErrorMessage
+                  className="text-red-500 text-xs mt-1 ml-1"
+                  name="freq"
+                  component="div"
+                />
+              </div>
+              <p>za</p>
+              <div className="flex ml-4">
+                <div>
+                  <Field
+                    className="w-20 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
+                    id="rate"
+                    name="rate"
+                    type="number"
+                    min="1"
+                  />
+                  <ErrorMessage
+                    className="text-red-500 text-xs mt-1 ml-1"
+                    name="rate"
+                    component="div"
+                  />
+                </div>
+                <div className="ml-2">
+                  <Field
+                    className="w-40 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:shadow-outline"
+                    as="select"
+                    name="timeType"
+                    aria-label="Target type">
+                    <option value="seconds">Sekund</option>
+                    <option value="minutes">Minut</option>
+                    <option value="hours">Hodin</option>
+                  </Field>
+                  <ErrorMessage
+                    className="text-red-500 text-xs mt-1 ml-1"
+                    name="timeType"
+                    component="div"
+                  />
+                </div>
+              </div>
             </div>
             <div className="mt-4">
               <button
                 type="submit"
-                className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Save
+                className="bg-blue-500 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Ulož
               </button>
             </div>
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   );
 };

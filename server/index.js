@@ -42,6 +42,8 @@ app.use(
   require('./routes/allChildrenOpenTargets')
 );
 app.use('/recordMeasurement', require('./routes/recordMeasurement'));
+app.use('/updatemeasurement', require('./routes/updatemeasurement'));
+
 app.use('/measurmentDetail', require('./routes/measurmentDetail'));
 
 app.use(

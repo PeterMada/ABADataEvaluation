@@ -39,7 +39,7 @@ export const Skill = ({ setAuth }) => {
   ) : (
     <div className=" m-auto">
       <div className="flex">
-        <div className=" border-r-2 border-blue-600">
+        <div className=" border-r-2 border-blue-600 print:hidden">
           <LeftMenu setAuth={setAuth} />
         </div>
 

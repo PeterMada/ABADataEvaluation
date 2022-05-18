@@ -136,7 +136,7 @@ export const Program = ({ setAuth }) => {
   return (
     <div className=" m-auto">
       <div className="flex">
-        <div className=" border-r-2 border-blue-600">
+        <div className=" border-r-2 border-blue-600 print:hidden">
           <LeftMenu setAuth={setAuth} />
         </div>
         <div className="w-full pl-10 ">
@@ -207,7 +207,7 @@ export const Program = ({ setAuth }) => {
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-16 text-right print:hidden">
             <Link
               className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               to={`/addTarget/${id}`}>

@@ -18,7 +18,7 @@ import 'whatwg-fetch';
 import { BrowserRouter } from 'react-router-dom';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import { Login } from '../../../src/components/login/login';
+import { Login } from '../../../src/components/login/Login';
 import { App } from '../../../src/App';
 import { ToastContainer } from 'react-toastify';
 require('dotenv').config();

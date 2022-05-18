@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/images/ABA-logo-placeholder.png';
-import profileDefault from '../../assets/images/Profile-default.jpg';
+import profileImage from '../../assets/images/profile-placeholder.png';
+
 import './header.css';
 
 export const Header = ({ isAuthenticated }) => {
@@ -39,7 +40,7 @@ export const Header = ({ isAuthenticated }) => {
           <Link to="/profile" className="header-profile flex items-center">
             <img
               className="header-profile__img"
-              src={profileDefault}
+              src={profileImage}
               alt={name}
             />
             <p className="pl-4">{name}</p>

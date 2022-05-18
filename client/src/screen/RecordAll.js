@@ -44,7 +44,6 @@ export const RecordAll = ({ id }) => {
       <div>
         {targets.map((target, current) => {
           let currentMeasurmentComponent;
-          console.log(target);
 
           switch (target.target_type) {
             case 'frequency/time':

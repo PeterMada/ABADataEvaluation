@@ -99,9 +99,6 @@ router.post('/', authorization, validinfo, async (req, res) => {
       [program_id]
     );
 
-    console.log('AAAAA');
-    console.log(completedTargets.rows.length);
-    console.log(skillFromProgram.rows[0].program_baseline_from);
     if (
       completedTargets.rows.length >=
       skillFromProgram.rows[0].program_baseline_from

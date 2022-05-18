@@ -29,7 +29,6 @@ export const Frequency = ({ data, setRemove, current }) => {
           return errors;
         }}
         onSubmit={async (values, { setSubmitting }) => {
-          console.log(values);
           try {
             const response = await fetch(
               `${process.env.REACT_APP_API_URL}recordmeasurement`,

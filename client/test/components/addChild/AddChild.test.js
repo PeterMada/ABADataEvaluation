@@ -155,7 +155,7 @@ describe('AddChild', () => {
     fireEvent.click(screen.getByRole('button', 'submit'));
 
     await waitFor(() =>
-      expect(screen.getByText('Processing...')).toBeInTheDocument()
+      expect(screen.getByText('Probíhá zpracování...')).toBeInTheDocument()
     );
   });
 

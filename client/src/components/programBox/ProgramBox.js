@@ -39,7 +39,6 @@ export const ProgramBox = ({ program, targets }) => {
 
         <div className="mt-4 mb-6 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2  gap-5">
           {targets.map((target, i) => {
-            console.log(target);
             if (i > 5) {
               return '';
             }

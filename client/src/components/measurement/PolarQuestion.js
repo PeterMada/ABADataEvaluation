@@ -30,7 +30,6 @@ export const PolarQuestion = ({
           }
         );
         const parseRes = await response.json();
-        console.log('AAAA');
         if (parseRes) {
           setformData(parseRes);
           setAnswerValue('No');

@@ -37,7 +37,6 @@ export const Target = ({ setAuth }) => {
           }
         );
         const parseRes = await response.json();
-        console.log(parseRes);
         setCurrentMeasurments(parseRes);
       } catch (err) {
         console.error(err);
@@ -50,7 +49,6 @@ export const Target = ({ setAuth }) => {
     );
   }, []);
 
-  console.log(curretnTarget);
 
   return (
     <div className=" m-auto">

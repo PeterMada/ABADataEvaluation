@@ -22,7 +22,6 @@ export const ReviewAll = ({ setAuth }) => {
           }
         );
         const parseRes = await response.json();
-        console.log(parseRes);
         setTargets(parseRes);
       } catch (err) {
         console.error(err);

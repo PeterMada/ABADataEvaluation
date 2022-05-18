@@ -26,7 +26,6 @@ export const RecordAllBaseline = ({ id, setAuth }) => {
           }
         );
         const parseRes = await response.json();
-        console.log(parseRes);
         setTargets(parseRes);
       } catch (err) {
         console.error(err);
@@ -45,7 +44,6 @@ export const RecordAllBaseline = ({ id, setAuth }) => {
       </h2>
       <div>
         {targets.map((target, current) => {
-          console.log(target);
           let returnComponent = [];
           let currentMeasurmentComponent;
           let i = 0;

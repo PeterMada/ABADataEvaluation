@@ -75,7 +75,9 @@ export const RecordAll = ({ id }) => {
           }
 
           return (
-            <div className="mt-4 mb-4" key={target.target_id}>
+            <div
+              className="block bg-[#2563eb0f] px-4 py-4 mb-4 rounded-lg shadow-md  overflow-hidden"
+              key={target.target_id}>
               {currentMeasurmentComponent}
             </div>
           );

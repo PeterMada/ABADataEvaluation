@@ -4,7 +4,9 @@ import { toast } from 'react-toastify';
 import { Frequency } from '../components/measurement/Frequency';
 import { FrequencyTime } from '../components/measurement/FrequencyTime';
 import { PolarQuestion } from '../components/measurement/PolarQuestion';
-export const ReviewAll = () => {
+import { LeftMenu } from '../components/leftMenu/LeftMenu';
+
+export const ReviewAll = ({ setAuth }) => {
   const { id } = useParams();
   const [measurement, setMeasurement] = useState([]);
   const [targets, setTargets] = useState([]);
@@ -56,43 +58,53 @@ export const ReviewAll = () => {
   return !targets ? (
     <p>Loading....</p>
   ) : (
-    <>
-      Record all page
-      <div>
-        {targets.map((target, current) => {
-          let currentMeasurmentComponent;
-          console.log(target);
-          switch (target.target_type) {
-            case 'frequency/time':
-              currentMeasurmentComponent = <FrequencyTime />;
-              break;
-            case 'yes/no':
-              currentMeasurmentComponent = (
-                <PolarQuestion
-                  data={target}
-                  current={current}
-                  fillForm={true}
-                />
-              );
-              break;
-            case 'frequency':
-              currentMeasurmentComponent = (
-                <Frequency data={target} current={current} />
-              );
-              break;
-            default:
-              currentMeasurmentComponent = (
-                <p>Measurement type does not exist.</p>
-              );
-          }
+    <div className=" m-auto">
+      <div className="flex">
+        <div className=" border-r-2 border-blue-600">
+          <LeftMenu setAuth={setAuth} />
+        </div>
+        <div className="w-full pl-10 ">
+          <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
+            Revize
+          </h1>
+          <div>
+            {targets.map((target, current) => {
+              let currentMeasurmentComponent;
+              switch (target.target_type) {
+                case 'frequency/time':
+                  currentMeasurmentComponent = <FrequencyTime />;
+                  break;
+                case 'yes/no':
+                  currentMeasurmentComponent = (
+                    <PolarQuestion
+                      data={target}
+                      current={current}
+                      fillForm={true}
+                    />
+                  );
+                  break;
+                case 'frequency':
+                  currentMeasurmentComponent = (
+                    <Frequency data={target} current={current} />
+                  );
+                  break;
+                default:
+                  currentMeasurmentComponent = (
+                    <p>Typ měření neexistuje.</p>
+                  );
+              }
 
-          return (
-            <div className="mt-4 mb-4" key={`${target.measurement_id}`}>
-              {currentMeasurmentComponent}
-            </div>
-          );
-        })}
+              return (
+                <div
+                  className="block bg-[#2563eb0f] px-4 py-4 mb-4 rounded-lg shadow-md  overflow-hidden"
+                  key={`${target.measurement_id}`}>
+                  {currentMeasurmentComponent}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };

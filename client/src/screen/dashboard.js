@@ -7,6 +7,7 @@ import profileImage from '../assets/images/profile-placeholder.png';
 
 export const Dashboard = ({ setAuth }) => {
   const [name, setName] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [allPersons, setAllPersons] = useState([]);
   const [allChildren, setAllChildren] = useState([]);
 
@@ -32,6 +33,7 @@ export const Dashboard = ({ setAuth }) => {
       const parseRes = await response.json();
       if (!isCancelled) {
         setAllPersons(parseRes);
+        setIsLoading(false);
       }
     };
 
@@ -47,6 +49,7 @@ export const Dashboard = ({ setAuth }) => {
       const parseRes = await response.json();
       if (!isCancelled) {
         setAllChildren(parseRes);
+        setIsLoading(false);
       }
     };
 
@@ -62,6 +65,7 @@ export const Dashboard = ({ setAuth }) => {
       const parseRes = await response.json();
       if (!isCancelled) {
         setName(`${parseRes.user_first_name} ${parseRes.user_last_name}`);
+        setIsLoading(false);
       }
     };
 
@@ -74,7 +78,9 @@ export const Dashboard = ({ setAuth }) => {
     };
   }, []);
 
-  return (
+  return isLoading ? (
+    ''
+  ) : (
     <div className=" m-auto">
       <div className="flex">
         <div className=" border-r-2 border-blue-600">
@@ -85,7 +91,7 @@ export const Dashboard = ({ setAuth }) => {
             Dashboard
           </h1>
 
-          <div data-testid="personsListWrapper" className="mt-10 mb-6">
+          <div data-testid="personsListWrapper" className="mt-10 mb-16">
             <h2 className="font-medium leading-tight text-xl mt-0 mb-4 text-blue-600">
               Studenti
             </h2>
@@ -120,18 +126,6 @@ export const Dashboard = ({ setAuth }) => {
                 <p>V seznamu nejsou žádný studenti</p>
               )}
             </div>
-
-            {allChildren.length > 0 ? (
-              <div className="text-right mt-6 mb-10">
-                <Link
-                  to="/"
-                  className="hover:underline hover:text-blue-600 py-2 px-4">
-                  Zobraz vše
-                </Link>
-              </div>
-            ) : (
-              ''
-            )}
           </div>
 
           <div data-testid="personsListWrapper">
@@ -170,18 +164,6 @@ export const Dashboard = ({ setAuth }) => {
                 <p>V seznamu nejsou žádne osoby</p>
               )}
             </div>
-
-            {allPersons.length > 0 ? (
-              <div className="text-right mt-6">
-                <Link
-                  to="/"
-                  className="hover:underline hover:text-blue-600 py-2 px-4">
-                  Zobraz vše
-                </Link>
-              </div>
-            ) : (
-              ''
-            )}
           </div>
         </div>
       </div>

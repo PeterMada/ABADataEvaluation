@@ -30,7 +30,7 @@ export const PolarQuestion = ({
           }
         );
         const parseRes = await response.json();
-
+        console.log('AAAA');
         if (parseRes) {
           setformData(parseRes);
           setAnswerValue('No');
@@ -49,12 +49,12 @@ export const PolarQuestion = ({
   }, []);
 
   return (
-    <div className="mt-10 mb-10">
+    <div className="">
       {!doNotShowDetails ? (
-        <>
+        <div>
           <h3>{data.target_title}</h3>
           <p>{data.target_description}</p>
-        </>
+        </div>
       ) : (
         ''
       )}
@@ -96,28 +96,48 @@ export const PolarQuestion = ({
               toast.error(parseRes);
             }
           } catch (err) {
-            toast.error('Oops, failed to fetch!');
+            toast.error('Jejda, načtení se nezdařilo!');
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (
           <Form>
             <div className="mt-4">
               <div role="group">
-                <label>
-                  <Field type="radio" name="answer" value="No" />
-                  No
-                </label>
-                <label>
-                  <Field type="radio" name="answer" value="Yes" />
-                  Yes
-                </label>
+                <div className="">
+                  <label
+                    className="inline-block  cursor-pointer"
+                    htmlFor={`answerYes-${data.target_id}`}>
+                    Áno
+                  </label>
+                  <Field
+                    className="rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                    type="radio"
+                    name="answer"
+                    id={`answerYes-${data.target_id}`}
+                    value="Yes"
+                  />
+                </div>
+                <div className="">
+                  <label
+                    className="inline-block cursor-pointer"
+                    htmlFor={`answerNo-${data.target_id}`}>
+                    Ne
+                  </label>
+                  <Field
+                    className="rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                    type="radio"
+                    name="answer"
+                    id={`answerNo-${data.target_id}`}
+                    value="No"
+                  />
+                </div>
               </div>
             </div>
             <div className="mt-4">
               <button
                 type="submit"
                 className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Save
+                Ulož
               </button>
             </div>
           </Form>

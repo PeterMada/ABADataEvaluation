@@ -75,6 +75,7 @@ const Routing = ({ setAuth, isAuthenticated }) => {
 */
 
 export const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setsAuthenticated] = useState(false);
   const setAuth = (boolean) => {
     setsAuthenticated(boolean);
@@ -94,8 +95,10 @@ export const App = () => {
       parseRes === true
         ? setsAuthenticated(true)
         : setsAuthenticated(false);
+      setIsLoading(false);
     } catch (err) {
       console.error(err.message);
+      setIsLoading(false);
     }
   };
 
@@ -125,34 +128,13 @@ export const App = () => {
   );
             */
 
-  return (
+  return isLoading ? (
+    ''
+  ) : (
     <BrowserRouter>
       <Header isAuthenticated={isAuthenticated} />
       <div className="container max-w-screen-xl min-w-[320px] mx-auto py-8 px-4">
         <Routes>
-          <Route
-            exact
-            path="/"
-            index
-            element={
-              !isAuthenticated ? (
-                <Login setAuth={setAuth} />
-              ) : (
-                <Navigate replace to="/dashboard" />
-              )
-            }
-          />
-          <Route
-            exact
-            path="/login"
-            element={
-              !isAuthenticated ? (
-                <Login setAuth={setAuth} />
-              ) : (
-                <Navigate replace to="/dashboard" />
-              )
-            }
-          />
           <Route
             exact
             path="/register"
@@ -218,7 +200,7 @@ export const App = () => {
             path="/addSkill/:id"
             element={
               isAuthenticated ? (
-                <AddSkill />
+                <AddSkill setAuth={setAuth} />
               ) : (
                 <Navigate replace to="/login" />
               )
@@ -229,7 +211,7 @@ export const App = () => {
             path="/editSkill/:id"
             element={
               isAuthenticated ? (
-                <EditSkill />
+                <EditSkill setAuth={setAuth} />
               ) : (
                 <Navigate replace to="/login" />
               )
@@ -353,6 +335,29 @@ export const App = () => {
                 <Session setAuth={setAuth} />
               ) : (
                 <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/"
+            index
+            element={
+              !isAuthenticated ? (
+                <Login setAuth={setAuth} />
+              ) : (
+                <Navigate replace to="/dashboard" />
+              )
+            }
+          />
+          <Route
+            exact
+            path="/login"
+            element={
+              !isAuthenticated ? (
+                <Login setAuth={setAuth} />
+              ) : (
+                <Navigate replace to="/dashboard" />
               )
             }
           />

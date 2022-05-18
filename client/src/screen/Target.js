@@ -154,7 +154,7 @@ export const Target = ({ setAuth }) => {
                           </td>
                           <td className="px-6 py-4">
                             <Link
-                              to={`/person/${mes.user_id}`}
+                              to={`/person/${meas.user_id}`}
                               className="hover:underline hover:text-blue-600">{`${meas.user_first_name} ${meas.user_last_name}`}</Link>
                           </td>
                           <td className="px-6 py-4">

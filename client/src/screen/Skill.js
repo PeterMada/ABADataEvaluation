@@ -6,6 +6,7 @@ import { ProgramBox } from '../components/programBox/ProgramBox';
 import { LeftMenu } from '../components/leftMenu/LeftMenu';
 
 export const Skill = ({ setAuth }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [currentSkill, setCurrentSkill] = useState([]);
   const [currentPrograms, setCurrentPrograms] = useState([]);
   const { id } = useParams();
@@ -24,6 +25,7 @@ export const Skill = ({ setAuth }) => {
 
         setCurrentSkill(parseRes.skillDetail);
         setCurrentPrograms(parseRes.allPrograms);
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
       }
@@ -32,7 +34,9 @@ export const Skill = ({ setAuth }) => {
     const childResult = fetchSkillDetail().catch(console.error);
   }, []);
 
-  return (
+  return isLoading ? (
+    ''
+  ) : (
     <div className=" m-auto">
       <div className="flex">
         <div className=" border-r-2 border-blue-600">

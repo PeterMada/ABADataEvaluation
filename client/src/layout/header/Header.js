@@ -31,7 +31,7 @@ export const Header = ({ isAuthenticated }) => {
     }
   });
 
-  return (
+  return isAuthenticated ? (
     <header className="max-w-screen-xl m-auto py-2 px-4">
       <div className="flex items-center	justify-between">
         <p></p>
@@ -47,5 +47,7 @@ export const Header = ({ isAuthenticated }) => {
         </div>
       </div>
     </header>
+  ) : (
+    ''
   );
 };

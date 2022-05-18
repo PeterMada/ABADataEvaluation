@@ -9,7 +9,8 @@ import { LeftMenu } from '../components/leftMenu/LeftMenu';
 
 export const Child = ({ setAuth }) => {
   const data = useLocation();
-  // TODO show loading
+
+  const [isLoading, setIsLoading] = useState(true);
   const [currentChild, setCurrentChild] = useState([]);
   const [currentSkills, setCurrentSkills] = useState([]);
   const { id } = useParams();
@@ -27,28 +28,27 @@ export const Child = ({ setAuth }) => {
         const parseRes = await response.json();
         setCurrentChild(parseRes.childDetails);
         setCurrentSkills(parseRes.allSkils);
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
       }
     };
 
-    const childResult = fetchChildDetail().catch(console.error);
+    fetchChildDetail().catch(console.error);
   }, []);
 
-  return (
+  return isLoading ? (
+    ''
+  ) : (
     <div className=" m-auto">
       <div className="flex">
         <div className=" border-r-2 border-blue-600">
           <LeftMenu setAuth={setAuth} />
         </div>
         <div className="w-full pl-10 ">
-          {currentChild.length ? (
-            'loading'
-          ) : (
-            <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
-              {`${currentChild?.child_first_name} ${currentChild?.child_last_name}`}
-            </h1>
-          )}
+          <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
+            {`${currentChild?.child_first_name} ${currentChild?.child_last_name}`}
+          </h1>
 
           <div className="mt-10 mb-6">
             <h2 className="font-medium leading-tight text-xl mt-0 mb-4 text-blue-600">

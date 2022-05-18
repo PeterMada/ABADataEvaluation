@@ -16,6 +16,7 @@ export const Program = ({ setAuth }) => {
   const [labels, setLabels] = useState([]);
   const [completedTargets, setCompletedTargets] = useState([]);
   const [completedBaseline, setCompletedBaseline] = useState([]);
+  const [garaphMax, setGaraphMax] = useState(0);
 
   useEffect(() => {
     const fetchProgramDetails = async () => {
@@ -42,13 +43,14 @@ export const Program = ({ setAuth }) => {
         let labelDates = ['baseline'];
         let targetsCompleted = [null];
         let j = 0;
+        let kumulative = 0;
+
         for (let i = dayDiference; i >= 0; i--) {
           j++;
           const d = new Date();
           d.setHours(0, 0, 0, 0);
           d.setDate(d.getDate() - i);
 
-          labelDates.push(d.toLocaleDateString('en-GB'));
           const targetCompleted = parseRes.allTargets.filter((target) => {
             const targetCompletedDate = new Date(
               target.target_completed_time
@@ -63,16 +65,26 @@ export const Program = ({ setAuth }) => {
               return true;
             }
           });
+
+          if (targetCompleted.length > 0) {
+            labelDates.push(d.toLocaleDateString('en-GB'));
+            kumulative += targetCompleted.length;
+          }
+
+          targetsCompleted.push(kumulative);
+
+          /*
           const prevTargetCompleted = targetsCompleted[j - 1]
             ? targetsCompleted[j - 1]
             : 0;
 
-          //console.log(targetsCompleted);
           targetsCompleted.push(
             prevTargetCompleted + targetCompleted.length
           );
+          */
         }
 
+        setGaraphMax(kumulative);
         setLabels(labelDates);
         setCompletedTargets(targetsCompleted);
 
@@ -107,7 +119,12 @@ export const Program = ({ setAuth }) => {
     },
     scales: {
       y: {
-        max: currentProgram.program_baseline_from,
+        max:
+          garaphMax >= currentProgram.program_baseline_from
+            ? garaphMax + 4
+            : currentProgram.program_baseline_from
+            ? currentProgram.program_baseline_from
+            : 4,
         min: 0,
         ticks: {
           stepSize: 1,

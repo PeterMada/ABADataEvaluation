@@ -72,7 +72,7 @@ export const EditSkill = () => {
               toast.error(parseRes);
             }
           } catch (err) {
-            toast.error('Oops, failed to fetch!');
+            toast.error('Jejda, načtení se nezdařilo!');
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (

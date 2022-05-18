@@ -56,15 +56,16 @@ export const RecordAllBaseline = ({ id, setAuth }) => {
           const alreadyDone = (done / from) * 100;
 
           returnComponent.push(
-            <div key={`${target.target_id}-${current}-${i}`}>
-              <h2 className="font-medium leading-tight text-4xl mt-6 mb-2 text-blue-600">
-                Baseline test for {target.target_title}
+            <div className="" key={`${target.target_id}-${current}-${i}`}>
+              <h2 className="font-medium leading-tight text-xl mt-0 mb-2 text-blue-600">
+                {target.target_title}
               </h2>
               <p>{target.target_description}</p>
-              <div>
+
+              <div className="mt-6">
                 <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
                   <div
-                    className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+                    className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full transition-all"
                     style={{
                       width: `${alreadyDone < 5 ? 5 : alreadyDone}%`,
                     }}>
@@ -95,14 +96,18 @@ export const RecordAllBaseline = ({ id, setAuth }) => {
             }
             const wrapedCommponent = (
               <div
-                className="mt-4 mb-4"
+                className=""
                 key={`${target.target_id}-${current + 1}-${i}`}>
                 {currentMeasurmentComponent}
               </div>
             );
 
             returnComponent.push(wrapedCommponent);
-            return returnComponent;
+            return (
+              <div className="block bg-[#2563eb0f] px-4 py-4 mb-4 rounded-lg shadow-md  overflow-hidden">
+                {returnComponent}
+              </div>
+            );
           } else {
           }
         })}

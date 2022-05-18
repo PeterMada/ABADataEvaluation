@@ -11,7 +11,7 @@ export const AddProgram = () => {
 
   return (
     <>
-      <h1>Add Program</h1>
+      <h1>Nový program</h1>
       <Formik
         initialValues={{
           programTitle: '',
@@ -24,33 +24,33 @@ export const AddProgram = () => {
           targetBaselineTo: '',
           targetCriterionFrom: '',
           targetCriterionTo: '',
-          targetType: 'Select target type',
+          targetType: 'Vyberte typ cíle',
         }}
         validate={(values) => {
           // TODO validate only numbers
           const errors = {};
           if (!values.programTitle) {
-            errors.programTitle = 'Program title field is required';
+            errors.programTitle = 'Pole je povinné';
           }
 
           if (!values.programBaselineFrom) {
-            errors.programBaselineFrom = 'Field is required';
+            errors.programBaselineFrom = 'Pole je povinné';
           }
 
           if (!values.targetBaselineFrom) {
-            errors.targetBaselineFrom = 'Field is required';
+            errors.targetBaselineFrom = 'Pole je povinné';
           }
           if (!values.targetBaselineTo) {
-            errors.targetBaselineTo = 'Field is required';
+            errors.targetBaselineTo = 'Pole je povinné';
           }
           if (!values.targetCriterionFrom) {
-            errors.targetCriterionFrom = 'Field is required';
+            errors.targetCriterionFrom = 'Pole je povinné';
           }
           if (!values.targetCriterionTo) {
-            errors.targetCriterionTo = 'Field is required';
+            errors.targetCriterionTo = 'Pole je povinné';
           }
-          if (values.targetType === 'Select target type') {
-            errors.targetType = 'Target type field is required';
+          if (values.targetType === 'Vyberte typ cíle') {
+            errors.targetType = 'Pole je povinné';
           }
 
           return errors;
@@ -72,13 +72,13 @@ export const AddProgram = () => {
 
             const parseRes = await response.json();
             if (parseRes.programId) {
-              toast.success('Program added succesfully');
+              toast.success('Program úspěšně přidán');
               navigate(`/program/${parseRes.programId}`);
             } else {
               toast.error(parseRes);
             }
           } catch (err) {
-            toast.error('Oops, failed to fetch!');
+            toast.error('Jejda, načtení se nezdařilo!');
           }
         }}>
         {({ isSubmitting, isValid, dirty }) => (

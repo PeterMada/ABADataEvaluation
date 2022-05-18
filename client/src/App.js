@@ -31,6 +31,8 @@ import { ReviewAll } from './screen/ReviewAll';
 import { RecordAllBaseline } from './screen/RecordAllBaseline';
 import { EditProgram } from './forms/editProgram/EditProgram';
 import { Session } from './screen/Session';
+import { Dashboard } from './screen/Dashboard';
+import { Login } from './components/login/Login';
 
 toast.configure();
 /*

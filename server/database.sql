@@ -24,18 +24,6 @@ CREATE TABLE users(
   PRIMARY KEY (user_id)
 );
 
-/*
-CREATE TABLE therapeutists (
-  therapeutist_id uuid DEFAULT uuid_generate_v4(),
-  therapeutist_first_name VARCHAR(255) NOT NULL,
-  therapeutist_last_name VARCHAR(255) NOT NULL,
-  therapeutist_email VARCHAR(255) NOT NULL,
-  supervisor_id uuid NOT NULL,
-  PRIMARY KEY (therapeutist_id),
-
-  CONSTRAINT fk_supervisor FOREIGN KEY(supervisor_id) REFERENCES users(user_id)
-);
-*/
 
 CREATE TABLE children(
   child_id uuid DEFAULT uuid_generate_v4(),
@@ -135,42 +123,3 @@ CREATE TABLE measurementFrequency(
   PRIMARY KEY (question_id),
   CONSTRAINT fk_target FOREIGN KEY(measurement_id) REFERENCES measurements(measurement_id)
 );
-
-
-
-
-
-
-CREATE TABLE frequency (
-  measurement_id uuid DEFAULT uuid_generate_v4(),
-  measurement_created timestamp not null default CURRENT_TIMESTAMP,
-  measurement_frequency SMALLINT NOT NULL,
-  measuremend_by uuid NOT NULL,
-  measurement_closed BOOLEAN DEFAULT FALSE,
-  target_id uuid NOT NULL,
-
-  PRIMARY KEY (measurement_id),
-  CONSTRAINT fk_target FOREIGN KEY(target_id) REFERENCES targets(target_id),
-  CONSTRAINT fk_user FOREIGN KEY(measuremend_by) REFERENCES users(user_id)
-);
-
-CREATE TABLE measurementProgramLevelOptions (
-  measurement_id uuid DEFAULT uuid_generate_v4(),
-  measurement_created timestamp not null default CURRENT_TIMESTAMP,
-  measurement_frequency SMALLINT,
-  target_id uuid NOT NULL,
-
-  PRIMARY KEY (measurement_id),
-  CONSTRAINT fk_target FOREIGN KEY(target_id) REFERENCES targets(target_id)
-);
-
-CREATE TABLE programLevelOptions (
-  program_id uuid DEFAULT uuid_generate_v4(),
-  target_title VARCHAR(255) NOT NULL,
-  measurement_id uuid NOT NULL,
- 
-  PRIMARY KEY (program_id),
-  CONSTRAINT fk_measurment FOREIGN KEY(measurement_id) REFERENCES measurementProgramLevelOptions(measurement_id)
-
-);
-

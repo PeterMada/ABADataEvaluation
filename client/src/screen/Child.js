@@ -41,11 +41,11 @@ export const Child = ({ setAuth }) => {
     ''
   ) : (
     <div className=" m-auto">
-      <div className="flex">
-        <div className=" border-r-2 border-blue-600 print:hidden">
+      <div className="flex  flex-col-reverse md:flex-row">
+        <div className=" md:border-r-2 md:border-blue-600 print:hidden">
           <LeftMenu setAuth={setAuth} />
         </div>
-        <div className="w-full pl-10 ">
+        <div className="w-full md:pl-10 ">
           {currentChild.child_childcode ? (
             <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
               {`${currentChild?.child_childcode}`}
@@ -86,22 +86,17 @@ export const Child = ({ setAuth }) => {
             <Link
               className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               to={`/addSkill/${id}`}>
-              Přirad terapeuta
-            </Link>
-            <Link
-              className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              to={`/addSkill/${id}`}>
-              Přidejte dovednost
+              Přidat dovednost
             </Link>
             <Link
               className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               to={`/session/${id}`}>
-              Zahájit relaci
+              Zahájit sezení
             </Link>
             <Link
               className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               to={`/reviewAll/${id}`}>
-              Revizne relace
+              Revizne sezení
             </Link>
           </div>
         </div>

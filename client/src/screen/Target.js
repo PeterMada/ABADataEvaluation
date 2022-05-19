@@ -51,17 +51,18 @@ export const Target = ({ setAuth }) => {
 
   return (
     <div className=" m-auto">
-      <div className="flex">
-        <div className=" border-r-2 border-blue-600 print:hidden">
+      <div className="flex  flex-col-reverse md:flex-row">
+        <div className="md:border-r-2 md:border-blue-600 print:hidden">
           <LeftMenu setAuth={setAuth} />
         </div>
-        <div className="w-full pl-10 ">
-          <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
-            {curretnTarget.target_title}
+        <div className="w-full md:pl-10 ">
+          <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600 flex justify-between">
+            <span className="block">{curretnTarget.target_title}</span>
+            <span className="ml-4 block">
+              {curretnTarget.target_complete ? <p>✔️</p> : ''}
+            </span>
           </h1>
           <p>{curretnTarget.target_description}</p>
-
-          {curretnTarget.target_complete ? <p>✔️</p> : ''}
 
           {curretnTarget.target_complete &&
           curretnTarget.target_done_from_baseline ? (
@@ -154,7 +155,7 @@ export const Target = ({ setAuth }) => {
                               className="hover:underline hover:text-blue-600">{`${meas.user_first_name} ${meas.user_last_name}`}</Link>
                           </td>
                           <td className="px-6 py-4">
-                            {meas.question_result ? 'Yes' : 'No'}
+                            {meas.question_result ? 'Ano' : 'Ne'}
                           </td>
                           <td className="px-6 py-4">
                             {meas.measuremend_type == 'baseline'
@@ -179,7 +180,7 @@ export const Target = ({ setAuth }) => {
               <Link
                 className="inline-block bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 to={`/recording/${id}`}>
-                Začněni záznam pro tento cíl
+                Začít nové měření
               </Link>
             </div>
           )}

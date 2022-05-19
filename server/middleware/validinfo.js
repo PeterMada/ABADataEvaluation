@@ -1,6 +1,14 @@
 module.exports = (req, res, next) => {
-  const { email, firstName, lastName, password, targetTitle, targetType } =
-    req.body;
+  const {
+    email,
+    firstName,
+    lastName,
+    password,
+    targetTitle,
+    targetType,
+    programTitle,
+    programCode,
+  } = req.body;
 
   const validEmail = (userEmail) => {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userEmail);
@@ -30,6 +38,10 @@ module.exports = (req, res, next) => {
     }
   } else if (req.path === '/addTarget') {
     if (![targetTitle, targetType].every(Boolean)) {
+      return res.status(401).json('Chybějící údaje');
+    }
+  } else if (req.path === '/addProgram' || req.path === '/editProgram') {
+    if (![programTitle, programCode].every(Boolean)) {
       return res.status(401).json('Chybějící údaje');
     }
   }

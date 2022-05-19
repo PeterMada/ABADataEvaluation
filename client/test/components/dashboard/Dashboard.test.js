@@ -11,7 +11,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import 'whatwg-fetch';
 require('dotenv').config();
-import { Dashboard } from '../../../src/components/dashboard/dashboard';
+import { Dashboard } from '../../../src/screen/Dashboard';
 
 // TODO test this
 describe('Dashboard', () => {

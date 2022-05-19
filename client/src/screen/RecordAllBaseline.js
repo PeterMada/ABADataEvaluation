@@ -75,7 +75,6 @@ export const RecordAllBaseline = ({ id, setAuth }) => {
           );
 
           if (repeatNumber > 0) {
-            console.log(target.target_type);
             switch (target.target_type) {
               case 'yes/no':
                 currentMeasurmentComponent = (

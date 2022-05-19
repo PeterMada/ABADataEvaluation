@@ -91,7 +91,7 @@ export const FrequencyTime = ({
 
             const parseRes = await response.json();
             if (parseRes.measrumentId) {
-              toast.success('Target measurement saved succesfuly');
+              toast.success('Měření cíle bylo úspěšně uloženo');
               if (doNotShowDetails) {
                 setRemove(`${data.target_id}-${new Date().getTime()}`);
               } else {

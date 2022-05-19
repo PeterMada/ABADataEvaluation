@@ -13,8 +13,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Header } from './layout/header/Header';
-import { Dashboard } from './screen/Dashboard';
-//import { Login } from './components/login/Login';
 import { Register } from './components/register/register';
 import { Profile } from './components/profile/profile';
 import { PersonForm } from './forms/personForm/PersonForm';
@@ -33,6 +31,8 @@ import { ReviewAll } from './screen/ReviewAll';
 import { RecordAllBaseline } from './screen/RecordAllBaseline';
 import { EditProgram } from './forms/editProgram/EditProgram';
 import { Session } from './screen/Session';
+import { Dashboard } from './screen/Dashboard';
+import { Login } from './components/login/Login';
 
 toast.configure();
 /*
@@ -338,26 +338,6 @@ export const App = () => {
               )
             }
           />
-        </Routes>
-      </div>
-    </BrowserRouter>
-  );
-};
-
-/*
-<Route
-  exact
-  path="/"
-  index
-  element={
-    !isAuthenticated ? (
-      <Login setAuth={setAuth} />
-    ) : (
-      <Navigate replace to="/dashboard" />
-    )
-  }
-/>;
-
 
           <Route
             exact
@@ -382,4 +362,23 @@ export const App = () => {
               )
             }
           />
+        </Routes>
+      </div>
+    </BrowserRouter>
+  );
+};
+
+/*
+<Route
+  exact
+  path="/"
+  index
+  element={
+    !isAuthenticated ? (
+      <Login setAuth={setAuth} />
+    ) : (
+      <Navigate replace to="/dashboard" />
+    )
+  }
+/>;
 */

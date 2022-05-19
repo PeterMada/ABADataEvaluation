@@ -9,6 +9,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
     const skill_id = req.headers['skill_id'];
     const {
       programTitle,
+      programCode,
       programDescription,
       programBaselineFrom,
       programBaselineTo,
@@ -70,8 +71,8 @@ router.post('/', authorization, validinfo, async (req, res) => {
         program_baseline_to, program_baseline_result,
         program_baseline_done, target_baseline_from, target_baseline_to,
         target_criterion_from, target_criterion_to, skill_id,
-        program_created_by, program_created, target_type) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *`,
+        program_created_by, program_created, target_type, program_code) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *`,
       [
         programTitle,
         programDescription,
@@ -87,6 +88,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
         req.user,
         new Date(),
         targetType,
+        programCode,
       ]
     );
 

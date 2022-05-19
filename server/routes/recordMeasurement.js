@@ -42,6 +42,7 @@ router.post('/', authorization, async (req, res) => {
       */
 
       // Check if target baseline is completed
+      /*
       const currentTarget = await pool.query(
         `SELECT * FROM targets 
       WHERE target_id = $1`,
@@ -81,11 +82,9 @@ router.post('/', authorization, async (req, res) => {
           succesfulMeasurmentCount++;
         }
       });
+      */
 
-      console.log(succesfulMeasurmentCount);
-      console.log(currentProgram.rows[0].target_baseline_from);
-      console.log('---------');
-
+      /*
       if (measuremend_type === 'baseline') {
         if (
           succesfulMeasurmentCount >=
@@ -137,9 +136,11 @@ router.post('/', authorization, async (req, res) => {
           );
         }
       }
+      */
 
       res.json({ measrumentId: measurment.rows[0].measurement_id });
     }
+    return;
   } catch (err) {
     console.log(err.message);
     res.status(500).json('Server Error');

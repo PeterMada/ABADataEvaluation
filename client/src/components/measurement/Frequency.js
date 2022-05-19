@@ -47,7 +47,7 @@ export const Frequency = ({ data, setRemove, current }) => {
 
             const parseRes = await response.json();
             if (parseRes.measrumentId) {
-              toast.success('Target measurement saved succesfuly');
+              toast.success('Měření cíle bylo úspěšně uloženo');
               setRemove(data.target_id);
             } else {
               toast.error(parseRes);

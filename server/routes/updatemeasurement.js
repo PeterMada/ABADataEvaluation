@@ -8,9 +8,9 @@ router.put('/', authorization, async (req, res) => {
   const target_id = req.headers['target_id'];
   const target_type = req.headers['target_type'];
   const measuremend_id = req.headers['measurement_id'];
+  const question_id = req.headers['measurement_id'];
   const measuremend_type = 'normal';
 
-  // TODO check if user can measure this target
   try {
     const measurment = await pool.query(
       'UPDATE measurements SET measurement_closed = TRUE WHERE measurement_id = $1 RETURNING measurement_id',
@@ -22,8 +22,8 @@ router.put('/', authorization, async (req, res) => {
         const { answer } = req.body;
 
         const target = await pool.query(
-          'UPDATE measurementPolarQuestions SET question_result = $1 RETURNING *',
-          [answer]
+          'UPDATE measurementPolarQuestions SET question_result = $1 WHERE question_id = $2  RETURNING *',
+          [answer, question_id]
         );
       }
 
@@ -77,7 +77,7 @@ router.put('/', authorization, async (req, res) => {
         // Baseline for target is succesfuly done
         // target do not go to session to next day
         // close target
-        const measurment = await pool.query(
+        const allTarget = await pool.query(
           `UPDATE targets 
               SET 
               target_complete = TRUE,

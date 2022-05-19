@@ -24,16 +24,6 @@ import { ToastContainer } from 'react-toastify';
 require('dotenv').config();
 
 describe('Login', () => {
-  /*
-  beforeEach(() => {
-    jest.spyOn(window, 'fetch').mockReturnValue(fetchResponseOk({}));
-  });
-
-  afterEach(() => {
-    window.fetch.mockRestore();
-  })
-  */
-
   const renderLogin = () => {
     render(
       <BrowserRouter>

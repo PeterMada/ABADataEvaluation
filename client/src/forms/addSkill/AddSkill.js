@@ -11,11 +11,11 @@ export const AddSkill = ({ setAuth }) => {
   let navigate = useNavigate();
   return (
     <div className=" m-auto">
-      <div className="flex">
-        <div className=" border-r-2 border-blue-600 print:hidden">
+      <div className="flex  flex-col-reverse md:flex-row">
+        <div className=" md:border-r-2 md:border-blue-600 print:hidden">
           <LeftMenu setAuth={setAuth} />
         </div>
-        <div className="w-full pl-10 ">
+        <div className="w-full md:pl-10 ">
           <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
             Nová dovednost
           </h1>
@@ -48,7 +48,7 @@ export const AddSkill = ({ setAuth }) => {
 
                 const parseRes = await response.json();
                 if (parseRes.skillId) {
-                  toast.success('Skill added succesfully');
+                  toast.success('Dovednost byla úspěšně přidána');
                   navigate(`/skill/${parseRes.skillId}`);
                 } else {
                   toast.error(parseRes);
@@ -85,7 +85,7 @@ export const AddSkill = ({ setAuth }) => {
                       }
                       type="submit"
                       disabled={!dirty}>
-                      Ulož
+                      Přidat
                     </button>
                   ) : (
                     <span

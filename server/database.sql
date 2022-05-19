@@ -67,6 +67,7 @@ CREATE TABLE skills (
 CREATE TABLE programs (
   program_id uuid DEFAULT uuid_generate_v4(),
   program_title VARCHAR(255) NOT NULL,
+  program_code VARCHAR(255),
   program_description TEXT,
   program_baseline_from SMALLINT,
   program_baseline_to SMALLINT,

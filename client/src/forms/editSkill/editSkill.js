@@ -65,7 +65,7 @@ export const EditSkill = () => {
 
             const parseRes = await response.json();
             if (parseRes.skillId) {
-              toast.success('Skill updated succesfully');
+              toast.success('Dovednost byla úspěšně aktualizována');
               navigate(`/skill/${parseRes.skillId}`);
             } else {
               toast.error(parseRes);

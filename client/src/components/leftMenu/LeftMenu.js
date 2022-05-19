@@ -30,7 +30,7 @@ export const LeftMenu = ({ setAuth }) => {
       <Link
         to="/addChild"
         className="hover:underline hover:text-blue-600 py-2 px-4">
-        Nový študent
+        Nový student
       </Link>
 
       <button

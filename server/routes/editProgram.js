@@ -15,6 +15,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
       programBaselineTo,
       programBaselineDone,
       programBaselineCurrent,
+      programCode,
     } = req.body;
 
     if (!req.user) {
@@ -68,7 +69,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
       `UPDATE programs SET
         program_title = $1, program_description = $2,
         program_baseline_from = $3, program_baseline_to = $4,
-        program_baseline_result = $5, program_baseline_done = $6
+        program_baseline_result = $5, program_baseline_done = $6, program_code = $8
         WHERE program_id = $7 RETURNING program_id`,
       [
         programTitle,
@@ -78,6 +79,7 @@ router.post('/', authorization, validinfo, async (req, res) => {
         programBaselineCurrent ? programBaselineCurrent : 0,
         isProgramDone,
         program_id,
+        programCode,
       ]
     );
 

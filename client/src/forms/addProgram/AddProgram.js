@@ -12,17 +12,18 @@ export const AddProgram = ({ setAuth }) => {
 
   return (
     <div className=" m-auto">
-      <div className="flex">
-        <div className=" border-r-2 border-blue-600 print:hidden">
+      <div className="flex  flex-col-reverse md:flex-row">
+        <div className=" md:border-r-2 md:border-blue-600 print:hidden">
           <LeftMenu setAuth={setAuth} />
         </div>
-        <div className="w-full pl-10 ">
+        <div className="w-full md:pl-10 ">
           <h1 className="font-medium leading-tight text-3xl mt-0 mb-10 text-blue-600">
             Nový program
           </h1>
           <Formik
             initialValues={{
               programTitle: '',
+              programCode: '',
               programDescription: '',
               programBaselineFrom: '',
               programBaselineTo: '',
@@ -58,6 +59,10 @@ export const AddProgram = ({ setAuth }) => {
               }
               if (values.targetType === 'Vyberte typ cíle') {
                 errors.targetType = 'Pole je povinné';
+              }
+
+              if (values.programCode === 'Vyberte typ cíle') {
+                errors.programCode = 'Pole je povinné';
               }
 
               return errors;
@@ -103,6 +108,22 @@ export const AddProgram = ({ setAuth }) => {
                   <ErrorMessage
                     className="text-red-500 text-xs mt-1 ml-1"
                     name="programTitle"
+                    component="div"
+                  />
+                </div>
+                <div className="mb-8">
+                  <label className="mb-2 block" htmlFor="programCode">
+                    Kód programu
+                  </label>
+                  <Field
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                    id="programCode"
+                    name="programCode"
+                  />
+                  <ErrorMessage
+                    className="text-red-500 text-xs mt-1 ml-1"
+                    name="programCode"
                     component="div"
                   />
                 </div>
@@ -308,7 +329,7 @@ export const AddProgram = ({ setAuth }) => {
                       }
                       type="submit"
                       disabled={!dirty}>
-                      Přidat program
+                      Přidat
                     </button>
                   ) : (
                     <span

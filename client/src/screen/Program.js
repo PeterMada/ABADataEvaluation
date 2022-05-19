@@ -135,22 +135,22 @@ export const Program = ({ setAuth }) => {
 
   return (
     <div className=" m-auto">
-      <div className="flex">
-        <div className=" border-r-2 border-blue-600 print:hidden">
+      <div className="flex  flex-col-reverse md:flex-row">
+        <div className=" md:border-r-2 md:border-blue-600 print:hidden">
           <LeftMenu setAuth={setAuth} />
         </div>
-        <div className="w-full pl-10 ">
-          <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
-            {currentProgram.program_title}
+        <div className="w-full md:pl-10 ">
+          <h1 className="font-medium leading-tight text-5xl mt-0 mb-6 text-blue-600">
+            {currentProgram.program_title} <br />
+            {currentProgram.program_code}
           </h1>
-          <p>{currentProgram.program_description}</p>
-          <p>{`Baseline: ${currentProgram.program_baseline_from}/${currentProgram.program_baseline_to}`}</p>
-          <p>{`Measured baseline: ${currentProgram.program_baseline_result}`}</p>
-          <p>{`Measured done: ${
-            currentProgram.program_baseline_done ? 'Yes' : 'No'
-          }`}</p>
+          <p className="mb-4 block">
+            {currentProgram.program_description}
+          </p>
+          <p>{`Baseline programu: ${currentProgram.program_baseline_from}/${currentProgram.program_baseline_to}`}</p>
+          <p>{`Naměřená baseline: ${currentProgram.program_baseline_result}`}</p>
 
-          <div className="mt-10 mb-10 w-2/4	">
+          <div className="mt-10 mb-10">
             <Line
               datasetIdKey="id"
               data={{
@@ -178,7 +178,7 @@ export const Program = ({ setAuth }) => {
 
           <div className="mt-10">
             <h2 className="font-medium leading-tight text-xl mt-0 mb-4 text-blue-600">
-              Všetky ciele tohto programu
+              Všechny cíle programu
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {currentTargets.map((target) => {
@@ -213,12 +213,12 @@ export const Program = ({ setAuth }) => {
             <Link
               className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               to={`/addTarget/${id}`}>
-              Add new target to this program
+              Přidat nový cíl
             </Link>
             <Link
               className="bg-blue-500 ml-2 mr-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               to={`/editProgram/${id}`}>
-              Edit program
+              Upravit program
             </Link>
           </div>
         </div>

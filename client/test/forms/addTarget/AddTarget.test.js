@@ -14,10 +14,10 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { App } from '../../../src/App';
 import { ToastContainer } from 'react-toastify';
-import { AddSkill } from '../../../src/forms/addSkill/AddSkill';
+import { AddTarget } from '../../../src/forms/addTarget/AddTarget';
 require('dotenv').config();
 
-describe('AddSkill', () => {
+describe('AddTarget', () => {
   const checkFormField = (labelText, name, type = 'text') => {
     const field = screen.getByLabelText(labelText);
     expect(field).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe('AddSkill', () => {
     it('displays error after blur when field is blank', async () => {
       render(
         <BrowserRouter>
-          <AddSkill />
+          <AddTarget />
         </BrowserRouter>
       );
       await fireEvent.focus(screen.getByLabelText(labelText));
@@ -47,7 +47,7 @@ describe('AddSkill', () => {
     it('remove error when there is some value in input', async () => {
       render(
         <BrowserRouter>
-          <AddSkill />
+          <AddTarget />
         </BrowserRouter>
       );
       const labelField = screen.getByLabelText(labelText);
@@ -69,49 +69,67 @@ describe('AddSkill', () => {
   it('render heading', () => {
     render(
       <BrowserRouter>
-        <AddSkill />
+        <AddTarget />
       </BrowserRouter>
     );
     expect(screen.getByRole('heading', { level: 1 }).textContent).toEqual(
-      'Nová dovednost'
+      'Přidat cíl'
     );
   });
 
   it('render form', () => {
     render(
       <BrowserRouter>
-        <AddSkill />
+        <AddTarget />
       </BrowserRouter>
     );
-    expect(screen.getByTestId('addSkill')).toBeInTheDocument();
+    expect(screen.getByTestId('addTarget')).toBeInTheDocument();
+  });
+
+  describe('title', () => {
+    it('renders a input field', () => {
+      render(
+        <BrowserRouter>
+          <AddTarget />
+        </BrowserRouter>
+      );
+      checkFormField('Název cílu', 'targetTitle');
+    });
+
+    isThereErrorOnEmptyInputBlur('Název cílu', 'Pole je povinné');
+
+    thereIsNoErrorMessageOnSomeTextInInput(
+      'Název cílu',
+      'Pole je povinné'
+    );
   });
 
   it('renders a input field for title', () => {
     render(
       <BrowserRouter>
-        <AddSkill />
+        <AddTarget />
       </BrowserRouter>
     );
-    checkFormField('Název', 'skillTitle');
+
+    const field = screen.getByLabelText('Popis');
+    expect(field).toBeInTheDocument();
+    expect(field.id).toEqual('targetDescription');
+    expect(field.type).toEqual('textarea');
   });
 
-  it('renders a input field for title', () => {
+  it('renders a input field for baseline', () => {
     render(
       <BrowserRouter>
-        <AddSkill />
+        <AddTarget />
       </BrowserRouter>
     );
-    checkFormField('Název', 'skillTitle');
+    checkFormField('Aktuální baseline', 'targetBaselineCurrent');
   });
-
-  isThereErrorOnEmptyInputBlur('Název', 'Pole je povinné');
-
-  thereIsNoErrorMessageOnSomeTextInInput('Název', 'Pole je povinné');
 
   it('has submit button', () => {
     render(
       <BrowserRouter>
-        <AddSkill />
+        <AddTarget />
       </BrowserRouter>
     );
 
@@ -122,15 +140,15 @@ describe('AddSkill', () => {
 
   describe('submiting', () => {
     const fillFormWithRightValues = () => {
-      const codeField = screen.getByLabelText('Název');
+      const codeField = screen.getByLabelText('Název cílu');
       fireEvent.change(codeField, {
-        target: { value: 'title' },
+        target: { value: 'Title' },
       });
     };
 
     const server = setupServer(
       rest.get(
-        `${process.env.REACT_APP_API_URL}addSkill`,
+        `${process.env.REACT_APP_API_URL}addTarget`,
         (req, res, ctx) => {
           return res(ctx.status(200), ctx.json({ token: '123' }));
         }
@@ -145,13 +163,13 @@ describe('AddSkill', () => {
       render(
         <BrowserRouter>
           <ToastContainer />
-          <AddSkill setAuth={() => null} />
+          <AddTarget setAuth={() => null} />
         </BrowserRouter>
       );
 
       server.use(
         rest.post(
-          `${process.env.REACT_APP_API_URL}addSkill`,
+          `${process.env.REACT_APP_API_URL}addTarget`,
           (req, res, ctx) => {
             return res(ctx.status(500));
           }
@@ -173,13 +191,13 @@ describe('AddSkill', () => {
       render(
         <BrowserRouter>
           <ToastContainer />
-          <AddSkill setAuth={setAuth} />
+          <AddTarget setAuth={setAuth} />
         </BrowserRouter>
       );
 
       server.use(
         rest.post(
-          `${process.env.REACT_APP_API_URL}addSkill`,
+          `${process.env.REACT_APP_API_URL}addTarget`,
           (req, res, ctx) => {
             return res(ctx.status(200), ctx.json('Chyba'));
           }
@@ -199,15 +217,15 @@ describe('AddSkill', () => {
       render(
         <BrowserRouter>
           <ToastContainer />
-          <AddSkill setAuth={setAuth} />
+          <AddTarget setAuth={setAuth} />
         </BrowserRouter>
       );
 
       server.use(
         rest.post(
-          `${process.env.REACT_APP_API_URL}addSkill`,
+          `${process.env.REACT_APP_API_URL}addTarget`,
           (req, res, ctx) => {
-            return res(ctx.status(200), ctx.json({ skillId: '123' }));
+            return res(ctx.status(200), ctx.json({ targetId: '123' }));
           }
         )
       );
@@ -218,7 +236,7 @@ describe('AddSkill', () => {
       fireEvent.click(submitButton);
 
       expect(
-        await screen.findByText('Dovednost byla úspěšně přidána')
+        await screen.findByText('Cíl byl úspěšně přidán')
       ).toBeInTheDocument();
     });
   });

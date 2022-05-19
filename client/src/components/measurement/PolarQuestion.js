@@ -15,6 +15,11 @@ export const PolarQuestion = ({
   const { id } = useParams();
   const [formData, setformData] = useState([]);
   const [answerValue, setAnswerValue] = useState('');
+  const [targetId, setTargetId] = useState(data.target_id);
+
+  if (isUpdate) {
+    // setTargetId(data.target_id);
+  }
 
   useEffect(() => {
     const fetchValuesForMeasurment = async () => {
@@ -33,6 +38,11 @@ export const PolarQuestion = ({
         const parseRes = await response.json();
         if (parseRes) {
           setformData(parseRes);
+
+          if (isUpdate) {
+            setTargetId(parseRes.question_id);
+          }
+
           setAnswerValue('No');
           if (parseRes.question_result) {
             setAnswerValue('Yes');
@@ -66,10 +76,19 @@ export const PolarQuestion = ({
         enableReinitialize={true}
         onSubmit={async (values, { setSubmitting }) => {
           const measuremendType = doNotShowDetails ? 'baseline' : '';
-          const measuremendId = data.measurement_id;
+          //let measuremendId = data.question_id;
+          let measuremendId = data.measurement_id;
+          let quetionId = '';
+
+          if (isUpdate) {
+            quetionId = formData.question_id;
+            measuremendId = data.measurement_id;
+          }
+
           try {
             let currentMethod = 'POST';
             let fetchUrl = 'recordmeasurement';
+
             if (isUpdate) {
               fetchUrl = 'updatemeasurement';
               currentMethod = 'PUT';
@@ -86,6 +105,7 @@ export const PolarQuestion = ({
                   target_id: data.target_id,
                   measuremend_type: measuremendType,
                   measurement_id: measuremendId,
+                  question_id: quetionId,
                 },
                 body: JSON.stringify(values),
               }
@@ -93,7 +113,7 @@ export const PolarQuestion = ({
 
             const parseRes = await response.json();
             if (parseRes.measrumentId) {
-              toast.success('Target measurement saved succesfuly');
+              toast.success('Měření cíle bylo úspěšně uloženo');
               if (doNotShowDetails) {
                 setRemove(`${data.target_id}-${new Date().getTime()}`);
               } else {
@@ -114,28 +134,28 @@ export const PolarQuestion = ({
                 <div className="">
                   <label
                     className="inline-block  cursor-pointer"
-                    htmlFor={`answerYes-${data.measurement_id}`}>
-                    Áno
+                    htmlFor={`answerYes-${targetId}`}>
+                    Ano
                   </label>
                   <Field
                     className="rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                     type="radio"
                     name="answer"
-                    id={`answerYes-${data.measurement_id}`}
+                    id={`answerYes-${targetId}`}
                     value="Yes"
                   />
                 </div>
                 <div className="">
                   <label
                     className="inline-block cursor-pointer"
-                    htmlFor={`answerNo-${data.measurement_id}`}>
+                    htmlFor={`answerNo-${targetId}`}>
                     Ne
                   </label>
                   <Field
                     className="rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                     type="radio"
                     name="answer"
-                    id={`answerNo-${data.measurement_id}`}
+                    id={`answerNo-${targetId}`}
                     value="No"
                   />
                 </div>
